@@ -2,8 +2,7 @@
 
 # TDD Boilerplate 📱
 
-This is an App with Auth Functions like Login and Register. All API
-using [reqres.in](https://reqres.in/).
+This is an app boilertplate to easily create flutter project using TDD and Bloc State Management
 
 ## Pre-requisites 📐
 
