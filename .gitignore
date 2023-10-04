@@ -32,6 +32,10 @@
 .pub/
 /build/
 lib/core/localization/generated
+**.g.dart
+**.freezed.dart
+
+
 
 # Web related
 lib/generated_plugin_registrant.dart
