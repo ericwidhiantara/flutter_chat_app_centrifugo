@@ -1,16 +1,30 @@
-# tdd_boilerplate
+<br>
 
-A new Flutter project.
+# TDD Boilerplate 📱
 
-## Getting Started
+This is an App with Auth Functions like Login and Register. All API
+using [reqres.in](https://reqres.in/).
 
-This project is a starting point for a Flutter application.
+## Pre-requisites 📐
 
-A few resources to get you started if this is your first Flutter project:
+| Technology | Recommended Version | Installation Guide                                                    |
+|------------|---------------------|-----------------------------------------------------------------------|
+| Flutter    | v3.10.x             | [Flutter Official Docs](https://flutter.dev/docs/get-started/install) |
+| Dart       | v3.0.x              | Installed automatically with Flutter                                  |
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+## Get Started 🚀
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+- Clone this project
+- Run `flutter pub get`
+- Run `flutter gen-l10n` to generate localization files
+- Run `flutter pub run build_runner build --delete-conflicting-outputs` to generate freezes files
+- Run `flutter run --flavor stg -t lib/main.dart --dart-define-from-file .env.stg.json` for *
+  *staging** or
+- Run `flutter run --flavor prd -t lib/main.dart --dart-define-from-file .env.prd.json` for *
+  *production**
+- Run Test `flutter test`
+- To generate launcher icon based on
+  Flavor `dart pub run flutter_launcher_icons:main -f flutter_launcher_icons*`
+- To generate mock class `dart pub run build_runner build`
+
+<br>
