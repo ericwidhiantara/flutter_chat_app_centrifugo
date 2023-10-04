@@ -7,8 +7,13 @@ class Toast extends StatelessWidget {
   final Color? textColor;
   final String? message;
 
-  const Toast(
-      {super.key, this.icon, this.bgColor, this.message, this.textColor});
+  const Toast({
+    super.key,
+    this.icon,
+    this.bgColor,
+    this.message,
+    this.textColor,
+  });
 
   @override
   Widget build(BuildContext context) {
