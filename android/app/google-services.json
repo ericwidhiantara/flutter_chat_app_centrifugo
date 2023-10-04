@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "894937209496",
+    "project_id": "tddboilerplate",
+    "storage_bucket": "tddboilerplate.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:894937209496:android:10cc10939822c712cd4eed",
+        "android_client_info": {
+          "package_name": "com.example.tdd_boilerplate"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAStsuaPz4FpOuesGmtiJmFv6JAeYsKQWo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
