@@ -77,8 +77,8 @@ void main() {
 
   test('to json, should return a json map containing proper data', () {
     /// act
-    // final result = userResponse.toJson();
-    final result = json.decode(json.encode(userResponse.toJson()));
+    final result = userResponse.toJson();
+    // final result = json.decode(json.encode(userResponse.toJson()));
 
     /// arrange
     final exceptedJson = {
