@@ -16,7 +16,8 @@ This is an app boilertplate to easily create flutter project using TDD and Bloc 
 - Clone this project using `git clone https://github.com/ericwidhiantara/tdd_boilerplate.git`
 - Run `flutter pub get`
 - Run `flutter gen-l10n` to generate localization files
-- Run `dart run build_runner build --delete-conflicting-outputs` to generate freezes files
+- Run `dart run build_runner build --delete-conflicting-outputs` to generate required files
+  (freezed, mocks, .g, etc)
 - To generate launcher icon based on
   Flavor `dart run flutter_launcher_icons:main -f flutter_launcher_icons*`
 - To generate mock class `dart run build_runner build`
