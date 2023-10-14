@@ -12,7 +12,7 @@ import '../../../../helpers/test_mock.mocks.dart';
 void main() {
   late MockUsersRepository mockUsersRepository;
   late GetUsers getUsers;
-  late Users users;
+  late UserListEntity users;
   const usersParams = UsersParams();
 
   setUp(() {

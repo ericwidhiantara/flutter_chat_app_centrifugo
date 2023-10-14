@@ -9,7 +9,7 @@ class UsersRepositoryImpl implements UsersRepository {
   const UsersRepositoryImpl(this.usersRemoteDatasource);
 
   @override
-  Future<Either<Failure, Users>> users(UsersParams usersParams) async {
+  Future<Either<Failure, UserListEntity>> users(UsersParams usersParams) async {
     final response = await usersRemoteDatasource.users(usersParams);
 
     return response.fold(

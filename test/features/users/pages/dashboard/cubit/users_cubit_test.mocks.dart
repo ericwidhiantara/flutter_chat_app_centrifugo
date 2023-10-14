@@ -40,20 +40,21 @@ class MockGetUsers extends _i1.Mock implements _i3.GetUsers {
   }
 
   @override
-  _i4.Future<_i2.Either<_i5.Failure, _i3.Users>> call(
+  _i4.Future<_i2.Either<_i5.Failure, _i3.UserListEntity>> call(
           _i3.UsersParams? params) =>
       (super.noSuchMethod(
         Invocation.method(
           #call,
           [params],
         ),
-        returnValue: _i4.Future<_i2.Either<_i5.Failure, _i3.Users>>.value(
-            _FakeEither_0<_i5.Failure, _i3.Users>(
+        returnValue:
+            _i4.Future<_i2.Either<_i5.Failure, _i3.UserListEntity>>.value(
+                _FakeEither_0<_i5.Failure, _i3.UserListEntity>(
           this,
           Invocation.method(
             #call,
             [params],
           ),
         )),
-      ) as _i4.Future<_i2.Either<_i5.Failure, _i3.Users>>);
+      ) as _i4.Future<_i2.Either<_i5.Failure, _i3.UserListEntity>>);
 }

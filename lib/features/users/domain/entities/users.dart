@@ -3,19 +3,19 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'users.freezed.dart';
 
 @freezed
-class Users with _$Users {
-  const factory Users({
-    List<User>? users,
+class UserListEntity with _$UserListEntity {
+  const factory UserListEntity({
+    List<UserEntity>? users,
     int? currentPage,
     int? lastPage,
-  }) = _Users;
+  }) = _UserListEntity;
 }
 
 @freezed
-class User with _$User {
-  const factory User({
+class UserEntity with _$UserEntity {
+  const factory UserEntity({
     String? name,
     String? avatar,
     String? email,
-  }) = _User;
+  }) = _UserEntity;
 }

@@ -26,7 +26,7 @@ class FakeUserState extends Fake implements UsersState {}
 
 void main() {
   late UsersCubit usersCubit;
-  late Users users;
+  late UserListEntity users;
 
   setUpAll(() {
     HttpOverrides.global = null;

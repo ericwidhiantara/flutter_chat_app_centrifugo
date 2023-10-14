@@ -21,7 +21,7 @@ import 'users_cubit_test.mocks.dart';
 void main() {
   late UsersCubit userCubit;
   late MockGetUsers mockGetUsers;
-  late Users users;
+  late UserListEntity users;
 
   const dummyUsersRequest1 = UsersParams();
   const dummyUsersRequest2 = UsersParams(page: 2);

@@ -17,7 +17,7 @@ class _DashboardPageState extends State<DashboardPage> {
   final ScrollController _scrollController = ScrollController();
   int _currentPage = 1;
   int _lastPage = 1;
-  final List<User> _users = [];
+  final List<UserEntity> _users = [];
 
   @override
   void initState() {

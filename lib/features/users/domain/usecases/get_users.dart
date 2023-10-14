@@ -7,13 +7,13 @@ part 'get_users.freezed.dart';
 
 part 'get_users.g.dart';
 
-class GetUsers extends UseCase<Users, UsersParams> {
+class GetUsers extends UseCase<UserListEntity, UsersParams> {
   final UsersRepository _repo;
 
   GetUsers(this._repo);
 
   @override
-  Future<Either<Failure, Users>> call(UsersParams params) =>
+  Future<Either<Failure, UserListEntity>> call(UsersParams params) =>
       _repo.users(params);
 }
 

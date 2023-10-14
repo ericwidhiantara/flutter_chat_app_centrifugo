@@ -18,7 +18,7 @@ import '../../../../helpers/test_mock.mocks.dart';
 void main() {
   late MockUsersRemoteDatasource mockUsersRemoteDatasource;
   late UsersRepositoryImpl authRepositoryImpl;
-  late Users users;
+  late UserListEntity users;
 
   setUp(() async {
     TestWidgetsFlutterBinding.ensureInitialized();

@@ -9,8 +9,8 @@ void main() {
     });
 
     test('returns correct values for UsersStatus.success', () {
-      const status = UsersState.success(Users());
-      expect(status, const UsersState.success(Users()));
+      const status = UsersState.success(UserListEntity());
+      expect(status, const UsersState.success(UserListEntity()));
     });
 
     test('returns correct values for UsersStatus.failure', () {

@@ -184,22 +184,23 @@ class MockUsersRepository extends _i1.Mock implements _i8.UsersRepository {
   }
 
   @override
-  _i6.Future<_i2.Either<_i7.Failure, _i8.Users>> users(
+  _i6.Future<_i2.Either<_i7.Failure, _i8.UserListEntity>> users(
           _i8.UsersParams? usersParams) =>
       (super.noSuchMethod(
         Invocation.method(
           #users,
           [usersParams],
         ),
-        returnValue: _i6.Future<_i2.Either<_i7.Failure, _i8.Users>>.value(
-            _FakeEither_0<_i7.Failure, _i8.Users>(
+        returnValue:
+            _i6.Future<_i2.Either<_i7.Failure, _i8.UserListEntity>>.value(
+                _FakeEither_0<_i7.Failure, _i8.UserListEntity>(
           this,
           Invocation.method(
             #users,
             [usersParams],
           ),
         )),
-      ) as _i6.Future<_i2.Either<_i7.Failure, _i8.Users>>);
+      ) as _i6.Future<_i2.Either<_i7.Failure, _i8.UserListEntity>>);
 }
 
 /// A class which mocks [UsersRemoteDatasource].

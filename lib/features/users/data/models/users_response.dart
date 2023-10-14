@@ -22,10 +22,10 @@ class UsersResponse with _$UsersResponse {
   factory UsersResponse.fromJson(Map<String, dynamic> json) =>
       _$UsersResponseFromJson(json);
 
-  Users toEntity() {
+  UserListEntity toEntity() {
     final listUser = data!
-        .map<User>(
-          (model) => User(
+        .map<UserEntity>(
+          (model) => UserEntity(
             name: "${model.firstName} ${model.lastName}",
             avatar: model.avatar ?? "",
             email: model.email ?? "",
@@ -33,7 +33,7 @@ class UsersResponse with _$UsersResponse {
         )
         .toList();
 
-    return Users(
+    return UserListEntity(
       users: listUser,
       currentPage: page ?? 1,
       lastPage: totalPages ?? 1,
