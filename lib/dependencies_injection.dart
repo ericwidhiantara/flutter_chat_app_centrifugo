@@ -84,6 +84,14 @@ void _cubit() {
 
   /// Users
   sl.registerFactory(() => UsersCubit(sl()));
+  sl.registerFactory(
+    () => SavedUsersCubit(
+      sl(),
+      sl(),
+      sl(),
+      sl(),
+    ),
+  );
   sl.registerFactory(() => SettingsCubit());
   sl.registerFactory(() => MainCubit());
 }
