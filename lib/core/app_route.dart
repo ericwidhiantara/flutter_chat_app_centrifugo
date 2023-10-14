@@ -12,6 +12,7 @@ enum Routes {
 
   /// Home Page
   dashboard("/dashboard"),
+  savedUsers("/users/saved"),
   settings("/settings"),
 
   // Auth Page
@@ -68,6 +69,14 @@ class AppRoute {
             builder: (_, __) => BlocProvider(
               create: (_) => sl<UsersCubit>()..fetchUsers(const UsersParams()),
               child: const DashboardPage(),
+            ),
+          ),
+          GoRoute(
+            path: Routes.savedUsers.path,
+            name: Routes.savedUsers.name,
+            builder: (_, __) => BlocProvider(
+              create: (_) => sl<SavedUsersCubit>()..fetchUsers(),
+              child: const SavedUsersPage(),
             ),
           ),
           GoRoute(
