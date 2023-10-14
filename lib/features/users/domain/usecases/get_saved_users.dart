@@ -3,10 +3,10 @@ import 'package:tdd_boilerplate/core/error/failure.dart';
 import 'package:tdd_boilerplate/core/usecase/usecase.dart';
 import 'package:tdd_boilerplate/features/features.dart';
 
-class GetSavedUsers implements UseCase<List<UserEntity>, void> {
+class GetSavedUsersUseCase implements UseCase<List<UserEntity>, void> {
   final UsersRepository _usersRepository;
 
-  GetSavedUsers(this._usersRepository);
+  GetSavedUsersUseCase(this._usersRepository);
 
   @override
   Future<Either<Failure, List<UserEntity>>> call(void params) {

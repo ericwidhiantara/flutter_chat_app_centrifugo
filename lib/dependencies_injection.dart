@@ -33,6 +33,9 @@ Future<void> _initHiveBoxes({
 }) async {
   await MainBoxMixin.initHive(prefixBox);
   sl.registerSingleton<MainBoxMixin>(MainBoxMixin());
+
+  await UserBoxMixin.initHive("saved_users_");
+  sl.registerSingleton<UserBoxMixin>(UserBoxMixin());
 }
 
 /// Register repositories
@@ -40,7 +43,12 @@ void _repositories() {
   sl.registerLazySingleton<AuthRepository>(
     () => AuthRepositoryImpl(sl(), sl()),
   );
-  sl.registerLazySingleton<UsersRepository>(() => UsersRepositoryImpl(sl()));
+  sl.registerLazySingleton<UsersRepository>(
+    () => UsersRepositoryImpl(
+      sl(),
+      sl(),
+    ),
+  );
 }
 
 /// Register dataSources
@@ -51,6 +59,9 @@ void _dataSources() {
   sl.registerLazySingleton<UsersRemoteDatasource>(
     () => UsersRemoteDatasourceImpl(sl()),
   );
+  sl.registerLazySingleton<UsersLocalDatasource>(
+    () => UsersLocalDatasourceImpl(sl()),
+  );
 }
 
 void _useCase() {
@@ -60,6 +71,10 @@ void _useCase() {
 
   /// Users
   sl.registerLazySingleton(() => GetUsers(sl()));
+  sl.registerLazySingleton(() => GetSavedUsersUseCase(sl()));
+  sl.registerLazySingleton(() => AddUserUseCase(sl()));
+  sl.registerLazySingleton(() => RemoveUserUseCase(sl()));
+  sl.registerLazySingleton(() => ClearUsersUseCase(sl()));
 }
 
 void _cubit() {
