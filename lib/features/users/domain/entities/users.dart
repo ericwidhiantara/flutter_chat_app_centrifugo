@@ -1,6 +1,9 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:hive/hive.dart';
 
 part 'users.freezed.dart';
+
+part 'users.g.dart';
 
 @freezed
 class UserListEntity with _$UserListEntity {
@@ -12,10 +15,11 @@ class UserListEntity with _$UserListEntity {
 }
 
 @freezed
+@HiveType(typeId: 0)
 class UserEntity with _$UserEntity {
   const factory UserEntity({
-    String? name,
-    String? avatar,
-    String? email,
+    @HiveField(0) String? name,
+    @HiveField(2) String? avatar,
+    @HiveField(3) String? email,
   }) = _UserEntity;
 }
