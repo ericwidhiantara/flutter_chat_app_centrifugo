@@ -17,6 +17,7 @@ import '../../../../helpers/test_mock.mocks.dart';
 
 void main() {
   late MockUsersRemoteDatasource mockUsersRemoteDatasource;
+  late MockUsersLocalDatasource mockUsersLocalDatasource;
   late UsersRepositoryImpl authRepositoryImpl;
   late UserListEntity users;
 
@@ -28,7 +29,11 @@ void main() {
       prefixBox: 'users_repository_impl_test_',
     );
     mockUsersRemoteDatasource = MockUsersRemoteDatasource();
-    authRepositoryImpl = UsersRepositoryImpl(mockUsersRemoteDatasource);
+    mockUsersLocalDatasource = MockUsersLocalDatasource();
+    authRepositoryImpl = UsersRepositoryImpl(
+      mockUsersRemoteDatasource,
+      mockUsersLocalDatasource,
+    );
     users = UsersResponse.fromJson(
       json.decode(jsonReader(successUserPath)) as Map<String, dynamic>,
     ).toEntity();

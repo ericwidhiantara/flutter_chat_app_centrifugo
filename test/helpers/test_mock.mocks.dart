@@ -201,6 +201,75 @@ class MockUsersRepository extends _i1.Mock implements _i8.UsersRepository {
           ),
         )),
       ) as _i6.Future<_i2.Either<_i7.Failure, _i8.UserListEntity>>);
+
+  @override
+  _i6.Future<_i2.Either<_i7.Failure, List<_i8.UserEntity>>> getSavedUsers() =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #getSavedUsers,
+          [],
+        ),
+        returnValue:
+            _i6.Future<_i2.Either<_i7.Failure, List<_i8.UserEntity>>>.value(
+                _FakeEither_0<_i7.Failure, List<_i8.UserEntity>>(
+          this,
+          Invocation.method(
+            #getSavedUsers,
+            [],
+          ),
+        )),
+      ) as _i6.Future<_i2.Either<_i7.Failure, List<_i8.UserEntity>>>);
+
+  @override
+  _i6.Future<_i2.Either<_i7.Failure, void>> addUser(_i8.UserEntity? article) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #addUser,
+          [article],
+        ),
+        returnValue: _i6.Future<_i2.Either<_i7.Failure, void>>.value(
+            _FakeEither_0<_i7.Failure, void>(
+          this,
+          Invocation.method(
+            #addUser,
+            [article],
+          ),
+        )),
+      ) as _i6.Future<_i2.Either<_i7.Failure, void>>);
+
+  @override
+  _i6.Future<_i2.Either<_i7.Failure, void>> removeUser(
+          _i8.UserEntity? article) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #removeUser,
+          [article],
+        ),
+        returnValue: _i6.Future<_i2.Either<_i7.Failure, void>>.value(
+            _FakeEither_0<_i7.Failure, void>(
+          this,
+          Invocation.method(
+            #removeUser,
+            [article],
+          ),
+        )),
+      ) as _i6.Future<_i2.Either<_i7.Failure, void>>);
+
+  @override
+  _i6.Future<_i2.Either<_i7.Failure, void>> clearUsers() => (super.noSuchMethod(
+        Invocation.method(
+          #clearUsers,
+          [],
+        ),
+        returnValue: _i6.Future<_i2.Either<_i7.Failure, void>>.value(
+            _FakeEither_0<_i7.Failure, void>(
+          this,
+          Invocation.method(
+            #clearUsers,
+            [],
+          ),
+        )),
+      ) as _i6.Future<_i2.Either<_i7.Failure, void>>);
 }
 
 /// A class which mocks [UsersRemoteDatasource].
@@ -230,6 +299,121 @@ class MockUsersRemoteDatasource extends _i1.Mock
           ),
         )),
       ) as _i6.Future<_i2.Either<_i7.Failure, _i8.UsersResponse>>);
+}
+
+/// A class which mocks [UsersLocalDatasource].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockUsersLocalDatasource extends _i1.Mock
+    implements _i8.UsersLocalDatasource {
+  MockUsersLocalDatasource() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i6.Future<_i2.Either<_i7.Failure, List<_i8.UserEntity>>> getSavedUsers() =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #getSavedUsers,
+          [],
+        ),
+        returnValue:
+            _i6.Future<_i2.Either<_i7.Failure, List<_i8.UserEntity>>>.value(
+                _FakeEither_0<_i7.Failure, List<_i8.UserEntity>>(
+          this,
+          Invocation.method(
+            #getSavedUsers,
+            [],
+          ),
+        )),
+      ) as _i6.Future<_i2.Either<_i7.Failure, List<_i8.UserEntity>>>);
+
+  @override
+  _i6.Future<void> addUser(_i8.UserEntity? user) => (super.noSuchMethod(
+        Invocation.method(
+          #addUser,
+          [user],
+        ),
+        returnValue: _i6.Future<void>.value(),
+        returnValueForMissingStub: _i6.Future<void>.value(),
+      ) as _i6.Future<void>);
+
+  @override
+  _i6.Future<void> removeUser(_i8.UserEntity? user) => (super.noSuchMethod(
+        Invocation.method(
+          #removeUser,
+          [user],
+        ),
+        returnValue: _i6.Future<void>.value(),
+        returnValueForMissingStub: _i6.Future<void>.value(),
+      ) as _i6.Future<void>);
+
+  @override
+  _i6.Future<void> clearUsers() => (super.noSuchMethod(
+        Invocation.method(
+          #clearUsers,
+          [],
+        ),
+        returnValue: _i6.Future<void>.value(),
+        returnValueForMissingStub: _i6.Future<void>.value(),
+      ) as _i6.Future<void>);
+
+  @override
+  _i6.Future<void> addData(_i8.UserEntity? value) => (super.noSuchMethod(
+        Invocation.method(
+          #addData,
+          [value],
+        ),
+        returnValue: _i6.Future<void>.value(),
+        returnValueForMissingStub: _i6.Future<void>.value(),
+      ) as _i6.Future<void>);
+
+  @override
+  _i6.Future<void> removeData(_i8.UserEntity? value) => (super.noSuchMethod(
+        Invocation.method(
+          #removeData,
+          [value],
+        ),
+        returnValue: _i6.Future<void>.value(),
+        returnValueForMissingStub: _i6.Future<void>.value(),
+      ) as _i6.Future<void>);
+
+  @override
+  _i6.Future<void> clearData() => (super.noSuchMethod(
+        Invocation.method(
+          #clearData,
+          [],
+        ),
+        returnValue: _i6.Future<void>.value(),
+        returnValueForMissingStub: _i6.Future<void>.value(),
+      ) as _i6.Future<void>);
+
+  @override
+  _i8.UserEntity? getData(_i8.UserEntity? value) =>
+      (super.noSuchMethod(Invocation.method(
+        #getData,
+        [value],
+      )) as _i8.UserEntity?);
+
+  @override
+  List<_i8.UserEntity> getAllData() => (super.noSuchMethod(
+        Invocation.method(
+          #getAllData,
+          [],
+        ),
+        returnValue: <_i8.UserEntity>[],
+      ) as List<_i8.UserEntity>);
+
+  @override
+  _i6.Future<void> closeBox({bool? isUnitTest = false}) => (super.noSuchMethod(
+        Invocation.method(
+          #closeBox,
+          [],
+          {#isUnitTest: isUnitTest},
+        ),
+        returnValue: _i6.Future<void>.value(),
+        returnValueForMissingStub: _i6.Future<void>.value(),
+      ) as _i6.Future<void>);
 }
 
 /// A class which mocks [BuildContext].

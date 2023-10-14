@@ -7,6 +7,7 @@ import 'package:tdd_boilerplate/features/features.dart';
   AuthRemoteDatasource,
   UsersRepository,
   UsersRemoteDatasource,
+  UsersLocalDatasource,
 ])
 @GenerateNiceMocks([MockSpec<BuildContext>()])
 void main() {}
