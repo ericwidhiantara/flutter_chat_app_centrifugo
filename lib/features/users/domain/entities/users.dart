@@ -19,7 +19,7 @@ class UserListEntity with _$UserListEntity {
 class UserEntity with _$UserEntity {
   const factory UserEntity({
     @HiveField(0) String? name,
-    @HiveField(2) String? avatar,
-    @HiveField(3) String? email,
+    @HiveField(1) String? avatar,
+    @HiveField(2) String? email,
   }) = _UserEntity;
 }
