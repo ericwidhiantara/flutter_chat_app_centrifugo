@@ -9,7 +9,12 @@ mixin class UserBoxMixin {
   static Future<void> initHive(String prefixBox) async {
     // Initialize hive (persistent database)
     await Hive.initFlutter();
-    Hive.registerAdapter(UserEntityAdapter());
+
+    //check if the adapter is already registered
+    //if not checked will be return error to integration test
+    if (!Hive.isAdapterRegistered(0)) {
+      Hive.registerAdapter(UserEntityAdapter());
+    }
     mainBox = await Hive.openBox<UserEntity>("$prefixBox$_boxName");
   }
 
