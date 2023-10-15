@@ -34,7 +34,7 @@ Future<void> _initHiveBoxes({
   await MainBoxMixin.initHive(prefixBox);
   sl.registerSingleton<MainBoxMixin>(MainBoxMixin());
 
-  await UserBoxMixin.initHive("saved_users_");
+  await UserBoxMixin.initHive(isUnitTest ? prefixBox : "saved_users_");
   sl.registerSingleton<UserBoxMixin>(UserBoxMixin());
 }
 
