@@ -94,4 +94,130 @@ void main() {
       },
     );
   });
+
+  group("local users", () {
+    const testUser = UserEntity(
+      name: "George Bluth",
+      avatar: "https://reqres.in/img/faces/1-image.jpg",
+      email: "george.bluth@reqres.in",
+    );
+    group('getSavedUsers', () {
+      test('should return a list of UserEntity from the UserBox', () async {
+        // Arrange
+        final testData = [
+          const UserEntity(
+            name: "George Bluth",
+            avatar: "https://reqres.in/img/faces/1-image.jpg",
+            email: "george.bluth@reqres.in",
+          ),
+          const UserEntity(
+            name: "Janet Weaver",
+            avatar: "https://reqres.in/img/faces/2-image.jpg",
+            email: "janet.weaver@reqres.in",
+          ),
+        ];
+
+        when(mockUsersLocalDatasource.getAllData()).thenAnswer((_) => testData);
+
+        // Act
+        final result = await authRepositoryImpl.getSavedUsers();
+
+        // Assert
+        expect(result, Right(testData));
+        verify(mockUsersLocalDatasource.getAllData());
+        verifyNoMoreInteractions(mockUsersLocalDatasource);
+      });
+
+      test('should return a Left(NoDataFailure) on failure', () async {
+        // Arrange
+        when(mockUsersLocalDatasource.getSavedUsers()).thenAnswer(
+          (_) async => Left(NoDataFailure()),
+        );
+
+        // Act
+        final result =
+            await mockUsersLocalDatasource.getSavedUsers(); // Await the Future
+
+        // Assert
+        expect(result, Left(NoDataFailure()));
+        verify(mockUsersLocalDatasource.getSavedUsers());
+        verifyNoMoreInteractions(mockUsersLocalDatasource);
+      });
+    });
+
+    group('addUser', () {
+      test('should add a user to the UserBox', () async {
+        // Arrange
+        when(mockUsersLocalDatasource.addData(testUser))
+            .thenAnswer((_) async => const Right<Failure, void>(null));
+
+        // Act
+        await mockUsersLocalDatasource.addUser(testUser);
+
+        // Assert
+        // Verify that the method was called
+        verify(mockUsersLocalDatasource.addUser(testUser));
+        verifyNoMoreInteractions(mockUsersLocalDatasource);
+      });
+
+      test('should return a Left(CacheFailure) on failure', () async {
+        when(mockUsersLocalDatasource.addUser(testUser))
+            .thenAnswer((_) async => Left(CacheFailure()));
+
+        // Act
+        await mockUsersLocalDatasource.addUser(testUser);
+
+        // Assert
+        verify(mockUsersLocalDatasource.addUser(testUser));
+        verifyNoMoreInteractions(mockUsersLocalDatasource);
+      });
+    });
+
+    group('removeUser', () {
+      test('should remove a user from the UserBox', () async {
+        // Act
+        await mockUsersLocalDatasource.removeUser(testUser);
+
+        // Assert
+        verify(mockUsersLocalDatasource.removeUser(testUser));
+        verifyNoMoreInteractions(mockUsersLocalDatasource);
+      });
+
+      test('should return a Left(CacheFailure) on failure', () async {
+        when(mockUsersLocalDatasource.removeUser(testUser))
+            .thenAnswer((_) async => Left(CacheFailure()));
+
+        // Act
+        await mockUsersLocalDatasource.removeUser(testUser);
+
+        // Assert
+        verify(mockUsersLocalDatasource.removeUser(testUser));
+        verifyNoMoreInteractions(mockUsersLocalDatasource);
+      });
+    });
+
+    group('clearUsers', () {
+      test('should clear all users from the UserBox', () async {
+        // Act
+        await mockUsersLocalDatasource.clearUsers();
+
+        // Assert
+        verify(mockUsersLocalDatasource.clearUsers());
+        verifyNoMoreInteractions(mockUsersLocalDatasource);
+      });
+
+      test('should return a Left(CacheFailure) on failure', () async {
+        // Arrange
+        when(mockUsersLocalDatasource.clearUsers())
+            .thenAnswer((_) async => Left(CacheFailure()));
+
+        // Act
+        await mockUsersLocalDatasource.clearUsers();
+
+        // Assert
+        verify(mockUsersLocalDatasource.clearUsers());
+        verifyNoMoreInteractions(mockUsersLocalDatasource);
+      });
+    });
+  });
 }
