@@ -30,7 +30,8 @@ class UsersLocalDatasourceImpl extends UsersLocalDatasource {
   @override
   Future<Either<Failure, void>> addUser(UserEntity user) async {
     try {
-      return Right(_box.addData(user));
+      await _box.addData(user);
+      return const Right<Failure, void>(null);
     } catch (e) {
       return Left(CacheFailure());
     }
@@ -39,7 +40,8 @@ class UsersLocalDatasourceImpl extends UsersLocalDatasource {
   @override
   Future<Either<Failure, void>> removeUser(UserEntity user) async {
     try {
-      return Right(_box.removeData(user));
+      await _box.removeData(user);
+      return const Right<Failure, void>(null);
     } catch (e) {
       return Left(CacheFailure());
     }
@@ -48,7 +50,8 @@ class UsersLocalDatasourceImpl extends UsersLocalDatasource {
   @override
   Future<Either<Failure, void>> clearUsers() async {
     try {
-      return Right(_box.clearData());
+      await _box.clearData();
+      return const Right<Failure, void>(null);
     } catch (e) {
       return Left(CacheFailure());
     }
