@@ -8,6 +8,7 @@ import 'package:tdd_boilerplate/features/features.dart';
   UsersRepository,
   UsersRemoteDatasource,
   UsersLocalDatasource,
+  UserBoxMixin,
 ])
 @GenerateNiceMocks([MockSpec<BuildContext>()])
 void main() {}

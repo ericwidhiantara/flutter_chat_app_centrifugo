@@ -416,6 +416,72 @@ class MockUsersLocalDatasource extends _i1.Mock
       ) as _i6.Future<void>);
 }
 
+/// A class which mocks [UserBoxMixin].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockUserBoxMixin extends _i1.Mock implements _i8.UserBoxMixin {
+  MockUserBoxMixin() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i6.Future<void> addData(_i8.UserEntity? value) => (super.noSuchMethod(
+        Invocation.method(
+          #addData,
+          [value],
+        ),
+        returnValue: _i6.Future<void>.value(),
+        returnValueForMissingStub: _i6.Future<void>.value(),
+      ) as _i6.Future<void>);
+
+  @override
+  _i6.Future<void> removeData(_i8.UserEntity? value) => (super.noSuchMethod(
+        Invocation.method(
+          #removeData,
+          [value],
+        ),
+        returnValue: _i6.Future<void>.value(),
+        returnValueForMissingStub: _i6.Future<void>.value(),
+      ) as _i6.Future<void>);
+
+  @override
+  _i6.Future<void> clearData() => (super.noSuchMethod(
+        Invocation.method(
+          #clearData,
+          [],
+        ),
+        returnValue: _i6.Future<void>.value(),
+        returnValueForMissingStub: _i6.Future<void>.value(),
+      ) as _i6.Future<void>);
+
+  @override
+  _i8.UserEntity? getData(_i8.UserEntity? value) =>
+      (super.noSuchMethod(Invocation.method(
+        #getData,
+        [value],
+      )) as _i8.UserEntity?);
+
+  @override
+  List<_i8.UserEntity> getAllData() => (super.noSuchMethod(
+        Invocation.method(
+          #getAllData,
+          [],
+        ),
+        returnValue: <_i8.UserEntity>[],
+      ) as List<_i8.UserEntity>);
+
+  @override
+  _i6.Future<void> closeBox({bool? isUnitTest = false}) => (super.noSuchMethod(
+        Invocation.method(
+          #closeBox,
+          [],
+          {#isUnitTest: isUnitTest},
+        ),
+        returnValue: _i6.Future<void>.value(),
+        returnValueForMissingStub: _i6.Future<void>.value(),
+      ) as _i6.Future<void>);
+}
+
 /// A class which mocks [BuildContext].
 ///
 /// See the documentation for Mockito's code generation for more information.
