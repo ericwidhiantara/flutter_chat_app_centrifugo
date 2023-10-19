@@ -43,7 +43,7 @@ class UsersRepositoryImpl implements UsersRepository {
     try {
       return Right(usersLocalDatasource.addData(user));
     } catch (e) {
-      return Left(NoDataFailure());
+      return Left(CacheFailure());
     }
   }
 
@@ -52,7 +52,7 @@ class UsersRepositoryImpl implements UsersRepository {
     try {
       return Right(usersLocalDatasource.removeData(user));
     } catch (e) {
-      return Left(NoDataFailure());
+      return Left(CacheFailure());
     }
   }
 
@@ -61,7 +61,7 @@ class UsersRepositoryImpl implements UsersRepository {
     try {
       return Right(usersLocalDatasource.clearUsers());
     } catch (e) {
-      return Left(NoDataFailure());
+      return Left(CacheFailure());
     }
   }
 }
