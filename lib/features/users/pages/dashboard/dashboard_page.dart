@@ -156,6 +156,7 @@ class _DashboardPageState extends State<DashboardPage> {
                                         ),
                                       ),
                                       IconButton(
+                                        key: Key('favButton_$index'),
                                         onPressed: () {
                                           if (isSaved(_users[index])) {
                                             _savedUsers.remove(
