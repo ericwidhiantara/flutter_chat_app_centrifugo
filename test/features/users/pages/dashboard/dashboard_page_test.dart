@@ -10,6 +10,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 //ignore_for_file: depend_on_referenced_packages
 import 'package:mocktail/mocktail.dart';
+import 'package:oktoast/oktoast.dart';
 import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
 import 'package:tdd_boilerplate/core/core.dart';
 import 'package:tdd_boilerplate/dependencies_injection.dart';
@@ -47,20 +48,22 @@ void main() {
   Widget rootWidget(Widget body) {
     return BlocProvider<UsersCubit>.value(
       value: usersCubit,
-      child: ScreenUtilInit(
-        designSize: const Size(375, 667),
-        minTextAdapt: true,
-        splitScreenMode: true,
-        builder: (_, __) => MaterialApp(
-          localizationsDelegates: const [
-            Strings.delegate,
-            GlobalMaterialLocalizations.delegate,
-            GlobalWidgetsLocalizations.delegate,
-            GlobalCupertinoLocalizations.delegate,
-          ],
-          locale: const Locale("en"),
-          theme: themeLight(MockBuildContext()),
-          home: body,
+      child: OKToast(
+        child: ScreenUtilInit(
+          designSize: const Size(375, 667),
+          minTextAdapt: true,
+          splitScreenMode: true,
+          builder: (_, __) => MaterialApp(
+            localizationsDelegates: const [
+              Strings.delegate,
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+            ],
+            locale: const Locale("en"),
+            theme: themeLight(MockBuildContext()),
+            home: body,
+          ),
         ),
       ),
     );
@@ -137,6 +140,30 @@ void main() {
         await tester.pump(const Duration(milliseconds: 100));
       }
       verify(() => usersCubit.refreshUsers(any())).called(1);
+    },
+  );
+
+  testWidgets(
+    'save user to local db by tapping favorite button',
+    (tester) async {
+      when(() => usersCubit.state).thenReturn(
+        UsersState.success(users),
+      );
+      await tester.pumpWidget(rootWidget(const DashboardPage()));
+      await tester.pumpAndSettle(); //if not include this the test will fail
+
+      // Find the widget by its key.
+      final buttonFinder = find.byKey(const Key('favButton_0'));
+
+      // Verify that the button exists in the widget tree.
+      expect(buttonFinder, findsOneWidget);
+
+      // Simulate a tap on the button.
+      await tester.tap(buttonFinder);
+
+      for (int i = 0; i < 5; i++) {
+        await tester.pump(const Duration(seconds: 3));
+      }
     },
   );
 }
