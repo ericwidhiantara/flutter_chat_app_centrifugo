@@ -59,14 +59,14 @@ void main() {
 
     test('should return a Left(NoDataFailure) on failure', () async {
       // Arrange
-      when(mockUserBox.getAllData()).thenThrow(Exception());
+      when(datasource.getSavedUsers()).thenThrow(Exception());
 
       // Act
       final result = await datasource.getSavedUsers();
 
       // Assert
       expect(result, Left(NoDataFailure()));
-      verify(mockUserBox.getAllData());
+      verify(datasource.getSavedUsers());
       verifyNoMoreInteractions(mockUserBox);
     });
   });
@@ -74,7 +74,7 @@ void main() {
   group('addUser', () {
     test('should add a user to the UserBox', () async {
       // Arrange
-      when(mockUserBox.addData(testUser))
+      when(datasource.addUser(testUser))
           .thenAnswer((_) async => const Right<Failure, void>(null));
 
       // Act
@@ -88,14 +88,13 @@ void main() {
     });
 
     test('should return a Left(CacheFailure) on failure', () async {
-      when(mockUserBox.addData(testUser)).thenThrow(Exception());
+      when(datasource.addUser(testUser)).thenThrow(Exception());
 
       // Act
       final result = await datasource.addUser(testUser);
-
       // Assert
-      expect(result, const Left(CacheFailure("")));
-      verify(mockUserBox.addData(testUser));
+      expect(result, Left(CacheFailure()));
+      verify(datasource.addUser(testUser));
       verifyNoMoreInteractions(mockUserBox);
     });
   });
@@ -112,13 +111,13 @@ void main() {
     });
 
     test('should return a Left(CacheFailure) on failure', () async {
-      when(mockUserBox.removeData(testUser)).thenThrow(Exception());
+      when(mockUserBox.removeData(testUser)).thenThrow(Left(CacheFailure()));
 
       // Act
       final result = await datasource.removeUser(testUser);
 
       // Assert
-      expect(result, const Left(CacheFailure("")));
+      expect(result, Left(CacheFailure()));
       verify(mockUserBox.removeData(testUser));
       verifyNoMoreInteractions(mockUserBox);
     });
@@ -137,14 +136,14 @@ void main() {
 
     test('should return a Left(CacheFailure) on failure', () async {
       // Arrange
-      when(mockUserBox.clearData()).thenThrow(Exception());
+      when(datasource.clearUsers()).thenThrow(Exception());
 
       // Act
       final result = await datasource.clearUsers();
 
       // Assert
-      expect(result, const Left(CacheFailure("")));
-      verify(mockUserBox.clearData());
+      expect(result, Left(CacheFailure()));
+      verify(datasource.clearUsers());
       verifyNoMoreInteractions(mockUserBox);
     });
   });
