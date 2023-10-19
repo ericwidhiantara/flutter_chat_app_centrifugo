@@ -38,7 +38,7 @@ class SavedUsersCubit extends Cubit<SavedUsersState> {
 
     data.fold(
       (l) {
-        if (l is ServerFailure) {
+        if (l is CacheFailure) {
           emit(_Failure(l.message ?? ""));
         } else if (l is NoDataFailure) {
           emit(const _Empty());
@@ -55,11 +55,11 @@ class SavedUsersCubit extends Cubit<SavedUsersState> {
     );
   }
 
-  Future<void> saveArticle(
-    UserEntity article, {
+  Future<void> saveUser(
+    UserEntity user, {
     bool isSave = true,
   }) async {
-    await _addUser.call(article);
+    await _addUser.call(user);
     emit(
       _Success(
         null,
@@ -68,14 +68,14 @@ class SavedUsersCubit extends Cubit<SavedUsersState> {
     );
   }
 
-  Future<void> deleteArticle(UserEntity article) async {
-    await _removeUser.call(article);
+  Future<void> deleteUser(UserEntity user) async {
+    await _removeUser.call(user);
 
     emit(const _Success(null, "Berhasil menghapus data"));
     await _fetchData();
   }
 
-  Future<void> clearArticle() async {
+  Future<void> clearUser() async {
     await _clearUsers.call(null);
 
     emit(const _Success(null, "Berhasil menghapus data"));

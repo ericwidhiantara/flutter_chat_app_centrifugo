@@ -121,7 +121,7 @@ class _SavedUsersPageState extends State<SavedUsersPage> {
                                       onPressed: () {
                                         context
                                             .read<SavedUsersCubit>()
-                                            .deleteArticle(_users[index]);
+                                            .deleteUser(_users[index]);
                                         _users.removeAt(index);
                                       },
                                       icon: const Icon(
@@ -215,7 +215,7 @@ class _SavedUsersPageState extends State<SavedUsersPage> {
                             context.pop();
                             _users.clear();
 
-                            context.read<SavedUsersCubit>().clearArticle();
+                            context.read<SavedUsersCubit>().clearUser();
                           },
                           child: Text(
                             Strings.of(context)!.yes,

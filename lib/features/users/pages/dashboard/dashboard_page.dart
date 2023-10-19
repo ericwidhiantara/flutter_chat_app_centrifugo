@@ -164,14 +164,14 @@ class _DashboardPageState extends State<DashboardPage> {
 
                                             ctx
                                                 .read<SavedUsersCubit>()
-                                                .deleteArticle(
+                                                .deleteUser(
                                                   _users[index],
                                                 );
                                           } else {
                                             _savedUsers.add(_users[index]);
                                             ctx
                                                 .read<SavedUsersCubit>()
-                                                .saveArticle(_users[index]);
+                                                .saveUser(_users[index]);
                                           }
                                         },
                                         icon: Icon(

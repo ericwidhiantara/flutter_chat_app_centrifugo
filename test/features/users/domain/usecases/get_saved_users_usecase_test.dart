@@ -11,7 +11,7 @@ void main() {
   late GetSavedUsersUseCase getSavedUsersUseCase;
   late List<UserEntity> users;
 
-  setUp(() async {
+  setUp(() {
     users = [
       const UserEntity(
         name: "George Bluth",
