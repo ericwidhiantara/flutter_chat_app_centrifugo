@@ -118,6 +118,7 @@ class _SavedUsersPageState extends State<SavedUsersPage> {
                                       ),
                                     ),
                                     IconButton(
+                                      key: Key("deleteButton_$index"),
                                       onPressed: () {
                                         context
                                             .read<SavedUsersCubit>()
@@ -176,6 +177,7 @@ class _SavedUsersPageState extends State<SavedUsersPage> {
             centerTitle: true,
             actions: [
               IconButton(
+                key: const Key("refreshButton"),
                 onPressed: () {
                   _users.clear();
                   context.read<SavedUsersCubit>().refreshUsers();
@@ -183,6 +185,7 @@ class _SavedUsersPageState extends State<SavedUsersPage> {
                 icon: const Icon(Icons.refresh),
               ),
               IconButton(
+                key: const Key("clearButton"),
                 onPressed: () {
                   showDialog(
                     context: context,
@@ -211,6 +214,7 @@ class _SavedUsersPageState extends State<SavedUsersPage> {
                           ),
                         ),
                         TextButton(
+                          key: const Key("yesClearButton"),
                           onPressed: () {
                             context.pop();
                             _users.clear();
