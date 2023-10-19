@@ -27,14 +27,14 @@ void main() {
   late MockClearUsersUseCase mockClearUsersUseCase;
   late List<UserEntity> users;
 
-  const errorMessage = "";
-
   /// Initialize data
   setUp(() async {
     TestWidgetsFlutterBinding.ensureInitialized();
     PathProviderPlatform.instance = FakePathProvider();
     await serviceLocator(
-        isUnitTest: true, prefixBox: 'saved_users_cubit_test_');
+      isUnitTest: true,
+      prefixBox: 'saved_users_cubit_test_',
+    );
 
     users = [
       const UserEntity(
@@ -93,7 +93,7 @@ void main() {
       build: () {
         when(
           mockGetSavedUsersUseCase.call(null),
-        ).thenAnswer((_) async => const Left(CacheFailure("")));
+        ).thenAnswer((_) async => Left(CacheFailure()));
 
         return savedUsersCubit;
       },
@@ -101,7 +101,7 @@ void main() {
       wait: const Duration(milliseconds: 100),
       expect: () => const [
         SavedUsersState.loading(),
-        SavedUsersState.failure(errorMessage),
+        SavedUsersState.failure("Cache Error"),
       ],
     );
 

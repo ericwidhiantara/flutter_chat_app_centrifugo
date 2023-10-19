@@ -35,14 +35,14 @@ void main() {
   test("should return Left(CacheFailure) on failure", () async {
     //arrange
     when(mockUsersRepository.clearUsers())
-        .thenAnswer((_) async => const Left(CacheFailure("")));
+        .thenAnswer((_) async => Left(CacheFailure()));
 
     //act
     final result = await clearUsersUseCase.call(null);
 
     //assert
     result.fold(
-      (l) => expect(l, const CacheFailure("")),
+      (l) => expect(l, CacheFailure()),
       (r) => expect(null, null),
     );
     verify(mockUsersRepository.clearUsers());

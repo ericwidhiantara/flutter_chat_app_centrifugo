@@ -39,7 +39,7 @@ class SavedUsersCubit extends Cubit<SavedUsersState> {
     data.fold(
       (l) {
         if (l is CacheFailure) {
-          emit(_Failure(l.message ?? ""));
+          emit(const _Failure("Cache Error"));
         } else if (l is NoDataFailure) {
           emit(const _Empty());
         }
