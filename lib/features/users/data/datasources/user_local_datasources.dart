@@ -33,7 +33,7 @@ class UsersLocalDatasourceImpl extends UsersLocalDatasource {
       await _box.addData(user);
       return const Right<Failure, void>(null);
     } catch (e) {
-      return Left(CacheFailure());
+      return Left(CacheFailure(e.toString()));
     }
   }
 
@@ -43,7 +43,7 @@ class UsersLocalDatasourceImpl extends UsersLocalDatasource {
       await _box.removeData(user);
       return const Right<Failure, void>(null);
     } catch (e) {
-      return Left(CacheFailure());
+      return Left(CacheFailure(e.toString()));
     }
   }
 
@@ -53,7 +53,7 @@ class UsersLocalDatasourceImpl extends UsersLocalDatasource {
       await _box.clearData();
       return const Right<Failure, void>(null);
     } catch (e) {
-      return Left(CacheFailure());
+      return Left(CacheFailure(e.toString()));
     }
   }
 }

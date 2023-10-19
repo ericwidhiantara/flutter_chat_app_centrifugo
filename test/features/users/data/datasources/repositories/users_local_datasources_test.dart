@@ -94,7 +94,7 @@ void main() {
       final result = await datasource.addUser(testUser);
 
       // Assert
-      expect(result, Left(CacheFailure()));
+      expect(result, const Left(CacheFailure("")));
       verify(mockUserBox.addData(testUser));
       verifyNoMoreInteractions(mockUserBox);
     });
@@ -118,7 +118,7 @@ void main() {
       final result = await datasource.removeUser(testUser);
 
       // Assert
-      expect(result, Left(CacheFailure()));
+      expect(result, const Left(CacheFailure("")));
       verify(mockUserBox.removeData(testUser));
       verifyNoMoreInteractions(mockUserBox);
     });
@@ -143,7 +143,7 @@ void main() {
       final result = await datasource.clearUsers();
 
       // Assert
-      expect(result, Left(CacheFailure()));
+      expect(result, const Left(CacheFailure("")));
       verify(mockUserBox.clearData());
       verifyNoMoreInteractions(mockUserBox);
     });

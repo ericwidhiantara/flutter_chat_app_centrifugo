@@ -162,7 +162,7 @@ void main() {
 
       test('should return a Left(CacheFailure) on failure', () async {
         when(mockUsersLocalDatasource.addUser(testUser))
-            .thenAnswer((_) async => Left(CacheFailure()));
+            .thenAnswer((_) async => const Left(CacheFailure("")));
 
         // Act
         await mockUsersLocalDatasource.addUser(testUser);
@@ -185,7 +185,7 @@ void main() {
 
       test('should return a Left(CacheFailure) on failure', () async {
         when(mockUsersLocalDatasource.removeUser(testUser))
-            .thenAnswer((_) async => Left(CacheFailure()));
+            .thenAnswer((_) async => const Left(CacheFailure("")));
 
         // Act
         await mockUsersLocalDatasource.removeUser(testUser);
@@ -209,7 +209,7 @@ void main() {
       test('should return a Left(CacheFailure) on failure', () async {
         // Arrange
         when(mockUsersLocalDatasource.clearUsers())
-            .thenAnswer((_) async => Left(CacheFailure()));
+            .thenAnswer((_) async => const Left(CacheFailure("")));
 
         // Act
         await mockUsersLocalDatasource.clearUsers();
