@@ -33,7 +33,8 @@ void main() {
   setUp(() async {
     TestWidgetsFlutterBinding.ensureInitialized();
     PathProviderPlatform.instance = FakePathProvider();
-    await serviceLocator(isUnitTest: true, prefixBox: 'users_cubit_test_');
+    await serviceLocator(
+        isUnitTest: true, prefixBox: 'saved_users_cubit_test_');
 
     users = [
       const UserEntity(
