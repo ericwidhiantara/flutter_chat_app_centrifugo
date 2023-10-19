@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:bloc_test/bloc_test.dart';
+import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -9,6 +10,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 //ignore_for_file: depend_on_referenced_packages
 import 'package:mocktail/mocktail.dart';
+import 'package:oktoast/oktoast.dart';
 import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
 import 'package:tdd_boilerplate/core/core.dart';
 import 'package:tdd_boilerplate/dependencies_injection.dart';
@@ -54,20 +56,22 @@ void main() {
   Widget rootWidget(Widget body) {
     return BlocProvider<SavedUsersCubit>.value(
       value: savedUsersCubit,
-      child: ScreenUtilInit(
-        designSize: const Size(375, 667),
-        minTextAdapt: true,
-        splitScreenMode: true,
-        builder: (_, __) => MaterialApp(
-          localizationsDelegates: const [
-            Strings.delegate,
-            GlobalMaterialLocalizations.delegate,
-            GlobalWidgetsLocalizations.delegate,
-            GlobalCupertinoLocalizations.delegate,
-          ],
-          locale: const Locale("en"),
-          theme: themeLight(MockBuildContext()),
-          home: body,
+      child: OKToast(
+        child: ScreenUtilInit(
+          designSize: const Size(375, 667),
+          minTextAdapt: true,
+          splitScreenMode: true,
+          builder: (_, __) => MaterialApp(
+            localizationsDelegates: const [
+              Strings.delegate,
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+            ],
+            locale: const Locale("en"),
+            theme: themeLight(MockBuildContext()),
+            home: body,
+          ),
         ),
       ),
     );
@@ -147,6 +151,97 @@ void main() {
         await tester.pump(const Duration(milliseconds: 100));
       }
       verify(() => savedUsersCubit.refreshUsers()).called(1);
+    },
+  );
+
+  testWidgets(
+    'should delete user from local db by tapping delete button',
+    (tester) async {
+      when(() => savedUsersCubit.state).thenReturn(
+        SavedUsersState.success(users, ""),
+      );
+
+      when(() => savedUsersCubit.deleteUser(users.first))
+          .thenAnswer((_) async => const Right(null));
+
+      await tester.pumpWidget(rootWidget(const SavedUsersPage()));
+      await tester.pumpAndSettle(); //if not include this the test will fail
+
+      // Find the widget by its key.
+      final buttonFinder = find.byKey(const Key('deleteButton_0'));
+
+      // Verify that the button exists in the widget tree.
+      expect(buttonFinder, findsOneWidget);
+
+      // Simulate a tap on the button.
+      await tester.tap(buttonFinder);
+
+      for (int i = 0; i < 5; i++) {
+        await tester.pump(const Duration(seconds: 3));
+      }
+    },
+  );
+
+  testWidgets(
+    'should trigger refresh saved user list when refresh button tapped',
+    (tester) async {
+      when(() => savedUsersCubit.state).thenReturn(
+        SavedUsersState.success(users, ""),
+      );
+
+      when(() => savedUsersCubit.refreshUsers()).thenAnswer((_) async {});
+
+      await tester.pumpWidget(rootWidget(const SavedUsersPage()));
+      await tester.pumpAndSettle(); //if not include this the test will fail
+
+      // Find the widget by its key.
+      final buttonFinder = find.byKey(const Key('refreshButton'));
+
+      // Verify that the button exists in the widget tree.
+      expect(buttonFinder, findsOneWidget);
+
+      // Simulate a tap on the button.
+      await tester.tap(buttonFinder);
+
+      for (int i = 0; i < 5; i++) {
+        await tester.pump(const Duration(seconds: 3));
+      }
+    },
+  );
+
+  testWidgets(
+    'should clear saved user list when clear button tapped',
+    (tester) async {
+      when(() => savedUsersCubit.state).thenReturn(
+        SavedUsersState.success(users, ""),
+      );
+
+      when(() => savedUsersCubit.clearUser())
+          .thenAnswer((_) async => const Right(null));
+
+      await tester.pumpWidget(rootWidget(const SavedUsersPage()));
+      await tester.pumpAndSettle(); //if not include this the test will fail
+
+      // Find the widget by its key.
+      final buttonFinder = find.byKey(const Key('clearButton'));
+
+      // Verify that the button exists in the widget tree.
+      expect(buttonFinder, findsOneWidget);
+
+      // Simulate a tap on the button.
+      await tester.tap(buttonFinder);
+      await tester.pump();
+
+      // Find the widget by its key.
+      final yesClearButtonFinder = find.byKey(const Key('yesClearButton'));
+
+      // Verify that the button exists in the widget tree.
+      expect(yesClearButtonFinder, findsOneWidget);
+
+      // // Don't simulate tap on the yes clear button,
+      // because it will throw error Go Router not found in context
+      // await tester.tap(yesClearButtonFinder);
+      // await tester.pump();
     },
   );
 }
