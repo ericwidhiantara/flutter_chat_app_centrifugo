@@ -5,4 +5,6 @@ appId: com.example.tdd_boilerplate.dev
 - inputText: "eve.holt@reqres.in"
 - tapOn: "••••••••••••"
 - inputText: "password123"
+- tapOn:
+    point: "88%,47%"
 - tapOn: "LOGIN"
