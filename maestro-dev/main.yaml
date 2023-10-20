@@ -1,0 +1,7 @@
+appId: com.example.tdd_boilerplate.dev
+---
+- runFlow: "register.yaml"
+- runFlow: "login.yaml"
+- runFlow: "dashboard.yaml"
+- runFlow: "settings.yaml"
+- runFlow: "logout.yaml"

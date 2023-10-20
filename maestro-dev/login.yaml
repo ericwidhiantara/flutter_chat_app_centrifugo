@@ -1,0 +1,8 @@
+appId: com.example.tdd_boilerplate.dev
+---
+- launchApp
+- tapOn: "eve.holt@reqres.in"
+- inputText: "eve.holt@reqres.in"
+- tapOn: "••••••••••••"
+- inputText: "password123"
+- tapOn: "LOGIN"

@@ -1,0 +1,14 @@
+appId: com.example.tdd_boilerplate.dev
+---
+- tapOn: "DON'T HAVE AN ACCOUNT?"
+- tapOn: "johndoe@gmail.com"
+- inputText: "eve.holt@reqres.in"
+- tapOn: "password\n••••••••••••"
+- inputText: "pistol"
+- tapOn:
+    point: "50%,38%"
+- tapOn: "repeat_password\n••••••••••••"
+- inputText: "pistol"
+- tapOn:
+    point: "60%,44%"
+- tapOn: "REGISTER"

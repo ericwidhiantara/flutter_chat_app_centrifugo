@@ -1,0 +1,14 @@
+appId: com.example.tdd_boilerplate.dev
+---
+- tapOn: "Menu"
+- tapOn: "Settings"
+- tapOn: "Theme Light"
+- tapOn: "Theme Dark"
+- tapOn: "Theme Dark"
+- tapOn: "Theme System"
+- tapOn: "English"
+- tapOn: "Bahasa"
+- tapOn: "Bahasa"
+- tapOn: "English"
+- tapOn: "Theme System"
+- tapOn: "Theme Light"
