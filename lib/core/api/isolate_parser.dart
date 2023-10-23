@@ -1,6 +1,6 @@
 import 'dart:isolate';
 
-import 'package:tdd_boilerplate/core/core.dart';
+import 'package:tddboilerplate/core/core.dart';
 
 class IsolateParser<T> {
   final Map<String, dynamic> json;

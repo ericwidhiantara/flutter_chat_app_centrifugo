@@ -3,9 +3,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:tdd_boilerplate/core/core.dart';
-import 'package:tdd_boilerplate/features/features.dart';
-import 'package:tdd_boilerplate/utils/utils.dart';
+import 'package:tddboilerplate/core/core.dart';
+import 'package:tddboilerplate/features/features.dart';
+import 'package:tddboilerplate/utils/utils.dart';
 
 class SavedUsersPage extends StatefulWidget {
   const SavedUsersPage({super.key});

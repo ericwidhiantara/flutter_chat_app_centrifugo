@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:tdd_boilerplate/core/core.dart';
-import 'package:tdd_boilerplate/utils/utils.dart';
+import 'package:tddboilerplate/core/core.dart';
+import 'package:tddboilerplate/utils/utils.dart';
 
 class Button extends StatelessWidget {
   final String title;

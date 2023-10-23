@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:tdd_boilerplate/utils/utils.dart';
+import 'package:tddboilerplate/utils/utils.dart';
 
 class DioInterceptor extends Interceptor with FirebaseCrashLogger {
   @override

@@ -1,6 +1,6 @@
 import 'package:dartz/dartz.dart';
-import 'package:tdd_boilerplate/core/core.dart';
-import 'package:tdd_boilerplate/features/auth/auth.dart';
+import 'package:tddboilerplate/core/core.dart';
+import 'package:tddboilerplate/features/auth/auth.dart';
 
 abstract class AuthRemoteDatasource {
   Future<Either<Failure, RegisterResponse>> register(

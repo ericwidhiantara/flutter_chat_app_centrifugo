@@ -4,10 +4,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:oktoast/oktoast.dart';
-import 'package:tdd_boilerplate/core/core.dart';
-import 'package:tdd_boilerplate/dependencies_injection.dart';
-import 'package:tdd_boilerplate/features/features.dart';
-import 'package:tdd_boilerplate/utils/helper/helper.dart';
+import 'package:tddboilerplate/core/core.dart';
+import 'package:tddboilerplate/dependencies_injection.dart';
+import 'package:tddboilerplate/features/features.dart';
+import 'package:tddboilerplate/utils/helper/helper.dart';
 
 class App extends StatelessWidget {
   @override
@@ -21,7 +21,9 @@ class App extends StatelessWidget {
     log.d(const String.fromEnvironment('ENV'));
     return MultiBlocProvider(
       providers: [
-        BlocProvider(create: (_) => sl<SettingsCubit>()..getActiveTheme()),
+        BlocProvider(
+          create: (_) => sl<SettingsCubit>()..getActiveTheme(),
+        ),
         BlocProvider(create: (_) => sl<AuthCubit>()),
       ],
       child: OKToast(

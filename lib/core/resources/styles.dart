@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:tdd_boilerplate/core/core.dart';
+import 'package:tddboilerplate/core/core.dart';
 
 /// Light theme
 ThemeData themeLight(BuildContext context) => ThemeData(

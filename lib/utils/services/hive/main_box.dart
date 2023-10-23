@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:tdd_boilerplate/utils/utils.dart';
+import 'package:tddboilerplate/utils/utils.dart';
 
 enum ActiveTheme {
   light(ThemeMode.light),

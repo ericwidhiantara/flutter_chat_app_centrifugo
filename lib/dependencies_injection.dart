@@ -1,7 +1,7 @@
 import 'package:get_it/get_it.dart';
-import 'package:tdd_boilerplate/core/core.dart';
-import 'package:tdd_boilerplate/features/features.dart';
-import 'package:tdd_boilerplate/utils/utils.dart';
+import 'package:tddboilerplate/core/core.dart';
+import 'package:tddboilerplate/features/features.dart';
+import 'package:tddboilerplate/utils/utils.dart';
 
 GetIt sl = GetIt.instance;
 

@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:tdd_boilerplate/features/features.dart';
+import 'package:tddboilerplate/features/features.dart';
 
 void main() {
   group('UsersStatusX', () {

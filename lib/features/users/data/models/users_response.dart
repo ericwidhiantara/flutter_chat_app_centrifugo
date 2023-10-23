@@ -1,5 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:tdd_boilerplate/features/users/users.dart';
+import 'package:tddboilerplate/features/users/users.dart';
 
 part 'users_response.freezed.dart';
 

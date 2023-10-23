@@ -1,6 +1,6 @@
 import 'package:dartz/dartz.dart';
-import 'package:tdd_boilerplate/core/core.dart';
-import 'package:tdd_boilerplate/features/features.dart';
+import 'package:tddboilerplate/core/core.dart';
+import 'package:tddboilerplate/features/features.dart';
 
 abstract class UsersLocalDatasource extends UserBoxMixin {
   Future<Either<Failure, List<UserEntity>>> getSavedUsers();

@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:tdd_boilerplate/features/features.dart';
+import 'package:tddboilerplate/features/features.dart';
 
 import '../../../../../helpers/json_reader.dart';
 import '../../../../../helpers/paths.dart';

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tdd_boilerplate/core/core.dart';
+import 'package:tddboilerplate/core/core.dart';
 
 class SpacerV extends StatelessWidget {
   const SpacerV({super.key, this.value});

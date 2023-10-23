@@ -1,5 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:tdd_boilerplate/utils/utils.dart';
+import 'package:tddboilerplate/utils/utils.dart';
 
 class SettingsCubit extends Cubit<DataHelper> with MainBoxMixin {
   SettingsCubit() : super(DataHelper(type: "en"));

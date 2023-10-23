@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:mockito/annotations.dart';
-import 'package:tdd_boilerplate/features/features.dart';
+import 'package:tddboilerplate/features/features.dart';
 
 @GenerateMocks([
   AuthRepository,

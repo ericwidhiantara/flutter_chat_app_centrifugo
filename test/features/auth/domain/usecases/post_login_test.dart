@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
-import 'package:tdd_boilerplate/features/features.dart';
+import 'package:tddboilerplate/features/features.dart';
 
 import '../../../../helpers/json_reader.dart';
 import '../../../../helpers/paths.dart';

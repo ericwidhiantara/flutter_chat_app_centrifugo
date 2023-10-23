@@ -1,6 +1,6 @@
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:tdd_boilerplate/features/features.dart';
-import 'package:tdd_boilerplate/utils/utils.dart';
+import 'package:tddboilerplate/features/features.dart';
+import 'package:tddboilerplate/utils/utils.dart';
 
 mixin class UserBoxMixin {
   static late Box? mainBox;

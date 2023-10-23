@@ -3,10 +3,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:tdd_boilerplate/core/core.dart';
-import 'package:tdd_boilerplate/dependencies_injection.dart';
-import 'package:tdd_boilerplate/features/users/users.dart';
-import 'package:tdd_boilerplate/utils/utils.dart';
+import 'package:tddboilerplate/core/core.dart';
+import 'package:tddboilerplate/dependencies_injection.dart';
+import 'package:tddboilerplate/features/users/users.dart';
+import 'package:tddboilerplate/utils/utils.dart';
 
 class DashboardPage extends StatefulWidget {
   const DashboardPage({super.key});

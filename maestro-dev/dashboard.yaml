@@ -1,4 +1,4 @@
-appId: com.example.tdd_boilerplate.dev
+appId: com.example.tddboilerplate.dev
 ---
 - swipe:
     direction: "UP"

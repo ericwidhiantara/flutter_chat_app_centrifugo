@@ -1,8 +1,8 @@
 import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
-import 'package:tdd_boilerplate/core/core.dart';
-import 'package:tdd_boilerplate/features/features.dart';
+import 'package:tddboilerplate/core/core.dart';
+import 'package:tddboilerplate/features/features.dart';
 
 import '../../../../helpers/test_mock.mocks.dart';
 

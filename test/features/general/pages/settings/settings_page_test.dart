@@ -10,10 +10,10 @@ import 'package:flutter_test/flutter_test.dart';
 //ignore_for_file: depend_on_referenced_packages
 import 'package:mocktail/mocktail.dart';
 import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
-import 'package:tdd_boilerplate/core/core.dart';
-import 'package:tdd_boilerplate/dependencies_injection.dart';
-import 'package:tdd_boilerplate/features/features.dart';
-import 'package:tdd_boilerplate/utils/utils.dart';
+import 'package:tddboilerplate/core/core.dart';
+import 'package:tddboilerplate/dependencies_injection.dart';
+import 'package:tddboilerplate/features/features.dart';
+import 'package:tddboilerplate/utils/utils.dart';
 
 import '../../../../helpers/fake_path_provider_platform.dart';
 import '../../../../helpers/test_mock.mocks.dart';

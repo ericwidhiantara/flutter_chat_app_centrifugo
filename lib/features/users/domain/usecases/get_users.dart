@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:tdd_boilerplate/core/core.dart';
-import 'package:tdd_boilerplate/features/users/users.dart';
+import 'package:tddboilerplate/core/core.dart';
+import 'package:tddboilerplate/features/users/users.dart';
 
 part 'get_users.freezed.dart';
 

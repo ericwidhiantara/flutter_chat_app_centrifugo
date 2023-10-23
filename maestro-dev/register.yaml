@@ -1,4 +1,4 @@
-appId: com.example.tdd_boilerplate.dev
+appId: com.example.tddboilerplate.dev
 ---
 - tapOn: "DON'T HAVE AN ACCOUNT?"
 - tapOn: "johndoe@gmail.com"

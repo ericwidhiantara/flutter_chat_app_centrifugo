@@ -1,8 +1,8 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:tdd_boilerplate/core/core.dart';
-import 'package:tdd_boilerplate/features/features.dart';
-import 'package:tdd_boilerplate/utils/helper/helper.dart';
+import 'package:tddboilerplate/core/core.dart';
+import 'package:tddboilerplate/features/features.dart';
+import 'package:tddboilerplate/utils/helper/helper.dart';
 
 part 'saved_users_cubit.freezed.dart';
 

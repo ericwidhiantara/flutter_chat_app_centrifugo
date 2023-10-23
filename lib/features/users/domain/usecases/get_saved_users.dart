@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
-import 'package:tdd_boilerplate/core/error/failure.dart';
-import 'package:tdd_boilerplate/core/usecase/usecase.dart';
-import 'package:tdd_boilerplate/features/features.dart';
+import 'package:tddboilerplate/core/error/failure.dart';
+import 'package:tddboilerplate/core/usecase/usecase.dart';
+import 'package:tddboilerplate/features/features.dart';
 
 class GetSavedUsersUseCase implements UseCase<List<UserEntity>, void> {
   final UsersRepository _usersRepository;

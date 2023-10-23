@@ -3,9 +3,9 @@ import 'dart:async';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:tdd_boilerplate/app.dart';
-import 'package:tdd_boilerplate/dependencies_injection.dart';
-import 'package:tdd_boilerplate/utils/utils.dart';
+import 'package:tddboilerplate/app.dart';
+import 'package:tddboilerplate/dependencies_injection.dart';
+import 'package:tddboilerplate/utils/utils.dart';
 
 void main() {
   runZonedGuarded(

@@ -9,7 +9,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:758311861545:android:c6dcb911b108d2a7d10b38",
         "android_client_info": {
-          "package_name": "com.example.tdd_boilerplate.dev"
+          "package_name": "com.example.tddboilerplate.dev"
         }
       },
       "oauth_client": [],

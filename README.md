@@ -13,7 +13,7 @@ This is an app boilertplate to easily create flutter project using TDD and Bloc 
 
 ## Get Started 🚀
 
-- Clone this project using `git clone https://github.com/ericwidhiantara/tdd_boilerplate.git`
+- Clone this project using `git clone https://github.com/ericwidhiantara/tddboilerplate.git`
 - Run `flutter pub get`
 - Run `flutter gen-l10n` to generate localization files
 - Run `dart run build_runner build --delete-conflicting-outputs` to generate required files

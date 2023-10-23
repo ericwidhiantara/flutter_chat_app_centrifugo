@@ -12,9 +12,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
-import 'package:tdd_boilerplate/core/core.dart';
-import 'package:tdd_boilerplate/dependencies_injection.dart';
-import 'package:tdd_boilerplate/features/features.dart';
+import 'package:tddboilerplate/core/core.dart';
+import 'package:tddboilerplate/dependencies_injection.dart';
+import 'package:tddboilerplate/features/features.dart';
 
 import '../../../../helpers/fake_path_provider_platform.dart';
 import '../../../../helpers/test_mock.mocks.dart';

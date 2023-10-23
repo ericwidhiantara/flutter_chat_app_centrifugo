@@ -5,9 +5,9 @@ import 'package:http_mock_adapter/http_mock_adapter.dart';
 
 //ignore_for_file: depend_on_referenced_packages
 import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
-import 'package:tdd_boilerplate/core/core.dart';
-import 'package:tdd_boilerplate/dependencies_injection.dart';
-import 'package:tdd_boilerplate/features/features.dart';
+import 'package:tddboilerplate/core/core.dart';
+import 'package:tddboilerplate/dependencies_injection.dart';
+import 'package:tddboilerplate/features/features.dart';
 
 import '../../../../../helpers/fake_path_provider_platform.dart';
 import '../../../../../helpers/json_reader.dart';
