@@ -2,9 +2,21 @@ appId: com.example.tdd_boilerplate.dev
 ---
 - launchApp
 - tapOn: "eve.holt@reqres.in"
-- inputText: "eve.holt@reqres.in"
+- inputText: "example@example.com"
 - tapOn: "••••••••••••"
+- inputText: "testt123"
+- tapOn:
+    point: "88%,47%"
+- tapOn: "LOGIN"
+- longPressOn: "example@example.com"
+- tapOn: "Select All"
+- "eraseText"
+- inputText: "eve.holt@reqres.in"
+- longPressOn: "testt123"
+- tapOn: "Select All"
+- "eraseText"
 - inputText: "password123"
 - tapOn:
     point: "88%,47%"
 - tapOn: "LOGIN"
+
