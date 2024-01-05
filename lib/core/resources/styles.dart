@@ -1,19 +1,49 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:tddboilerplate/core/core.dart';
 
 /// Light theme
 ThemeData themeLight(BuildContext context) => ThemeData(
       fontFamily: 'Poppins',
       useMaterial3: true,
-      primaryColor: Palette.pinkLatte,
+      primaryColor: Palette.primary,
       disabledColor: Palette.shadowDark,
       hintColor: Palette.subText,
       cardColor: Palette.background,
       scaffoldBackgroundColor: Palette.background,
+      dividerColor: Palette.shadow,
       colorScheme: const ColorScheme.light().copyWith(
         primary: Palette.primary,
         background: Palette.background,
+      ),
+      actionIconTheme: ActionIconThemeData(
+        backButtonIconBuilder: (BuildContext context) => IconButton(
+          padding: EdgeInsets.zero,
+          onPressed: () => Navigator.maybePop(context),
+          icon: Container(
+            width: Dimens.size30,
+            height: Dimens.size30,
+            decoration: ShapeDecoration(
+              color: Theme.of(context).scaffoldBackgroundColor,
+              shape: const OvalBorder(
+                side: BorderSide(
+                  color: Color(0xFFF2F2F2),
+                ),
+              ),
+              shadows: const [
+                BoxShadow(
+                  color: Color(0x7F000000),
+                  blurRadius: 2,
+                  offset: Offset(0, 2),
+                ),
+              ],
+            ),
+            child: Center(
+              child: SvgPicture.asset(SvgImages.icArrowBackward),
+            ),
+          ),
+        ),
       ),
       textTheme: TextTheme(
         displayLarge: Theme.of(context).textTheme.displayLarge?.copyWith(
@@ -73,7 +103,7 @@ ThemeData themeLight(BuildContext context) => ThemeData(
       appBarTheme: const AppBarTheme().copyWith(
         titleTextStyle: Theme.of(context).textTheme.bodyLarge,
         color: Palette.background,
-        iconTheme: const IconThemeData(color: Palette.pinkLatte),
+        iconTheme: const IconThemeData(color: Palette.primary),
         systemOverlayStyle: SystemUiOverlayStyle.dark.copyWith(
           statusBarColor: Colors.transparent,
         ),
@@ -100,6 +130,7 @@ ThemeData themeLight(BuildContext context) => ThemeData(
       visualDensity: VisualDensity.adaptivePlatformDensity,
       extensions: const <ThemeExtension<dynamic>>[
         CustomColor(
+          primary: Palette.primary,
           background: Palette.background,
           card: Palette.card,
           buttonText: Palette.text,
@@ -127,12 +158,41 @@ ThemeData themeLight(BuildContext context) => ThemeData(
 ThemeData themeDark(BuildContext context) => ThemeData(
       fontFamily: 'Poppins',
       useMaterial3: true,
-      primaryColor: Palette.pinkMocha,
+      primaryColor: Palette.redMocha,
       disabledColor: Palette.shadowDark,
       hintColor: Palette.subTextDark,
       cardColor: Palette.backgroundDark,
       scaffoldBackgroundColor: Palette.backgroundDark,
+      dividerColor: Palette.shadow,
       colorScheme: const ColorScheme.dark().copyWith(primary: Palette.primary),
+      actionIconTheme: ActionIconThemeData(
+        backButtonIconBuilder: (BuildContext context) => IconButton(
+          padding: EdgeInsets.zero,
+          onPressed: () => Navigator.maybePop(context),
+          icon: Container(
+            width: Dimens.size30,
+            height: Dimens.size30,
+            decoration: ShapeDecoration(
+              color: Theme.of(context).scaffoldBackgroundColor,
+              shape: const OvalBorder(
+                side: BorderSide(
+                  color: Color(0xFFF2F2F2),
+                ),
+              ),
+              shadows: const [
+                BoxShadow(
+                  color: Color(0x7F000000),
+                  blurRadius: 2,
+                  offset: Offset(0, 2),
+                ),
+              ],
+            ),
+            child: Center(
+              child: SvgPicture.asset(SvgImages.icArrowBackward),
+            ),
+          ),
+        ),
+      ),
       textTheme: TextTheme(
         displayLarge: Theme.of(context).textTheme.displayLarge?.copyWith(
               fontSize: Dimens.displayLarge,
@@ -219,6 +279,7 @@ ThemeData themeDark(BuildContext context) => ThemeData(
       visualDensity: VisualDensity.adaptivePlatformDensity,
       extensions: const <ThemeExtension<dynamic>>[
         CustomColor(
+          primary: Palette.primary,
           background: Palette.backgroundDark,
           buttonText: Palette.textDark,
           card: Palette.cardDark,
@@ -243,6 +304,7 @@ ThemeData themeDark(BuildContext context) => ThemeData(
     );
 
 class CustomColor extends ThemeExtension<CustomColor> {
+  final Color? primary;
   final Color? background;
   final Color? card;
   final Color? buttonText;
@@ -264,6 +326,7 @@ class CustomColor extends ThemeExtension<CustomColor> {
   final Color? red;
 
   const CustomColor({
+    this.primary,
     this.background,
     this.card,
     this.buttonText,
@@ -287,6 +350,7 @@ class CustomColor extends ThemeExtension<CustomColor> {
 
   @override
   ThemeExtension<CustomColor> copyWith({
+    Color? primary,
     Color? background,
     Color? card,
     Color? buttonText,
@@ -308,6 +372,7 @@ class CustomColor extends ThemeExtension<CustomColor> {
     Color? red,
   }) {
     return CustomColor(
+      primary: primary ?? this.primary,
       background: background ?? this.background,
       card: card ?? this.card,
       buttonText: buttonText ?? this.buttonText,
@@ -339,6 +404,7 @@ class CustomColor extends ThemeExtension<CustomColor> {
       return this;
     }
     return CustomColor(
+      primary: Color.lerp(primary, other.primary, t),
       background: Color.lerp(background, other.background, t),
       card: Color.lerp(card, other.card, t),
       buttonText: Color.lerp(buttonText, other.buttonText, t),
