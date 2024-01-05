@@ -1,0 +1,15 @@
+flutter_native_splash:
+  color: "#ffffff"
+  image: assets/images/ic_launcher_foreground_dev.png
+  color_dark: "#1E1E2E"
+  image_dark: assets/images/ic_launcher_dev.png
+  android_gravity: fill
+
+  android_12:
+    image: assets/images/ic_launcher_foreground_dev.png
+    icon_background_color: "#ffffff"
+    image_dark: assets/images/ic_launcher_dev.png
+    icon_background_color_dark: "#1E1E2E"
+    android_gravity: fill
+  
+  web: false
