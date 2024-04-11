@@ -22,7 +22,7 @@ This is an app boilertplate to easily create flutter project using TDD and Bloc 
   Flavor `flutter clean && flutter pub get && dart run flutter_native_splash:create --flavors dev,stg,prd`
 - To generate launcher icon based on
   Flavor `dart run flutter_launcher_icons:main -f flutter_launcher_icons*`
-- To generate mock class `dart run build_runner build`
+- To generate mock class `dart run build_runner build --delete-conflicting-outputs`
 
 ## Run The App 🏃
 
