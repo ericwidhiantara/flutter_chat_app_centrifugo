@@ -19,6 +19,7 @@ enum MainBoxKeys {
   theme,
   locale,
   isLogin,
+  tokenData,
 }
 
 mixin class MainBoxMixin {
@@ -28,6 +29,13 @@ mixin class MainBoxMixin {
   static Future<void> initHive(String prefixBox) async {
     // Initialize hive (persistent database)
     await Hive.initFlutter();
+
+    //check if the adapter is already registered
+    //if not checked will be return error to integration test
+    if (!Hive.isAdapterRegistered(1)) {
+      Hive.registerAdapter(UserLoginEntityAdapter());
+    }
+
     mainBox = await Hive.openBox("$prefixBox$_boxName");
   }
 
@@ -45,6 +53,7 @@ mixin class MainBoxMixin {
     /// Clear the box
     removeData(MainBoxKeys.isLogin);
     removeData(MainBoxKeys.token);
+    removeData(MainBoxKeys.tokenData);
   }
 
   Future<void> closeBox({bool isUnitTest = false}) async {
