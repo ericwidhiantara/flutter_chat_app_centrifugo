@@ -54,12 +54,19 @@ import 'package:flutter/material.dart';
 class Palette {
   Palette._();
 
-  static const Color primary = Color(0xffE18925);
-  static const Color primaryLight = Color(0xffF7B553);
+  static const Color primary = Color(0xffC6261D);
+  static const Color primaryLight = Color(0xffFFD79B);
+
+  static const Color onboardingGradientUp = Color(0xFFFFE5EC);
+  static const Color onboardingGradientDown = Color(0xffC6261D);
+
+  static const Color pinkButtonColor = Color(0xFFFC4674);
 
   static const Color background = Color(0xffeff1f5);
   static const Color backgroundDark = Color(0xff1e1e2e);
-  static const Color card = Color(0xffccd0da);
+  static const Color black = Color(0xff000000);
+  static const Color white = Color(0xffffffff);
+  static const Color card = Color(0xffF9FAFD);
   static const Color cardDark = Color(0xff313244);
   static const Color text = Color(0xff4c4f69);
   static const Color textDark = Color(0xffcdd6f4);
@@ -84,6 +91,7 @@ class Palette {
   static const Color lavenderMocha = Color(0xffb4befe);
 
   static const Color redLatte = Color(0xffd20f39);
+  static const Color red = Color(0xffF52D23);
   static const Color greenLatte = Color(0xff40a02b);
   static const Color roseWaterLatte = Color(0xffdc8a78);
   static const Color flamingoLatte = Color(0xffdd7878);
@@ -92,9 +100,16 @@ class Palette {
   static const Color maroonLatte = Color(0xffe64553);
   static const Color peachLatte = Color(0xfffe640b);
   static const Color yellowLatte = Color(0xffdf8e1d);
+  static const Color yellow = Color(0xffFEBE1A);
   static const Color tealLatte = Color(0xff179299);
   static const Color sapphireLatte = Color(0xff209fb5);
   static const Color skyLatte = Color(0xff04a5e5);
   static const Color blueLatte = Color(0xff1e66f5);
+  static const Color blue = Color(0xff1A91FE);
   static const Color lavenderLatte = Color(0xff7287fd);
+
+  static Color colorFromHex(String hexColor) {
+    final hexCode = hexColor.replaceAll('#', '');
+    return Color(int.parse('FF$hexCode', radix: 16));
+  }
 }

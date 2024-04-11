@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:tddboilerplate/core/core.dart';
 
 /// Light theme
@@ -10,40 +9,12 @@ ThemeData themeLight(BuildContext context) => ThemeData(
       primaryColor: Palette.primary,
       disabledColor: Palette.shadowDark,
       hintColor: Palette.subText,
-      cardColor: Palette.background,
+      cardColor: Palette.card,
       scaffoldBackgroundColor: Palette.background,
       dividerColor: Palette.shadow,
       colorScheme: const ColorScheme.light().copyWith(
         primary: Palette.primary,
         background: Palette.background,
-      ),
-      actionIconTheme: ActionIconThemeData(
-        backButtonIconBuilder: (BuildContext context) => IconButton(
-          padding: EdgeInsets.zero,
-          onPressed: () => Navigator.maybePop(context),
-          icon: Container(
-            width: Dimens.size30,
-            height: Dimens.size30,
-            decoration: ShapeDecoration(
-              color: Theme.of(context).scaffoldBackgroundColor,
-              shape: const OvalBorder(
-                side: BorderSide(
-                  color: Color(0xFFF2F2F2),
-                ),
-              ),
-              shadows: const [
-                BoxShadow(
-                  color: Color(0x7F000000),
-                  blurRadius: 2,
-                  offset: Offset(0, 2),
-                ),
-              ],
-            ),
-            child: Center(
-              child: SvgPicture.asset(SvgImages.icArrowBackward),
-            ),
-          ),
-        ),
       ),
       textTheme: TextTheme(
         displayLarge: Theme.of(context).textTheme.displayLarge?.copyWith(
@@ -131,9 +102,13 @@ ThemeData themeLight(BuildContext context) => ThemeData(
       extensions: const <ThemeExtension<dynamic>>[
         CustomColor(
           primary: Palette.primary,
+          onboardingGradientUp: Palette.onboardingGradientUp,
+          onboardingGradientDown: Palette.onboardingGradientDown,
+          pinkButtonColor: Palette.pinkButtonColor,
           background: Palette.background,
           card: Palette.card,
           buttonText: Palette.text,
+          defaultText: Palette.black,
           subtitle: Palette.subText,
           shadow: Palette.shadowDark,
           green: Palette.greenLatte,
@@ -143,13 +118,16 @@ ThemeData themeLight(BuildContext context) => ThemeData(
           mauve: Palette.mauveLatte,
           maroon: Palette.maroonLatte,
           peach: Palette.peachLatte,
-          yellow: Palette.yellowLatte,
+          yellow: Palette.yellow,
+          yellowLatte: Palette.yellowLatte,
           teal: Palette.tealLatte,
           sapphire: Palette.sapphireLatte,
           sky: Palette.skyLatte,
-          blue: Palette.blueLatte,
+          blue: Palette.blue,
+          blueLatte: Palette.blueLatte,
           lavender: Palette.lavenderLatte,
-          red: Palette.redLatte,
+          red: Palette.red,
+          redLatte: Palette.redLatte,
         ),
       ],
     );
@@ -161,38 +139,10 @@ ThemeData themeDark(BuildContext context) => ThemeData(
       primaryColor: Palette.redMocha,
       disabledColor: Palette.shadowDark,
       hintColor: Palette.subTextDark,
-      cardColor: Palette.backgroundDark,
+      cardColor: Palette.cardDark,
       scaffoldBackgroundColor: Palette.backgroundDark,
       dividerColor: Palette.shadow,
       colorScheme: const ColorScheme.dark().copyWith(primary: Palette.primary),
-      actionIconTheme: ActionIconThemeData(
-        backButtonIconBuilder: (BuildContext context) => IconButton(
-          padding: EdgeInsets.zero,
-          onPressed: () => Navigator.maybePop(context),
-          icon: Container(
-            width: Dimens.size30,
-            height: Dimens.size30,
-            decoration: ShapeDecoration(
-              color: Theme.of(context).scaffoldBackgroundColor,
-              shape: const OvalBorder(
-                side: BorderSide(
-                  color: Color(0xFFF2F2F2),
-                ),
-              ),
-              shadows: const [
-                BoxShadow(
-                  color: Color(0x7F000000),
-                  blurRadius: 2,
-                  offset: Offset(0, 2),
-                ),
-              ],
-            ),
-            child: Center(
-              child: SvgPicture.asset(SvgImages.icArrowBackward),
-            ),
-          ),
-        ),
-      ),
       textTheme: TextTheme(
         displayLarge: Theme.of(context).textTheme.displayLarge?.copyWith(
               fontSize: Dimens.displayLarge,
@@ -250,7 +200,7 @@ ThemeData themeDark(BuildContext context) => ThemeData(
       ),
       appBarTheme: const AppBarTheme().copyWith(
         titleTextStyle: Theme.of(context).textTheme.bodyLarge,
-        iconTheme: const IconThemeData(color: Palette.pinkMocha),
+        iconTheme: const IconThemeData(color: Palette.redMocha),
         color: Palette.backgroundDark,
         systemOverlayStyle: SystemUiOverlayStyle.light.copyWith(
           statusBarColor: Colors.transparent,
@@ -280,8 +230,12 @@ ThemeData themeDark(BuildContext context) => ThemeData(
       extensions: const <ThemeExtension<dynamic>>[
         CustomColor(
           primary: Palette.primary,
+          onboardingGradientUp: Palette.onboardingGradientUp,
+          onboardingGradientDown: Palette.onboardingGradientDown,
+          pinkButtonColor: Palette.pinkButtonColor,
           background: Palette.backgroundDark,
           buttonText: Palette.textDark,
+          defaultText: Palette.white,
           card: Palette.cardDark,
           subtitle: Palette.subTextDark,
           shadow: Palette.shadowDark,
@@ -292,22 +246,29 @@ ThemeData themeDark(BuildContext context) => ThemeData(
           mauve: Palette.mauveMocha,
           maroon: Palette.maroonMocha,
           peach: Palette.peachMocha,
-          yellow: Palette.yellowMocha,
+          yellow: Palette.yellow,
+          yellowLatte: Palette.yellowMocha,
           teal: Palette.tealMocha,
           sapphire: Palette.sapphireMocha,
           sky: Palette.skyMocha,
-          blue: Palette.blueMocha,
+          blue: Palette.blue,
+          blueLatte: Palette.blueMocha,
           lavender: Palette.lavenderMocha,
-          red: Palette.redMocha,
+          red: Palette.red,
+          redLatte: Palette.redMocha,
         ),
       ],
     );
 
 class CustomColor extends ThemeExtension<CustomColor> {
   final Color? primary;
+  final Color? onboardingGradientUp;
+  final Color? onboardingGradientDown;
+  final Color? pinkButtonColor;
   final Color? background;
   final Color? card;
   final Color? buttonText;
+  final Color? defaultText;
   final Color? subtitle;
   final Color? shadow;
   final Color? green;
@@ -318,18 +279,25 @@ class CustomColor extends ThemeExtension<CustomColor> {
   final Color? maroon;
   final Color? peach;
   final Color? yellow;
+  final Color? yellowLatte;
   final Color? teal;
   final Color? sky;
   final Color? sapphire;
   final Color? blue;
+  final Color? blueLatte;
   final Color? lavender;
   final Color? red;
+  final Color? redLatte;
 
   const CustomColor({
     this.primary,
+    this.onboardingGradientUp,
+    this.onboardingGradientDown,
+    this.pinkButtonColor,
     this.background,
     this.card,
     this.buttonText,
+    this.defaultText,
     this.subtitle,
     this.shadow,
     this.green,
@@ -340,20 +308,27 @@ class CustomColor extends ThemeExtension<CustomColor> {
     this.maroon,
     this.peach,
     this.yellow,
+    this.yellowLatte,
     this.teal,
     this.sapphire,
     this.sky,
     this.blue,
+    this.blueLatte,
     this.lavender,
     this.red,
+    this.redLatte,
   });
 
   @override
   ThemeExtension<CustomColor> copyWith({
     Color? primary,
+    Color? onboardingGradientUp,
+    Color? onboardingGradientDown,
+    Color? pinkButtonColor,
     Color? background,
     Color? card,
     Color? buttonText,
+    Color? defaultText,
     Color? subtitle,
     Color? shadow,
     Color? green,
@@ -364,18 +339,26 @@ class CustomColor extends ThemeExtension<CustomColor> {
     Color? maroon,
     Color? peach,
     Color? yellow,
+    Color? yellowLatte,
     Color? teal,
     Color? sky,
     Color? sapphire,
     Color? blue,
+    Color? blueLatte,
     Color? lavender,
     Color? red,
+    Color? redLatte,
   }) {
     return CustomColor(
       primary: primary ?? this.primary,
+      onboardingGradientUp: onboardingGradientUp ?? this.onboardingGradientUp,
+      onboardingGradientDown:
+          onboardingGradientDown ?? this.onboardingGradientDown,
+      pinkButtonColor: pinkButtonColor ?? this.onboardingGradientDown,
       background: background ?? this.background,
       card: card ?? this.card,
       buttonText: buttonText ?? this.buttonText,
+      defaultText: defaultText ?? this.defaultText,
       subtitle: subtitle ?? this.subtitle,
       shadow: shadow ?? this.shadow,
       green: green ?? this.green,
@@ -386,12 +369,15 @@ class CustomColor extends ThemeExtension<CustomColor> {
       maroon: maroon ?? this.maroon,
       peach: peach ?? this.peach,
       yellow: yellow ?? this.yellow,
+      yellowLatte: yellowLatte ?? this.yellowLatte,
       teal: teal ?? this.teal,
       sky: sky ?? this.sky,
       sapphire: sapphire ?? this.sapphire,
       blue: blue ?? this.blue,
+      blueLatte: blueLatte ?? this.blueLatte,
       lavender: lavender ?? this.lavender,
       red: red ?? this.red,
+      redLatte: redLatte ?? this.redLatte,
     );
   }
 
@@ -405,6 +391,11 @@ class CustomColor extends ThemeExtension<CustomColor> {
     }
     return CustomColor(
       primary: Color.lerp(primary, other.primary, t),
+      onboardingGradientUp:
+          Color.lerp(onboardingGradientUp, other.onboardingGradientUp, t),
+      onboardingGradientDown:
+          Color.lerp(onboardingGradientDown, other.onboardingGradientDown, t),
+      pinkButtonColor: Color.lerp(pinkButtonColor, other.pinkButtonColor, t),
       background: Color.lerp(background, other.background, t),
       card: Color.lerp(card, other.card, t),
       buttonText: Color.lerp(buttonText, other.buttonText, t),
