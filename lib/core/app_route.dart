@@ -64,22 +64,6 @@ class AppRoute {
         ),
         routes: [
           GoRoute(
-            path: Routes.dashboard.path,
-            name: Routes.dashboard.name,
-            builder: (_, __) => BlocProvider(
-              create: (_) => sl<UsersCubit>()..fetchUsers(const UsersParams()),
-              child: const DashboardPage(),
-            ),
-          ),
-          GoRoute(
-            path: Routes.savedUsers.path,
-            name: Routes.savedUsers.name,
-            builder: (_, __) => BlocProvider(
-              create: (_) => sl<SavedUsersCubit>()..fetchUsers(),
-              child: const SavedUsersPage(),
-            ),
-          ),
-          GoRoute(
             path: Routes.settings.path,
             name: Routes.settings.name,
             builder: (_, __) => const SettingsPage(),

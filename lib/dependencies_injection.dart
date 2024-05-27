@@ -33,21 +33,12 @@ Future<void> _initHiveBoxes({
 }) async {
   await MainBoxMixin.initHive(prefixBox);
   sl.registerSingleton<MainBoxMixin>(MainBoxMixin());
-
-  await UserBoxMixin.initHive(isUnitTest ? prefixBox : "saved_users_");
-  sl.registerSingleton<UserBoxMixin>(UserBoxMixin());
 }
 
 /// Register repositories
 void _repositories() {
   sl.registerLazySingleton<AuthRepository>(
     () => AuthRepositoryImpl(sl(), sl()),
-  );
-  sl.registerLazySingleton<UsersRepository>(
-    () => UsersRepositoryImpl(
-      sl(),
-      sl(),
-    ),
   );
 }
 
@@ -56,25 +47,12 @@ void _dataSources() {
   sl.registerLazySingleton<AuthRemoteDatasource>(
     () => AuthRemoteDatasourceImpl(sl()),
   );
-  sl.registerLazySingleton<UsersRemoteDatasource>(
-    () => UsersRemoteDatasourceImpl(sl()),
-  );
-  sl.registerLazySingleton<UsersLocalDatasource>(
-    () => UsersLocalDatasourceImpl(sl()),
-  );
 }
 
 void _useCase() {
   /// Auth
   sl.registerLazySingleton(() => PostLogin(sl()));
   sl.registerLazySingleton(() => PostRegister(sl()));
-
-  /// Users
-  sl.registerLazySingleton(() => GetUsers(sl()));
-  sl.registerLazySingleton(() => GetSavedUsersUseCase(sl()));
-  sl.registerLazySingleton(() => AddUserUseCase(sl()));
-  sl.registerLazySingleton(() => RemoveUserUseCase(sl()));
-  sl.registerLazySingleton(() => ClearUsersUseCase(sl()));
 }
 
 void _cubit() {
@@ -82,16 +60,6 @@ void _cubit() {
   sl.registerFactory(() => RegisterCubit(sl()));
   sl.registerFactory(() => AuthCubit(sl()));
 
-  /// Users
-  sl.registerFactory(() => UsersCubit(sl()));
-  sl.registerFactory(
-    () => SavedUsersCubit(
-      sl(),
-      sl(),
-      sl(),
-      sl(),
-    ),
-  );
   sl.registerFactory(() => SettingsCubit());
   sl.registerFactory(() => MainCubit());
 }

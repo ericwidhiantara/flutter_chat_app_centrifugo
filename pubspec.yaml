@@ -22,6 +22,7 @@ dependencies:
   flutter_svg: ^2.0.7
   flutter_native_splash: ^2.3.6
   jwt_decoder: ^2.0.1
+  centrifuge: ^0.14.0
 
   # Functional programming thingies
   dartz: ^0.10.1

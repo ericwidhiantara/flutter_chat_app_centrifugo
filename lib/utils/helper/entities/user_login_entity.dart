@@ -4,20 +4,20 @@ import 'package:hive_flutter/hive_flutter.dart';
 part 'user_login_entity.freezed.dart';
 part 'user_login_entity.g.dart';
 
-@freezed
 @HiveType(typeId: 1)
+@freezed
 class UserLoginEntity with _$UserLoginEntity {
   const factory UserLoginEntity({
     @HiveField(10) String? id,
-    @HiveField(11) String? email,
-    @HiveField(12) String? fullname,
-    @HiveField(13) String? username,
-    @HiveField(14) bool? isActive,
-    @HiveField(21) int? createdAt,
-    @HiveField(22) int? updatedAt,
+    @HiveField(11) String? userId,
+    @HiveField(12) String? email,
+    @HiveField(13) String? name,
+    @HiveField(14) String? phone,
+    @HiveField(15) int? createdAt,
+    @HiveField(16) int? updatedAt,
   }) = _UserLoginEntity;
 
-  const UserLoginEntity._();
+  const UserLoginEntity._(); // Added constructor
 
   factory UserLoginEntity.fromJson(Map<String, dynamic> json) =>
       _$UserLoginEntityFromJson(json);

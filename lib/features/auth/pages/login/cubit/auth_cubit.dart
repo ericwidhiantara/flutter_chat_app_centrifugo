@@ -31,7 +31,7 @@ class AuthCubit extends Cubit<AuthState> {
           emit(_Failure(l.message ?? ""));
         }
       },
-      (r) => emit(_Success(r.token)),
+      (r) => emit(_Success(r)),
     );
   }
 

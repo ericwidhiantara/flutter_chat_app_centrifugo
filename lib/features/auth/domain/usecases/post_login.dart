@@ -7,13 +7,13 @@ part 'post_login.freezed.dart';
 
 part 'post_login.g.dart';
 
-class PostLogin extends UseCase<Login, LoginParams> {
+class PostLogin extends UseCase<LoginEntity, LoginParams> {
   final AuthRepository _repo;
 
   PostLogin(this._repo);
 
   @override
-  Future<Either<Failure, Login>> call(LoginParams params) =>
+  Future<Either<Failure, LoginEntity>> call(LoginParams params) =>
       _repo.login(params);
 }
 

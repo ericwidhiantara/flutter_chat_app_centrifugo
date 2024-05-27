@@ -11,14 +11,18 @@ class AuthRepositoryImpl implements AuthRepository {
   const AuthRepositoryImpl(this.authRemoteDatasource, this.mainBoxMixin);
 
   @override
-  Future<Either<Failure, Login>> login(LoginParams loginParams) async {
+  Future<Either<Failure, LoginEntity>> login(LoginParams loginParams) async {
     final response = await authRemoteDatasource.login(loginParams);
 
     return response.fold(
       (failure) => Left(failure),
       (loginResponse) {
         mainBoxMixin.addData(MainBoxKeys.isLogin, true);
-        mainBoxMixin.addData(MainBoxKeys.token, loginResponse.token);
+        mainBoxMixin.addData(MainBoxKeys.token, loginResponse.data?.token);
+        mainBoxMixin.addData(
+          MainBoxKeys.tokenData,
+          loginResponse.data?.user?.toEntity(),
+        );
 
         return Right(loginResponse.toEntity());
       },

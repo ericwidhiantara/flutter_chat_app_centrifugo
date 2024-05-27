@@ -8,26 +8,28 @@ part 'user_login_model.g.dart';
 class UserLoginModel with _$UserLoginModel {
   const factory UserLoginModel({
     @JsonKey(name: 'id') String? id,
+    @JsonKey(name: 'user_id') String? userId,
     @JsonKey(name: 'email') String? email,
-    @JsonKey(name: 'full_name') String? fullname,
-    @JsonKey(name: 'username') String? username,
-    @JsonKey(name: 'is_active') bool? isActive,
+    @JsonKey(name: 'name') String? name,
+    @JsonKey(name: 'phone') String? phone,
     @JsonKey(name: 'created_at') int? createdAt,
     @JsonKey(name: 'updated_at') int? updatedAt,
   }) = _UserLoginModel;
 
-  const UserLoginModel._();
+  const UserLoginModel._(); // Added constructor
 
   factory UserLoginModel.fromJson(Map<String, dynamic> json) =>
       _$UserLoginModelFromJson(json);
 
-  UserLoginEntity toEntity() => UserLoginEntity(
-        id: id,
-        email: email,
-        fullname: fullname,
-        username: username,
-        isActive: isActive,
-        createdAt: createdAt,
-        updatedAt: updatedAt,
-      );
+  UserLoginEntity toEntity() {
+    return UserLoginEntity(
+      id: id,
+      userId: userId,
+      email: email,
+      name: name,
+      phone: phone,
+      createdAt: createdAt,
+      updatedAt: updatedAt,
+    );
+  }
 }
