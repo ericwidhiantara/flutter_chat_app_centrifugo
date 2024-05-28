@@ -10,6 +10,7 @@ import 'package:tddboilerplate/core/core.dart';
 import 'package:tddboilerplate/dependencies_injection.dart';
 import 'package:tddboilerplate/features/dashboard/dashboard.dart';
 import 'package:tddboilerplate/features/features.dart';
+import 'package:tddboilerplate/utils/helper/centrifuge_client.dart' as conf;
 import 'package:tddboilerplate/utils/utils.dart';
 
 class RoomPage extends StatefulWidget {
@@ -148,8 +149,7 @@ class _RoomPageState extends State<RoomPage> with TickerProviderStateMixin {
                                               .getData(MainBoxKeys.tokenData)
                                           as UserLoginEntity;
 
-                                  final ChatClient conf = ChatClient();
-                                  conf
+                                  conf.cli
                                     ..init(
                                       token,
                                       user.name ?? "",

@@ -86,8 +86,12 @@ class ChatClient {
         .listen((data) {
       log.i("Received msg di subs: $data");
       final Map<String, dynamic> d = json.decode(data) as Map<String, dynamic>;
+      print("Parsed JSON data: $d");
 
-      final MessageDataResponse res = MessageDataResponse.fromJson(d);
+      // Explicitly cast d["data"] to Map<String, dynamic>
+      final Map<String, dynamic> jsonData = d["data"] as Map<String, dynamic>;
+
+      final MessageDataResponse res = MessageDataResponse.fromJson(jsonData);
 
       final MessageDataEntity message = res.toEntity();
       log.i("Ini message: ${message.text}");
@@ -146,3 +150,5 @@ class ChatClient {
     }
   }
 }
+
+final ChatClient cli = ChatClient();

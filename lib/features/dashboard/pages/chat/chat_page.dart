@@ -9,6 +9,7 @@ import 'package:tddboilerplate/core/core.dart';
 import 'package:tddboilerplate/dependencies_injection.dart';
 import 'package:tddboilerplate/features/dashboard/dashboard.dart';
 import 'package:tddboilerplate/features/features.dart';
+import 'package:tddboilerplate/utils/helper/centrifuge_client.dart' as conf;
 import 'package:tddboilerplate/utils/utils.dart';
 
 class ChatPage extends StatefulWidget {
@@ -30,7 +31,8 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
   String _roomId = "";
 
   late StreamSubscription<MessageDataEntity> _sub;
-  final ChatClient conf = ChatClient();
+
+  // final ChatClient conf = ChatClient();
   final TextEditingController _messageController = TextEditingController();
 
   UserLoginEntity? _user;
@@ -43,8 +45,8 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
       _user = sl<MainBoxMixin>().getData(MainBoxKeys.tokenData);
     });
 
-    conf.subscribe("room:$_roomId");
-    _sub = conf.messages.listen((MessageDataEntity msg) {
+    conf.cli.subscribe("room:$_roomId");
+    _sub = conf.cli.messages.listen((MessageDataEntity msg) {
       log.i("Received message: $msg");
       // _messages.add(msg);
       setState(() => _messages.add(msg));
@@ -76,7 +78,7 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
   void dispose() {
     _scrollController.dispose();
     _sub.cancel();
-    conf.dispose();
+    conf.cli.dispose();
     super.dispose();
   }
 
@@ -174,7 +176,7 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
                       itemCount: _currentPage == _lastPage
                           ? _messages.length
                           : _messages.length + 1,
-                      reverse: true,
+                      // reverse: true,
                       itemBuilder: (context, index) {
                         if (index < _messages.length) {
                           final data = _messages[index];
