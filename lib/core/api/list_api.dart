@@ -12,8 +12,8 @@ class ListAPI {
   static const String roomById = "/rooms/:room_id";
   static const String addParticipant = "/rooms/:room_id/participants";
 
-  static const String sendMessage = "/messages/rooms/:room_id";
+  static const String sendMessage = "/messages/rooms";
   static const String messageById = "/messages/:message_id";
   static const String messagesByUser = "/messages";
-  static const String messagesByRoom = "/messages/rooms/:room_id";
+  static const String messagesByRoom = "/messages/rooms";
 }

@@ -25,6 +25,7 @@ dependencies:
   centrifuge: ^0.14.0
   fluttertoast: ^8.0.8
   pedantic: ^1.8.0
+  intl: ^0.18.1
 
   # Functional programming thingies
   dartz: ^0.10.1

@@ -12,7 +12,7 @@ enum Routes {
 
   /// Home Page
   dashboard("/dashboard"),
-  savedUsers("/users/saved"),
+  chat("chat"),
   settings("/settings"),
 
   // Auth Page
@@ -71,6 +71,24 @@ class AppRoute {
                   sl<RoomCubit>()..fetchRoomList(const GetRoomsParams()),
               child: const RoomPage(),
             ),
+            routes: [
+              GoRoute(
+                path: Routes.chat.path,
+                name: Routes.chat.name,
+                builder: (_, state) {
+                  final roomId = state.extra! as String;
+                  return BlocProvider(
+                    create: (_) => sl<ChatCubit>()
+                      ..fetchMessages(
+                        GetMessagesParams(
+                          roomId: roomId,
+                        ),
+                      ),
+                    child: ChatPage(roomId: roomId),
+                  );
+                },
+              ),
+            ],
           ),
           GoRoute(
             path: Routes.settings.path,

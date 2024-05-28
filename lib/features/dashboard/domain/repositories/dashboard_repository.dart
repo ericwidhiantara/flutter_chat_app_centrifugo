@@ -4,4 +4,6 @@ import 'package:tddboilerplate/features/features.dart';
 
 abstract class DashboardRepository {
   Future<Either<Failure, RoomsEntity>> getRooms(GetRoomsParams params);
+
+  Future<Either<Failure, MessagesEntity>> getMessages(GetMessagesParams params);
 }

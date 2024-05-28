@@ -1,3 +1,4 @@
+export 'centrifuge_client.dart';
 export 'common.dart';
 export 'constant.dart';
 export 'data_helper.dart';

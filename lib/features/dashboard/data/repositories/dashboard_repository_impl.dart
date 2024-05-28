@@ -24,4 +24,23 @@ class DashboardRepositoryImpl implements DashboardRepository {
       },
     );
   }
+
+  @override
+  Future<Either<Failure, MessagesEntity>> getMessages(
+    GetMessagesParams params,
+  ) async {
+    final response = await _dataSource.getMessages(params);
+
+    return response.fold(
+      (failure) => Left(failure),
+      (response) async {
+        if (response.data == [] ||
+            response.data == null ||
+            response.data!.isEmpty) {
+          return Left(NoDataFailure());
+        }
+        return Right(response.toEntity());
+      },
+    );
+  }
 }

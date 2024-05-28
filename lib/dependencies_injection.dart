@@ -63,6 +63,7 @@ void _useCase() {
 
   /// Dashboard
   sl.registerLazySingleton(() => GetRoomsUsecase(sl()));
+  sl.registerLazySingleton(() => GetMessagesUsecase(sl()));
 }
 
 void _cubit() {
@@ -75,4 +76,5 @@ void _cubit() {
 
   /// Dashboard
   sl.registerFactory(() => RoomCubit(sl()));
+  sl.registerFactory(() => ChatCubit(sl()));
 }

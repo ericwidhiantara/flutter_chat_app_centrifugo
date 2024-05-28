@@ -7,6 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:tddboilerplate/core/core.dart';
+import 'package:tddboilerplate/dependencies_injection.dart';
 import 'package:tddboilerplate/features/dashboard/dashboard.dart';
 import 'package:tddboilerplate/features/features.dart';
 import 'package:tddboilerplate/utils/utils.dart';
@@ -138,7 +139,34 @@ class _RoomPageState extends State<RoomPage> with TickerProviderStateMixin {
                             child: Card(
                               color: Theme.of(context).cardColor,
                               child: ListTile(
-                                onTap: () {},
+                                onTap: () {
+                                  final token = sl<MainBoxMixin>()
+                                      .getData(MainBoxKeys.token) as String;
+
+                                  final UserLoginEntity user =
+                                      sl<MainBoxMixin>()
+                                              .getData(MainBoxKeys.tokenData)
+                                          as UserLoginEntity;
+
+                                  final ChatClient conf = ChatClient();
+                                  conf
+                                    ..init(
+                                      token,
+                                      user.name ?? "",
+                                      user.userId ?? "",
+                                    )
+                                    ..connect(() async {
+                                      await Future<void>.delayed(
+                                        const Duration(milliseconds: 10),
+                                      );
+                                      if (context.mounted) {
+                                        context.pushNamed(
+                                          Routes.chat.name,
+                                          extra: data.roomId,
+                                        );
+                                      }
+                                    });
+                                },
                                 tileColor: Theme.of(context).cardColor,
                                 contentPadding: const EdgeInsets.all(8),
                                 title: Text(
@@ -192,24 +220,6 @@ class _RoomPageState extends State<RoomPage> with TickerProviderStateMixin {
             ),
           ),
         ),
-      ),
-    );
-  }
-
-  PreferredSize _appBar(BuildContext context) {
-    return PreferredSize(
-      preferredSize: Size.fromHeight(Dimens.size40),
-      child: AppBar(
-        title: Text(
-          "Kegiatan Kelembagaan",
-          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: Palette.white,
-                fontWeight: FontWeight.w700,
-              ),
-        ),
-        centerTitle: true,
-        backgroundColor: Theme.of(context).primaryColor,
-        elevation: 0,
       ),
     );
   }
