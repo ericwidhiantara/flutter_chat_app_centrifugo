@@ -40,6 +40,10 @@ void _repositories() {
   sl.registerLazySingleton<AuthRepository>(
     () => AuthRepositoryImpl(sl(), sl()),
   );
+
+  sl.registerLazySingleton<DashboardRepository>(
+    () => DashboardRepositoryImpl(sl()),
+  );
 }
 
 /// Register dataSources
@@ -47,12 +51,18 @@ void _dataSources() {
   sl.registerLazySingleton<AuthRemoteDatasource>(
     () => AuthRemoteDatasourceImpl(sl()),
   );
+  sl.registerLazySingleton<DashboardRemoteDatasource>(
+    () => DashboardRemoteDatasourceImpl(sl()),
+  );
 }
 
 void _useCase() {
   /// Auth
   sl.registerLazySingleton(() => PostLogin(sl()));
   sl.registerLazySingleton(() => PostRegister(sl()));
+
+  /// Dashboard
+  sl.registerLazySingleton(() => GetRoomsUsecase(sl()));
 }
 
 void _cubit() {
@@ -62,4 +72,7 @@ void _cubit() {
 
   sl.registerFactory(() => SettingsCubit());
   sl.registerFactory(() => MainCubit());
+
+  /// Dashboard
+  sl.registerFactory(() => RoomCubit(sl()));
 }

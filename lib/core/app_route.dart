@@ -64,6 +64,15 @@ class AppRoute {
         ),
         routes: [
           GoRoute(
+            path: Routes.dashboard.path,
+            name: Routes.dashboard.name,
+            builder: (_, __) => BlocProvider(
+              create: (_) =>
+                  sl<RoomCubit>()..fetchRoomList(const GetRoomsParams()),
+              child: const RoomPage(),
+            ),
+          ),
+          GoRoute(
             path: Routes.settings.path,
             name: Routes.settings.name,
             builder: (_, __) => const SettingsPage(),
