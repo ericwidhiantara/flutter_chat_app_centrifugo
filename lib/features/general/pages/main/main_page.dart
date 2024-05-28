@@ -122,7 +122,6 @@ class _MainPageState extends State<MainPage> {
         ),
         actions: const [
           /// Notification on Dashboard
-          ButtonNotification(),
         ],
       ),
     );

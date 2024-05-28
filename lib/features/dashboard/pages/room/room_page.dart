@@ -147,7 +147,8 @@ class _RoomPageState extends State<RoomPage> with TickerProviderStateMixin {
                                       .textTheme
                                       .bodyMedium
                                       ?.copyWith(
-                                        fontSize: Dimens.text10,
+                                        fontSize: Dimens.text16,
+                                        fontWeight: FontWeight.w700,
                                       ),
                                 ),
                                 subtitle: Text(
