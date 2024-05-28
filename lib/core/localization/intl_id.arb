@@ -28,5 +28,6 @@
   "logoutDesc": "Apakah anda ingin keluar dari aplikasi?",
   "yes": "Ya",
   "delete": "Hapus",
-  "deleteDesc": "Apakah anda yakin menghapus data?"
+  "deleteDesc": "Apakah anda yakin menghapus data?",
+  "expiredToken": "Sesi anda telah berakhir, silahkan login kembali"
 }
