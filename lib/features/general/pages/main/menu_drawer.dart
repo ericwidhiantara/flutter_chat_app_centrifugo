@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:tddboilerplate/core/core.dart';
+import 'package:tddboilerplate/dependencies_injection.dart';
 import 'package:tddboilerplate/utils/utils.dart';
 
 class MenuDrawer extends StatefulWidget {
@@ -20,6 +21,14 @@ class MenuDrawer extends StatefulWidget {
 }
 
 class _MenuDrawerState extends State<MenuDrawer> {
+  UserLoginEntity? userLogin;
+
+  @override
+  void initState() {
+    userLogin = sl<MainBoxMixin>().getData(MainBoxKeys.tokenData);
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -49,14 +58,14 @@ class _MenuDrawerState extends State<MenuDrawer> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          "Lazycat Labs",
+                          userLogin?.name ?? "",
                           style: Theme.of(context)
                               .textTheme
                               .titleLargeBold
                               ?.copyWith(color: Theme.of(context).primaryColor),
                         ),
                         Text(
-                          "lzyct@lazycatlabs.com",
+                          userLogin?.email ?? "",
                           style:
                               Theme.of(context).textTheme.bodySmall?.copyWith(
                                     color: Theme.of(context)
