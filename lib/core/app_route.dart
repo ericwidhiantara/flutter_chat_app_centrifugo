@@ -77,13 +77,20 @@ class AppRoute {
                 name: Routes.chat.name,
                 builder: (_, state) {
                   final roomId = state.extra! as String;
-                  return BlocProvider(
-                    create: (_) => sl<ChatCubit>()
-                      ..fetchMessages(
-                        GetMessagesParams(
-                          roomId: roomId,
-                        ),
+                  return MultiBlocProvider(
+                    providers: [
+                      BlocProvider(
+                        create: (_) => sl<ChatCubit>()
+                          ..fetchMessages(
+                            GetMessagesParams(
+                              roomId: roomId,
+                            ),
+                          ),
                       ),
+                      BlocProvider(
+                        create: (context) => sl<ChatFormCubit>(),
+                      ),
+                    ],
                     child: ChatPage(roomId: roomId),
                   );
                 },

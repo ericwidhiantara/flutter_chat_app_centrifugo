@@ -25,6 +25,7 @@ class App extends StatelessWidget {
           create: (_) => sl<SettingsCubit>()..getActiveTheme(),
         ),
         BlocProvider(create: (_) => sl<AuthCubit>()),
+        BlocProvider(create: (_) => sl<ChatFormCubit>()),
       ],
       child: OKToast(
         child: ScreenUtilInit(

@@ -1,6 +1,8 @@
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:tddboilerplate/core/core.dart';
+import 'package:tddboilerplate/dependencies_injection.dart';
+import 'package:tddboilerplate/features/features.dart';
 import 'package:tddboilerplate/utils/utils.dart';
 
 typedef ResponseConverter<T> = T Function(dynamic response);
@@ -49,7 +51,10 @@ class DioClient with MainBoxMixin, FirebaseCrashLogger {
             'Content-Type': 'application/json',
             'Accept': 'application/json',
             if (_auth != null) ...{
-              'Authorization': _auth,
+              //expired token example
+              // 'Authorization':
+              //     "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTAwLjk4LjEwMy44Njo4MDAwL2FwaS9sb2dpbiIsImlhdCI6MTcxNDk5MjQ1OCwiZXhwIjoxNzE1MDc4ODU4LCJuYmYiOjE3MTQ5OTI0NTgsImp0aSI6IjBMblM4T0tpZnNsZFFHU2giLCJzdWIiOiIzIiwicHJ2IjoiMjNiZDVjODk0OWY2MDBhZGIzOWU3MDFjNDAwODcyZGI3YTU5NzZmNyIsInVzZXJfaWQiOjN9.1wS4Tj9zOMM2kuHponOZ8m7RFO_SvA3gHOXvSjqT258",
+              'Authorization': "Bearer $_auth",
             },
           },
           receiveTimeout: const Duration(minutes: 1),
@@ -68,8 +73,7 @@ class DioClient with MainBoxMixin, FirebaseCrashLogger {
   }) async {
     try {
       final response = await dio.get(url, queryParameters: queryParameters);
-      if ((response.statusCode ?? 0) < 200 ||
-          (response.statusCode ?? 0) > 201) {
+      if (response.statusCode! != 200) {
         throw DioException(
           requestOptions: response.requestOptions,
           response: response,
@@ -86,12 +90,35 @@ class DioClient with MainBoxMixin, FirebaseCrashLogger {
       final result = await isolateParse.parseInBackground();
       return Right(result);
     } on DioException catch (e, stackTrace) {
+      if (e.type == DioExceptionType.unknown) {
+        if (e.response?.statusCode == 401) {
+          sl<AuthCubit>().logout();
+          return Left(
+            UnauthorizedFailure(
+              e.response?.data["message"].toString() ?? "Unauthorized",
+            ),
+          );
+        }
+        return Left(
+          ServerFailure(
+            e.response?.data["message"].toString() ?? "Error occurred",
+          ),
+        );
+      }
       if (!_isUnitTest) {
         nonFatalError(error: e, stackTrace: stackTrace);
       }
+      if (e.response?.statusCode == 401) {
+        sl<AuthCubit>().logout();
+        return Left(
+          UnauthorizedFailure(
+            e.response?.data["message"].toString() ?? "Unauthorized",
+          ),
+        );
+      }
       return Left(
         ServerFailure(
-          e.response?.data['error'] as String? ?? e.message,
+          e.response?.data["message"].toString() ?? "Error occurred",
         ),
       );
     }
@@ -100,13 +127,13 @@ class DioClient with MainBoxMixin, FirebaseCrashLogger {
   Future<Either<Failure, T>> postRequest<T>(
     String url, {
     Map<String, dynamic>? data,
+    FormData? formData,
     required ResponseConverter<T> converter,
     bool isIsolate = true,
   }) async {
     try {
-      final response = await dio.post(url, data: data);
-      if ((response.statusCode ?? 0) < 200 ||
-          (response.statusCode ?? 0) > 201) {
+      final Response response = await dio.post(url, data: formData ?? data);
+      if (response.statusCode! != 200) {
         throw DioException(
           requestOptions: response.requestOptions,
           response: response,
@@ -123,12 +150,152 @@ class DioClient with MainBoxMixin, FirebaseCrashLogger {
       final result = await isolateParse.parseInBackground();
       return Right(result);
     } on DioException catch (e, stackTrace) {
+      if (e.type == DioExceptionType.unknown) {
+        if (e.response?.statusCode == 401) {
+          sl<AuthCubit>().logout();
+          return Left(
+            UnauthorizedFailure(
+              e.response?.data["message"].toString() ?? "Unauthorized",
+            ),
+          );
+        }
+        return Left(
+          ServerFailure(
+            e.response?.data["message"].toString() ?? "Error occurred",
+          ),
+        );
+      }
       if (!_isUnitTest) {
         nonFatalError(error: e, stackTrace: stackTrace);
       }
+      if (e.response?.statusCode == 401) {
+        sl<AuthCubit>().logout();
+        return Left(
+          UnauthorizedFailure(
+            e.response?.data["message"].toString() ?? "Unauthorized",
+          ),
+        );
+      }
       return Left(
         ServerFailure(
-          e.response?.data['error'] as String? ?? e.message,
+          e.response?.data["message"].toString() ?? "Error occurred",
+        ),
+      );
+    }
+  }
+
+  Future<Either<Failure, T>> patchRequest<T>(
+    String url, {
+    Map<String, dynamic>? data,
+    required ResponseConverter<T> converter,
+    bool isIsolate = true,
+  }) async {
+    try {
+      final response = await dio.patch(url, data: data);
+      if (response.statusCode! != 200) {
+        throw DioException(
+          requestOptions: response.requestOptions,
+          response: response,
+        );
+      }
+
+      if (!isIsolate) {
+        return Right(converter(response.data));
+      }
+      final isolateParse = IsolateParser<T>(
+        response.data as Map<String, dynamic>,
+        converter,
+      );
+      final result = await isolateParse.parseInBackground();
+      return Right(result);
+    } on DioException catch (e, stackTrace) {
+      if (e.type == DioExceptionType.unknown) {
+        if (e.response?.statusCode == 401) {
+          sl<AuthCubit>().logout();
+          return Left(
+            UnauthorizedFailure(
+              e.response?.data["message"].toString() ?? "Unauthorized",
+            ),
+          );
+        }
+        return Left(
+          ServerFailure(
+            e.response?.data["message"].toString() ?? "Error occurred",
+          ),
+        );
+      }
+      if (!_isUnitTest) {
+        nonFatalError(error: e, stackTrace: stackTrace);
+      }
+      if (e.response?.statusCode == 401) {
+        sl<AuthCubit>().logout();
+        return Left(
+          UnauthorizedFailure(
+            e.response?.data["message"].toString() ?? "Unauthorized",
+          ),
+        );
+      }
+      return Left(
+        ServerFailure(
+          e.response?.data["message"].toString() ?? "Error occurred",
+        ),
+      );
+    }
+  }
+
+  Future<Either<Failure, T>> deleteRequest<T>(
+    String url, {
+    required ResponseConverter<T> converter,
+    bool isIsolate = true,
+  }) async {
+    try {
+      final response = await dio.delete(url);
+      if (response.statusCode! != 200) {
+        throw DioException(
+          requestOptions: response.requestOptions,
+          response: response,
+        );
+      }
+
+      if (!isIsolate) {
+        return Right(converter(response.data));
+      }
+      final isolateParse = IsolateParser<T>(
+        response.data as Map<String, dynamic>,
+        converter,
+      );
+      final result = await isolateParse.parseInBackground();
+      return Right(result);
+    } on DioException catch (e, stackTrace) {
+      if (e.type == DioExceptionType.unknown) {
+        if (e.response?.statusCode == 401) {
+          sl<AuthCubit>().logout();
+          return Left(
+            UnauthorizedFailure(
+              e.response?.data["message"].toString() ?? "Unauthorized",
+            ),
+          );
+        }
+        return Left(
+          ServerFailure(
+            e.response?.data["message"].toString() ?? "Error occurred",
+          ),
+        );
+      }
+      if (!_isUnitTest) {
+        nonFatalError(error: e, stackTrace: stackTrace);
+      }
+      if (e.response?.statusCode == 401) {
+        sl<AuthCubit>().logout();
+        return Left(
+          UnauthorizedFailure(
+            e.response?.data["message"].toString() ?? "Unauthorized",
+          ),
+        );
+      }
+      return Left(
+        ServerFailure(
+          e.response?.data["message"].toString() ?? "Error occurred",
         ),
       );
     }

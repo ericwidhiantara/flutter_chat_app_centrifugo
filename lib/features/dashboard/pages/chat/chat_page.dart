@@ -31,6 +31,7 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
 
   late StreamSubscription<MessageDataEntity> _sub;
   final ChatClient conf = ChatClient();
+  final TextEditingController _messageController = TextEditingController();
 
   UserLoginEntity? _user;
 
@@ -44,8 +45,9 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
 
     conf.subscribe("room:$_roomId");
     _sub = conf.messages.listen((MessageDataEntity msg) {
-      _messages.add(msg);
-      // setState(() => _messages.add(msg));
+      log.i("Received message: $msg");
+      // _messages.add(msg);
+      setState(() => _messages.add(msg));
       _scrollController.animateTo(
         _scrollController.position.maxScrollExtent + 100,
         duration: const Duration(milliseconds: 300),
@@ -81,6 +83,48 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Parent(
+      bottomNavigation: Container(
+        height: 60,
+        margin: EdgeInsets.symmetric(
+          horizontal: Dimens.size20,
+          vertical: Dimens.size15,
+        ),
+        child: TextField(
+          controller: _messageController,
+          decoration: InputDecoration(
+            hintText: 'Type a message',
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+            suffixIcon: IconButton(
+              icon: const Icon(Icons.send),
+              onPressed: () async {
+                if (_messageController.text.isNotEmpty) {
+                  await context.read<ChatFormCubit>().sendMessage(
+                        PostSendMessageParams(
+                          text: _messageController.text,
+                          roomId: _roomId,
+                        ),
+                      );
+                  _scrollController.animateTo(
+                    _scrollController.position.maxScrollExtent + 100,
+                    duration: const Duration(milliseconds: 300),
+                    curve: Curves.easeOut,
+                  );
+                  _messages.add(
+                    MessageDataEntity(
+                      text: _messageController.text,
+                      senderId: _user?.userId,
+                      createdAt: DateTime.now().millisecondsSinceEpoch,
+                    ),
+                  );
+                  _messageController.clear();
+                }
+              },
+            ),
+          ),
+        ),
+      ),
       child: RefreshIndicator(
         color: Theme.of(context).primaryColor,
         backgroundColor: Theme.of(context).extension<CustomColor>()!.background,
@@ -137,7 +181,9 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
                           return ChatBubble(
                             message: data.text ?? "",
                             isSender: data.senderId == _user?.userId,
-                            senderName: data.sender?.name ?? "",
+                            senderName: data.senderId == _user?.userId
+                                ? null
+                                : data.sender?.name ?? "",
                             time: DateFormat("hh:mm").format(
                               DateTime.fromMillisecondsSinceEpoch(
                                 data.createdAt! * 1000,
