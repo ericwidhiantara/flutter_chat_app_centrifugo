@@ -50,6 +50,39 @@ class AppRoute {
         builder: (_, __) => const LoginPage(),
       ),
       GoRoute(
+        path: Routes.dashboard.path,
+        name: Routes.dashboard.name,
+        builder: (_, __) => BlocProvider(
+          create: (_) => sl<RoomCubit>()..fetchRoomList(const GetRoomsParams()),
+          child: const RoomPage(),
+        ),
+        routes: [
+          GoRoute(
+            path: Routes.chat.path,
+            name: Routes.chat.name,
+            builder: (_, state) {
+              final roomId = state.extra! as String;
+              return MultiBlocProvider(
+                providers: [
+                  BlocProvider(
+                    create: (_) => sl<ChatCubit>()
+                      ..fetchMessages(
+                        GetMessagesParams(
+                          roomId: roomId,
+                        ),
+                      ),
+                  ),
+                  BlocProvider(
+                    create: (context) => sl<ChatFormCubit>(),
+                  ),
+                ],
+                child: ChatPage(roomId: roomId),
+              );
+            },
+          ),
+        ],
+      ),
+      GoRoute(
         path: Routes.register.path,
         name: Routes.register.name,
         builder: (_, __) => BlocProvider(
@@ -57,53 +90,20 @@ class AppRoute {
           child: const RegisterPage(),
         ),
       ),
-      ShellRoute(
-        builder: (_, __, child) => BlocProvider(
-          create: (context) => sl<MainCubit>(),
-          child: MainPage(child: child),
-        ),
-        routes: [
-          GoRoute(
-            path: Routes.dashboard.path,
-            name: Routes.dashboard.name,
-            builder: (_, __) => BlocProvider(
-              create: (_) =>
-                  sl<RoomCubit>()..fetchRoomList(const GetRoomsParams()),
-              child: const RoomPage(),
-            ),
-            routes: [
-              GoRoute(
-                path: Routes.chat.path,
-                name: Routes.chat.name,
-                builder: (_, state) {
-                  final roomId = state.extra! as String;
-                  return MultiBlocProvider(
-                    providers: [
-                      BlocProvider(
-                        create: (_) => sl<ChatCubit>()
-                          ..fetchMessages(
-                            GetMessagesParams(
-                              roomId: roomId,
-                            ),
-                          ),
-                      ),
-                      BlocProvider(
-                        create: (context) => sl<ChatFormCubit>(),
-                      ),
-                    ],
-                    child: ChatPage(roomId: roomId),
-                  );
-                },
-              ),
-            ],
-          ),
-          GoRoute(
-            path: Routes.settings.path,
-            name: Routes.settings.name,
-            builder: (_, __) => const SettingsPage(),
-          ),
-        ],
-      ),
+      // ShellRoute(
+      //   builder: (_, __, child) => BlocProvider(
+      //     create: (context) => sl<MainCubit>(),
+      //     child: MainPage(child: child),
+      //   ),
+      //   routes: [
+      //
+      //     GoRoute(
+      //       path: Routes.settings.path,
+      //       name: Routes.settings.name,
+      //       builder: (_, __) => const SettingsPage(),
+      //     ),
+      //   ],
+      // ),
     ],
     initialLocation: Routes.splashScreen.path,
     routerNeglect: true,

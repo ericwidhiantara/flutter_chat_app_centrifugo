@@ -5,7 +5,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:intl/intl.dart';
 import 'package:tddboilerplate/core/core.dart';
 import 'package:tddboilerplate/dependencies_injection.dart';
 import 'package:tddboilerplate/features/features.dart';
@@ -26,32 +25,12 @@ class _RoomPageState extends State<RoomPage> with TickerProviderStateMixin {
 
   final List<RoomDataEntity> _items = [];
 
-  Timer? _debounce;
-
-  int month = DateTime.now().month;
-  String monthString = DateFormat("MMMM", "id").format(DateTime.now());
-  int year = DateTime.now().year;
-
-  List<String> months = [
-    'Januari',
-    'Februari',
-    'Maret',
-    'April',
-    'Mei',
-    'Juni',
-    'Juli',
-    'Agustus',
-    'September',
-    'Oktober',
-    'November',
-    'Desember',
-  ];
-  List<int> years =
-      List.generate(DateTime.now().year % 100 + 1, (index) => 2000 + index);
+  UserLoginEntity? userLogin;
 
   @override
   void initState() {
     super.initState();
+    userLogin = sl<MainBoxMixin>().getData(MainBoxKeys.tokenData);
 
     _scrollController.addListener(() async {
       if (_scrollController.position.atEdge) {
@@ -71,7 +50,6 @@ class _RoomPageState extends State<RoomPage> with TickerProviderStateMixin {
 
   @override
   void dispose() {
-    _debounce?.cancel();
     _scrollController.dispose();
 
     super.dispose();
@@ -80,6 +58,13 @@ class _RoomPageState extends State<RoomPage> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Parent(
+      appBar: _appBar(context),
+      backgroundColor: Theme.of(context).extension<CustomColor>()!.card,
+      floatingButton: FloatingActionButton(
+        backgroundColor: Theme.of(context).primaryColor,
+        onPressed: () {},
+        child: const Icon(Icons.add),
+      ),
       child: RefreshIndicator(
         color: Theme.of(context).primaryColor,
         backgroundColor: Theme.of(context).extension<CustomColor>()!.background,
@@ -113,7 +98,7 @@ class _RoomPageState extends State<RoomPage> with TickerProviderStateMixin {
             ),
           ],
           child: Container(
-            padding: EdgeInsets.all(Dimens.size20),
+            padding: EdgeInsets.symmetric(horizontal: Dimens.size20),
             child: BlocBuilder<RoomCubit, RoomState>(
               builder: (context, state) {
                 return state.when(
@@ -217,6 +202,119 @@ class _RoomPageState extends State<RoomPage> with TickerProviderStateMixin {
                 );
               },
             ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  PreferredSize _appBar(BuildContext context) {
+    return PreferredSize(
+      preferredSize: Size.fromHeight(Dimens.size100 + Dimens.size50),
+      child: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: SafeArea(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  CircleAvatar(
+                    radius: Dimens.size20,
+                    backgroundColor: Theme.of(context).primaryColor,
+                    backgroundImage: const CachedNetworkImageProvider(
+                      'https://via.placeholder.com/65x65',
+                    ),
+                  ),
+                  SpacerH(
+                    value: Dimens.size20,
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        userLogin?.name ?? "",
+                        style: Theme.of(context)
+                            .textTheme
+                            .titleLargeBold
+                            ?.copyWith(color: Theme.of(context).primaryColor),
+                      ),
+                      Text(
+                        userLogin?.email ?? "",
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                              color: Theme.of(context)
+                                  .extension<CustomColor>()!
+                                  .shadow,
+                            ),
+                      ),
+                    ],
+                  ),
+                  const Spacer(),
+                  IconButton(
+                    onPressed: () {
+                      showDialog(
+                        context: context,
+                        builder: (_) => AlertDialog(
+                          title: Text(
+                            Strings.of(context)!.logout,
+                            style: Theme.of(context).textTheme.bodyLarge,
+                          ),
+                          content: Text(
+                            Strings.of(context)!.logoutDesc,
+                            style: Theme.of(context).textTheme.bodyMedium,
+                          ),
+                          actions: [
+                            TextButton(
+                              onPressed: () => context.back(),
+                              child: Text(
+                                Strings.of(context)!.cancel,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium
+                                    ?.copyWith(
+                                      color: Theme.of(context)
+                                          .extension<CustomColor>()!
+                                          .subtitle,
+                                    ),
+                              ),
+                            ),
+                            TextButton(
+                              onPressed: () {
+                                context.read<AuthCubit>().logout();
+                              },
+                              child: Text(
+                                Strings.of(context)!.yes,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium
+                                    ?.copyWith(
+                                      color: Theme.of(context)
+                                          .extension<CustomColor>()!
+                                          .red,
+                                    ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                    icon: const Icon(Icons.logout),
+                  ),
+                ],
+              ),
+              SpacerV(
+                value: Dimens.size20,
+              ),
+              Text(
+                "Rooms",
+                style: Theme.of(context).textTheme.titleLargeBold?.copyWith(
+                      color: Theme.of(context)
+                          .extension<CustomColor>()!
+                          .defaultText,
+                      fontSize: Dimens.text36,
+                    ),
+              ),
+            ],
           ),
         ),
       ),
