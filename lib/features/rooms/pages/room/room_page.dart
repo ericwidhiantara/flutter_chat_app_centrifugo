@@ -62,7 +62,22 @@ class _RoomPageState extends State<RoomPage> with TickerProviderStateMixin {
       backgroundColor: Theme.of(context).extension<CustomColor>()!.card,
       floatingButton: FloatingActionButton(
         backgroundColor: Theme.of(context).primaryColor,
-        onPressed: () {},
+        onPressed: () async {
+          final res = await context.pushNamed(Routes.newRoom.name);
+
+          if (res != null && res == true) {
+            _currentPage = 1;
+            _lastPage = 1;
+            _items.clear();
+
+            if (!context.mounted) return;
+            await context.read<RoomCubit>().fetchRoomList(
+                  GetRoomsParams(
+                    page: _currentPage,
+                  ),
+                );
+          }
+        },
         child: const Icon(Icons.add),
       ),
       child: RefreshIndicator(
@@ -104,7 +119,6 @@ class _RoomPageState extends State<RoomPage> with TickerProviderStateMixin {
                 return state.when(
                   loading: () => const Center(child: Loading()),
                   success: (data) {
-                    _items.clear();
                     _items.addAll(data.data ?? []);
                     _lastPage = data.pagination?.totalPage ?? 1;
 
@@ -144,7 +158,7 @@ class _RoomPageState extends State<RoomPage> with TickerProviderStateMixin {
                                         const Duration(milliseconds: 10),
                                       );
                                       if (context.mounted) {
-                                        context.goNamed(
+                                        context.pushNamed(
                                           Routes.chat.name,
                                           extra: data,
                                         );
@@ -164,7 +178,7 @@ class _RoomPageState extends State<RoomPage> with TickerProviderStateMixin {
                                       ),
                                 ),
                                 subtitle: Text(
-                                  "Participant: ${data.participants?.length ?? 0}",
+                                  "Anggota: ${data.participants?.length ?? 0} orang",
                                   style: Theme.of(context)
                                       .textTheme
                                       .bodyMedium
@@ -306,7 +320,7 @@ class _RoomPageState extends State<RoomPage> with TickerProviderStateMixin {
                 value: Dimens.size20,
               ),
               Text(
-                "Rooms",
+                "Chattooo",
                 style: Theme.of(context).textTheme.titleLargeBold?.copyWith(
                       color: Theme.of(context)
                           .extension<CustomColor>()!

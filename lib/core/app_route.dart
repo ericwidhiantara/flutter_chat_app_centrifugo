@@ -13,6 +13,7 @@ enum Routes {
   /// Home Page
   dashboard("/dashboard"),
   chat("chat"),
+  newRoom("new-room"),
   settings("/settings"),
 
   // Auth Page
@@ -58,6 +59,24 @@ class AppRoute {
         ),
         routes: [
           GoRoute(
+            path: Routes.newRoom.path,
+            name: Routes.newRoom.name,
+            builder: (_, __) {
+              return MultiBlocProvider(
+                providers: [
+                  BlocProvider(
+                    create: (_) =>
+                        sl<RoomCubit>()..fetchRoomList(const GetRoomsParams()),
+                  ),
+                  BlocProvider(
+                    create: (context) => sl<CreateRoomCubit>(),
+                  ),
+                ],
+                child: const CreateRoomPage(),
+              );
+            },
+          ),
+          GoRoute(
             path: Routes.chat.path,
             name: Routes.chat.name,
             builder: (_, state) {
@@ -90,20 +109,6 @@ class AppRoute {
           child: const RegisterPage(),
         ),
       ),
-      // ShellRoute(
-      //   builder: (_, __, child) => BlocProvider(
-      //     create: (context) => sl<MainCubit>(),
-      //     child: MainPage(child: child),
-      //   ),
-      //   routes: [
-      //
-      //     GoRoute(
-      //       path: Routes.settings.path,
-      //       name: Routes.settings.name,
-      //       builder: (_, __) => const SettingsPage(),
-      //     ),
-      //   ],
-      // ),
     ],
     initialLocation: Routes.splashScreen.path,
     routerNeglect: true,

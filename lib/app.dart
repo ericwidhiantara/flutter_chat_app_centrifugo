@@ -63,7 +63,7 @@ class App extends StatelessWidget {
                 title: Constants.get.appName,
                 theme: themeLight(context),
                 darkTheme: themeDark(context),
-                locale: Locale(data.type ?? "en"),
+                locale: Locale(data.type ?? "id"),
                 supportedLocales: L10n.all,
                 themeMode: data.activeTheme.mode,
               ),

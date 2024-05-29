@@ -20,7 +20,7 @@ class _SettingsPageState extends State<SettingsPage> with MainBoxMixin {
     DataHelper(title: Constants.get.bahasa, type: "id"),
   ];
   late DataHelper _selectedLanguage =
-      (getData(MainBoxKeys.locale) ?? "en") == "en"
+      (getData(MainBoxKeys.locale) ?? "id") == "en"
           ? _listLanguage[0]
           : _listLanguage[1];
 
@@ -80,7 +80,7 @@ class _SettingsPageState extends State<SettingsPage> with MainBoxMixin {
                   if (!mounted) return;
                   context
                       .read<SettingsCubit>()
-                      .updateLanguage(value?.type ?? "en");
+                      .updateLanguage(value?.type ?? "id");
                 },
               ),
             ],

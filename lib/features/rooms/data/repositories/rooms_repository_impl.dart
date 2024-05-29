@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:tddboilerplate/core/core.dart';
 import 'package:tddboilerplate/features/features.dart';
+import 'package:tddboilerplate/utils/utils.dart';
 
 class RoomsRepositoryImpl implements RoomsRepository {
   /// Data Source
@@ -22,6 +23,18 @@ class RoomsRepositoryImpl implements RoomsRepository {
         }
         return Right(response.toEntity());
       },
+    );
+  }
+
+  @override
+  Future<Either<Failure, MetaEntity>> createRoom(
+    PostCreateRoomParams params,
+  ) async {
+    final response = await _dataSource.createRoom(params);
+
+    return response.fold(
+      (failure) => Left(failure),
+      (response) => Right(response.toEntity()),
     );
   }
 }

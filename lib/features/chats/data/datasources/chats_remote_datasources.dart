@@ -9,9 +9,7 @@ abstract class ChatsRemoteDatasource {
     GetMessagesParams params,
   );
 
-  Future<Either<Failure, MetaModel>> sendMessage(
-    PostSendMessageParams params,
-  );
+  Future<Either<Failure, MetaModel>> sendMessage(PostSendMessageParams params);
 }
 
 class ChatsRemoteDatasourceImpl implements ChatsRemoteDatasource {
@@ -44,7 +42,7 @@ class ChatsRemoteDatasourceImpl implements ChatsRemoteDatasource {
       "${ListAPI.sendMessage}/${params.roomId}/create",
       formData: formData,
       converter: (response) =>
-          MetaModel.fromJson(response as Map<String, dynamic>),
+          MetaModel.fromJson(response["meta"] as Map<String, dynamic>),
     );
 
     return response;
