@@ -160,7 +160,7 @@ class _RoomPageState extends State<RoomPage> with TickerProviderStateMixin {
                                         const Duration(milliseconds: 10),
                                       );
                                       if (context.mounted) {
-                                        context.pushNamed(
+                                        context.goNamed(
                                           Routes.chat.name,
                                           extra: data.roomId,
                                         );

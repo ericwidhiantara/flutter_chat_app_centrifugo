@@ -18,7 +18,10 @@ class ChatClient {
   late StreamSubscription<MessageEvent> _msgSub;
 
   late Subscription? subscription;
-  final _chatMsgController = StreamController<MessageDataEntity>();
+
+  // final _chatMsgController = StreamController<MessageDataEntity>();
+  final StreamController<MessageDataEntity> _chatMsgController =
+      StreamController<MessageDataEntity>.broadcast();
 
   Stream<MessageDataEntity> get messages => _chatMsgController.stream;
 
@@ -102,9 +105,13 @@ class ChatClient {
       log.i("Ini message: ${message.id}");
       log.i("Ini message: ${message.messageId}");
 
-      _chatMsgController.sink.add(
-        message,
-      );
+      if (!_chatMsgController.isClosed) {
+        _chatMsgController.sink.add(
+          message,
+        );
+      } else {
+        log.e("_chatMsgController is closed");
+      }
     });
     subscription.join.listen(
       (event) => log.i("Join: $event"),
@@ -135,7 +142,8 @@ class ChatClient {
     await _disconnSub?.cancel();
     await _errorSub?.cancel();
     await _msgSub.cancel();
-    await _chatMsgController.close();
+    // await _chatMsgController.close();
+    await _client.disconnect();
     debugPrint("disposed");
   }
 
