@@ -12,10 +12,10 @@ void main() {
     /// Lock device orientation to portrait
     () async {
       WidgetsFlutterBinding.ensureInitialized();
+      await FirebaseServices.init();
 
       /// Register Service locator
       await serviceLocator();
-      await FirebaseServices.init();
 
       return SystemChrome.setPreferredOrientations(
         [
@@ -25,6 +25,8 @@ void main() {
       ).then((_) => runApp(App()));
     },
     (error, stackTrace) async {
+      debugPrint('runZonedGuarded: Caught error: $error');
+      debugPrint('runZonedGuarded: Caught stacktrace: $stackTrace');
       FirebaseCrashlytics.instance.recordError(error, stackTrace);
     },
   );

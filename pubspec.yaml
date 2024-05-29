@@ -56,9 +56,9 @@ dependencies:
   logger: ^2.0.2
 
   # Firebase
-  firebase_core: ^2.16.0
-  firebase_analytics: ^10.5.0
-  firebase_crashlytics: ^3.3.6
+  firebase_core: ^2.32.0
+  firebase_analytics: ^10.10.7
+  firebase_crashlytics: ^3.5.7
 
   # router
   go_router: ^10.2.0
