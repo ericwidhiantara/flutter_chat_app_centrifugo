@@ -1,3 +1,4 @@
 export 'auth/auth.dart';
-export 'dashboard/dashboard.dart';
+export 'chats/chats.dart';
 export 'general/general.dart';
+export 'rooms/rooms.dart';

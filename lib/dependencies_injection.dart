@@ -41,8 +41,12 @@ void _repositories() {
     () => AuthRepositoryImpl(sl(), sl()),
   );
 
-  sl.registerLazySingleton<DashboardRepository>(
-    () => DashboardRepositoryImpl(sl()),
+  sl.registerLazySingleton<ChatsRepository>(
+    () => ChatsRepositoryImpl(sl()),
+  );
+
+  sl.registerLazySingleton<RoomsRepository>(
+    () => RoomsRepositoryImpl(sl()),
   );
 }
 
@@ -51,8 +55,13 @@ void _dataSources() {
   sl.registerLazySingleton<AuthRemoteDatasource>(
     () => AuthRemoteDatasourceImpl(sl()),
   );
-  sl.registerLazySingleton<DashboardRemoteDatasource>(
-    () => DashboardRemoteDatasourceImpl(sl()),
+
+  sl.registerLazySingleton<ChatsRemoteDatasource>(
+    () => ChatsRemoteDatasourceImpl(sl()),
+  );
+
+  sl.registerLazySingleton<RoomsRemoteDatasource>(
+    () => RoomsRemoteDatasourceImpl(sl()),
   );
 }
 
@@ -61,8 +70,10 @@ void _useCase() {
   sl.registerLazySingleton(() => PostLogin(sl()));
   sl.registerLazySingleton(() => PostRegister(sl()));
 
-  /// Dashboard
+  /// Rooms
   sl.registerLazySingleton(() => GetRoomsUsecase(sl()));
+
+  /// Chats
   sl.registerLazySingleton(() => GetMessagesUsecase(sl()));
   sl.registerLazySingleton(() => PostSendMessageUsecase(sl()));
 }
