@@ -146,7 +146,7 @@ class _RoomPageState extends State<RoomPage> with TickerProviderStateMixin {
                                       if (context.mounted) {
                                         context.goNamed(
                                           Routes.chat.name,
-                                          extra: data.roomId,
+                                          extra: data,
                                         );
                                       }
                                     });

@@ -12,9 +12,9 @@ import 'package:tddboilerplate/utils/helper/centrifuge_client.dart' as conf;
 import 'package:tddboilerplate/utils/utils.dart';
 
 class ChatPage extends StatefulWidget {
-  final String roomId;
+  final RoomDataEntity room;
 
-  const ChatPage({super.key, required this.roomId});
+  const ChatPage({super.key, required this.room});
 
   @override
   State<ChatPage> createState() => _ChatPageState();
@@ -40,7 +40,7 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
   void initState() {
     super.initState();
     setState(() {
-      _roomId = widget.roomId;
+      _roomId = widget.room.roomId!;
       _user = sl<MainBoxMixin>().getData(MainBoxKeys.tokenData);
     });
 
@@ -219,7 +219,7 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
       preferredSize: Size.fromHeight(Dimens.size50),
       child: AppBar(
         title: Text(
-          "Chat",
+          widget.room.name ?? "-",
           style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                 fontWeight: FontWeight.w700,
               ),
