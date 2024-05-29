@@ -84,12 +84,14 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Parent(
+      appBar: _appBar(context),
       bottomNavigation: Container(
-        height: 60,
         margin: EdgeInsets.symmetric(
           horizontal: Dimens.size20,
           vertical: Dimens.size15,
         ),
+        padding:
+            EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
         child: TextField(
           controller: _messageController,
           decoration: InputDecoration(
@@ -202,12 +204,28 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
                     );
                   },
                   failure: (_, message) => Empty(errorMessage: message),
-                  empty: () => const Empty(),
+                  empty: () => const SizedBox(),
                 );
               },
             ),
           ),
         ),
+      ),
+    );
+  }
+
+  PreferredSize _appBar(BuildContext context) {
+    return PreferredSize(
+      preferredSize: Size.fromHeight(Dimens.size50),
+      child: AppBar(
+        title: Text(
+          "Chat",
+          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                fontWeight: FontWeight.w700,
+              ),
+        ),
+        centerTitle: true,
+        elevation: 0,
       ),
     );
   }
