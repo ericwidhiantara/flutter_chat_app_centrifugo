@@ -86,7 +86,7 @@ class ChatClient {
         .listen((data) {
       log.i("Received msg di subs: $data");
       final Map<String, dynamic> d = json.decode(data) as Map<String, dynamic>;
-      print("Parsed JSON data: $d");
+      log.i("Parsed JSON data: $d");
 
       // Explicitly cast d["data"] to Map<String, dynamic>
       final Map<String, dynamic> jsonData = d["data"] as Map<String, dynamic>;
@@ -129,12 +129,14 @@ class ChatClient {
   }
 
   Future<void> dispose() async {
+    debugPrint("disposed");
     await _connectingSub?.cancel();
     await _connectedSub?.cancel();
     await _disconnSub?.cancel();
     await _errorSub?.cancel();
     await _msgSub.cancel();
     await _chatMsgController.close();
+    debugPrint("disposed");
   }
 
   Future<void> sendMsg(MessageDataEntity msg) async {

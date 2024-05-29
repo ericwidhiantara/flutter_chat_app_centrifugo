@@ -49,9 +49,9 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
     _sub = conf.cli.messages.listen((MessageDataEntity msg) {
       log.i("Received message: $msg");
       // _messages.add(msg);
-      setState(() => _messages.add(msg));
+      setState(() => _messages.insert(0, msg));
       _scrollController.animateTo(
-        _scrollController.position.maxScrollExtent + 100,
+        0.0,
         duration: const Duration(milliseconds: 300),
         curve: Curves.easeOut,
       );
@@ -109,7 +109,7 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
                         ),
                       );
                   _scrollController.animateTo(
-                    _scrollController.position.maxScrollExtent + 100,
+                    0.0,
                     duration: const Duration(milliseconds: 300),
                     curve: Curves.easeOut,
                   );
@@ -176,7 +176,7 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
                       itemCount: _currentPage == _lastPage
                           ? _messages.length
                           : _messages.length + 1,
-                      // reverse: true,
+                      reverse: true,
                       itemBuilder: (context, index) {
                         if (index < _messages.length) {
                           final data = _messages[index];
