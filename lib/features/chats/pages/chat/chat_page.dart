@@ -282,10 +282,10 @@ class ChatBubble extends StatelessWidget {
                 ),
               ),
             ),
-          Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Container(
+          LayoutBuilder(
+            builder: (context, constraints) {
+              final maxWidth = constraints.maxWidth * 0.65;
+              return Container(
                 margin: const EdgeInsets.symmetric(vertical: 5),
                 padding:
                     const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
@@ -293,30 +293,38 @@ class ChatBubble extends StatelessWidget {
                   color: bgColor,
                   borderRadius: radius,
                 ),
-                child: Column(
-                  crossAxisAlignment: align,
-                  children: [
-                    FittedBox(
-                      child: Text(
-                        message,
-                        style: TextStyle(color: textColor),
-                      ),
-                    ),
-                    const SizedBox(height: 5),
-                    Align(
-                      alignment: Alignment.bottomRight,
-                      child: Text(
-                        time,
-                        style: TextStyle(
-                          color: textColor.withOpacity(0.6),
-                          fontSize: 10,
+                child: IntrinsicWidth(
+                  child: Column(
+                    crossAxisAlignment: align,
+                    children: [
+                      ConstrainedBox(
+                        constraints: BoxConstraints(
+                          maxWidth: maxWidth,
+                        ),
+                        child: Text(
+                          message,
+                          style: TextStyle(color: textColor),
                         ),
                       ),
-                    ),
-                  ],
+                      const SizedBox(height: 5),
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Spacer(),
+                          Text(
+                            time,
+                            style: TextStyle(
+                              color: textColor.withOpacity(0.6),
+                              fontSize: 10,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              );
+            },
           ),
         ],
       ),
