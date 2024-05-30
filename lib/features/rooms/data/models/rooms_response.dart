@@ -34,7 +34,7 @@ class RoomDataResponse with _$RoomDataResponse {
     @JsonKey(name: 'room_id') String? roomId,
     @JsonKey(name: 'user_id') String? userId,
     @JsonKey(name: 'name') String? name,
-    @JsonKey(name: 'participants') List<ParticipantDataResponse>? participants,
+    @JsonKey(name: 'participants') List<UserLoginModel>? participants,
     @JsonKey(name: 'created_at') int? createdAt,
     @JsonKey(name: 'updated_at') int? updatedAt,
   }) = _RoomDataResponse;
@@ -52,38 +52,6 @@ class RoomDataResponse with _$RoomDataResponse {
       name: name,
       participants:
           participants?.map((participant) => participant.toEntity()).toList(),
-      createdAt: createdAt,
-      updatedAt: updatedAt,
-    );
-  }
-}
-
-@freezed
-class ParticipantDataResponse with _$ParticipantDataResponse {
-  const factory ParticipantDataResponse({
-    @JsonKey(name: 'id') String? id,
-    @JsonKey(name: 'user_id') String? userId,
-    @JsonKey(name: 'email') String? email,
-    @JsonKey(name: 'name') String? name,
-    @JsonKey(name: 'phone') String? phone,
-    @JsonKey(name: 'password') String? password,
-    @JsonKey(name: 'created_at') int? createdAt,
-    @JsonKey(name: 'updated_at') int? updatedAt,
-  }) = _ParticipantDataResponse;
-
-  const ParticipantDataResponse._(); // Added constructor
-
-  factory ParticipantDataResponse.fromJson(Map<String, dynamic> json) =>
-      _$ParticipantDataResponseFromJson(json);
-
-  ParticipantDataEntity toEntity() {
-    return ParticipantDataEntity(
-      id: id,
-      userId: userId,
-      email: email,
-      name: name,
-      phone: phone,
-      password: password,
       createdAt: createdAt,
       updatedAt: updatedAt,
     );

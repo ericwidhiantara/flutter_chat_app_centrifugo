@@ -2,15 +2,16 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:tddboilerplate/core/core.dart';
 import 'package:tddboilerplate/features/features.dart';
+import 'package:tddboilerplate/utils/helper/entities/entities.dart';
 
-part 'create_room_cubit.freezed.dart';
-part 'create_room_state.dart';
+part 'add_participant_cubit.freezed.dart';
+part 'add_participant_state.dart';
 
-class CreateRoomCubit extends Cubit<CreateRoomState> {
-  CreateRoomCubit(this._usecase) : super(const _Loading());
-  final PostCreateRoomUsecase _usecase;
+class AddParticipantCubit extends Cubit<AddParticipantState> {
+  AddParticipantCubit(this._usecase) : super(const _Loading());
+  final PostAddParticipantUsecase _usecase;
 
-  Future<void> createRoom(PostCreateRoomParams params) async {
+  Future<void> addParticipant(PostAddParticipantParams params) async {
     emit(const _Loading());
     final data = await _usecase.call(params);
 

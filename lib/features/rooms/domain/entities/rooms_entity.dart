@@ -25,7 +25,7 @@ class RoomDataEntity with _$RoomDataEntity {
     String? roomId,
     String? userId,
     String? name,
-    List<ParticipantDataEntity>? participants,
+    List<UserLoginEntity>? participants,
     int? createdAt,
     int? updatedAt,
   }) = _RoomDataEntity;
@@ -34,23 +34,4 @@ class RoomDataEntity with _$RoomDataEntity {
 
   factory RoomDataEntity.fromJson(Map<String, dynamic> json) =>
       _$RoomDataEntityFromJson(json);
-}
-
-@freezed
-class ParticipantDataEntity with _$ParticipantDataEntity {
-  const factory ParticipantDataEntity({
-    String? id,
-    String? userId,
-    String? email,
-    String? name,
-    String? phone,
-    String? password,
-    int? createdAt,
-    int? updatedAt,
-  }) = _ParticipantDataEntity;
-
-  const ParticipantDataEntity._(); // Added constructor
-
-  factory ParticipantDataEntity.fromJson(Map<String, dynamic> json) =>
-      _$ParticipantDataEntityFromJson(json);
 }

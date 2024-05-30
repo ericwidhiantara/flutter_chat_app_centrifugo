@@ -6,7 +6,15 @@ import 'package:tddboilerplate/utils/utils.dart';
 abstract class RoomsRemoteDatasource {
   Future<Either<Failure, RoomsResponse>> getRooms(GetRoomsParams params);
 
-  Future<Either<Failure, MetaModel>> createRoom(PostCreateRoomParams params);
+  Future<Either<Failure, CreateRoomResponse>> createRoom(
+    PostCreateRoomParams params,
+  );
+
+  Future<Either<Failure, UsersResponse>> getUsers(GetUsersParams params);
+
+  Future<Either<Failure, MetaModel>> addParticipant(
+    PostAddParticipantParams params,
+  );
 }
 
 class RoomsRemoteDatasourceImpl implements RoomsRemoteDatasource {
@@ -26,13 +34,40 @@ class RoomsRemoteDatasourceImpl implements RoomsRemoteDatasource {
   }
 
   @override
-  Future<Either<Failure, MetaModel>> createRoom(
+  Future<Either<Failure, CreateRoomResponse>> createRoom(
     PostCreateRoomParams params,
   ) async {
     final response = await _client.postRequest(
       ListAPI.createRoom,
       data: {
         "name": params.name,
+      },
+      converter: (response) =>
+          CreateRoomResponse.fromJson(response as Map<String, dynamic>),
+    );
+
+    return response;
+  }
+
+  @override
+  Future<Either<Failure, UsersResponse>> getUsers(GetUsersParams params) async {
+    final response = await _client.getRequest(
+      "${ListAPI.users}?page=${params.page}",
+      converter: (response) =>
+          UsersResponse.fromJson(response as Map<String, dynamic>),
+    );
+
+    return response;
+  }
+
+  @override
+  Future<Either<Failure, MetaModel>> addParticipant(
+    PostAddParticipantParams params,
+  ) async {
+    final response = await _client.postRequest(
+      "${ListAPI.rooms}/${params.roomId}/participants",
+      data: {
+        "user_id": params.userId,
       },
       converter: (response) =>
           MetaModel.fromJson(response["meta"] as Map<String, dynamic>),

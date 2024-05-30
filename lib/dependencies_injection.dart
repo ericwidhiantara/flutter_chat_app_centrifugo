@@ -73,6 +73,8 @@ void _useCase() {
   /// Rooms
   sl.registerLazySingleton(() => GetRoomsUsecase(sl()));
   sl.registerLazySingleton(() => PostCreateRoomUsecase(sl()));
+  sl.registerLazySingleton(() => GetUsersUsecase(sl()));
+  sl.registerLazySingleton(() => PostAddParticipantUsecase(sl()));
 
   /// Chats
   sl.registerLazySingleton(() => GetMessagesUsecase(sl()));
@@ -90,6 +92,9 @@ void _cubit() {
   /// Rooms
   sl.registerFactory(() => RoomCubit(sl()));
   sl.registerFactory(() => CreateRoomCubit(sl()));
+  sl.registerFactory(() => ParticipantCubit(sl()));
+  sl.registerFactory(() => ParticipantDataCubit());
+  sl.registerFactory(() => AddParticipantCubit(sl()));
 
   /// Chats
   sl.registerFactory(() => ChatCubit(sl()));

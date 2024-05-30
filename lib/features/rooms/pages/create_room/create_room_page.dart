@@ -39,30 +39,38 @@ class _CreateRoomPageState extends State<CreateRoomPage> {
   Widget build(BuildContext context) {
     return Parent(
       appBar: _appBar(context),
-      child: BlocListener<CreateRoomCubit, CreateRoomState>(
-        listener: (_, state) {
-          state.whenOrNull(
-            loading: () => context.show(),
-            success: (data) {
-              context.dismiss();
-              data.message.toString().toToastSuccess(context);
-              resetForm();
+      child: MultiBlocListener(
+        listeners: [
+          BlocListener<CreateRoomCubit, CreateRoomState>(
+            listener: (_, state) {
+              state.whenOrNull(
+                loading: () => context.show(),
+                success: (data) async {
+                  context.dismiss();
+                  data.meta?.message.toString().toToastSuccess(context);
+                  resetForm();
+                  context.back(true);
 
-              context.back(true);
+                  context.goNamed(
+                    Routes.addParticipant.name,
+                    extra: data.data,
+                  );
+                },
+                failure: (type, message) {
+                  if (type is UnauthorizedFailure) {
+                    Strings.of(context)!.expiredToken.toToastError(context);
+
+                    context.goNamed(Routes.login.name);
+                  } else {
+                    context.dismiss();
+
+                    message.toToastError(context);
+                  }
+                },
+              );
             },
-            failure: (type, message) {
-              if (type is UnauthorizedFailure) {
-                Strings.of(context)!.expiredToken.toToastError(context);
-
-                context.goNamed(Routes.login.name);
-              } else {
-                context.dismiss();
-
-                message.toToastError(context);
-              }
-            },
-          );
-        },
+          ),
+        ],
         child: SingleChildScrollView(
           controller: _scrollController,
           child: Padding(

@@ -14,6 +14,7 @@ enum Routes {
   dashboard("/dashboard"),
   chat("chat"),
   newRoom("new-room"),
+  addParticipant("add-participant"),
   settings("/settings"),
 
   // Auth Page
@@ -96,6 +97,28 @@ class AppRoute {
                   ),
                 ],
                 child: ChatPage(room: room),
+              );
+            },
+          ),
+          GoRoute(
+            path: Routes.addParticipant.path,
+            name: Routes.addParticipant.name,
+            builder: (_, state) {
+              final room = state.extra! as RoomDataEntity;
+              return MultiBlocProvider(
+                providers: [
+                  BlocProvider(
+                    create: (_) => sl<ParticipantCubit>()
+                      ..fetchParticipantList(const GetUsersParams()),
+                  ),
+                  BlocProvider(
+                    create: (context) => sl<ParticipantDataCubit>(),
+                  ),
+                  BlocProvider(
+                    create: (context) => sl<AddParticipantCubit>(),
+                  ),
+                ],
+                child: ParticipantPage(room: room),
               );
             },
           ),

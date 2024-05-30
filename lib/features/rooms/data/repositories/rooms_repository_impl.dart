@@ -27,10 +27,39 @@ class RoomsRepositoryImpl implements RoomsRepository {
   }
 
   @override
-  Future<Either<Failure, MetaEntity>> createRoom(
+  Future<Either<Failure, CreateRoomEntity>> createRoom(
     PostCreateRoomParams params,
   ) async {
     final response = await _dataSource.createRoom(params);
+
+    return response.fold(
+      (failure) => Left(failure),
+      (response) => Right(response.toEntity()),
+    );
+  }
+
+  @override
+  Future<Either<Failure, UsersEntity>> getUsers(GetUsersParams params) async {
+    final response = await _dataSource.getUsers(params);
+
+    return response.fold(
+      (failure) => Left(failure),
+      (response) async {
+        if (response.data == [] ||
+            response.data == null ||
+            response.data!.isEmpty) {
+          return Left(NoDataFailure());
+        }
+        return Right(response.toEntity());
+      },
+    );
+  }
+
+  @override
+  Future<Either<Failure, MetaEntity>> addParticipant(
+    PostAddParticipantParams params,
+  ) async {
+    final response = await _dataSource.addParticipant(params);
 
     return response.fold(
       (failure) => Left(failure),
