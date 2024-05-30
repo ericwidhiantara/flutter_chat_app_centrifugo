@@ -139,6 +139,13 @@ class _RoomPageState extends State<RoomPage> with TickerProviderStateMixin {
                               color: Theme.of(context).cardColor,
                               child: ListTile(
                                 onTap: () {
+                                  if (data.participants?.length == 1) {
+                                    context.goNamed(
+                                      Routes.addParticipant.name,
+                                      extra: data,
+                                    );
+                                    return;
+                                  }
                                   final token = sl<MainBoxMixin>()
                                       .getData(MainBoxKeys.token) as String;
 
