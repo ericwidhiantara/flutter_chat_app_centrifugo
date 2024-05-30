@@ -36,6 +36,8 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
 
   UserLoginEntity? _user;
 
+  final _formKey = GlobalKey<FormState>();
+
   @override
   void initState() {
     super.initState();
@@ -48,6 +50,7 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
     _sub = conf.cli.messages.listen((MessageDataEntity msg) {
       log.i("Received message: $msg");
       // _messages.add(msg);
+
       setState(() => _messages.insert(0, msg));
       _scrollController.animateTo(
         0.0,
@@ -83,131 +86,133 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return Parent(
+    return Scaffold(
+      resizeToAvoidBottomInset: true,
       appBar: _appBar(context),
-      bottomNavigation: Container(
-        margin: EdgeInsets.symmetric(
-          horizontal: Dimens.size20,
-          vertical: Dimens.size15,
-        ),
-        padding:
-            EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-        child: TextField(
-          controller: _messageController,
-          decoration: InputDecoration(
-            hintText: 'Type a message',
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10),
-            ),
-            suffixIcon: IconButton(
-              icon: const Icon(Icons.send),
-              onPressed: () async {
-                if (_messageController.text.isNotEmpty) {
-                  await context.read<ChatFormCubit>().sendMessage(
-                        PostSendMessageParams(
-                          text: _messageController.text,
-                          roomId: _roomId,
-                        ),
-                      );
-                  _scrollController.animateTo(
-                    0.0,
-                    duration: const Duration(milliseconds: 300),
-                    curve: Curves.easeOut,
-                  );
-                  _messages.add(
-                    MessageDataEntity(
-                      text: _messageController.text,
-                      senderId: _user?.userId,
-                      createdAt: DateTime.now().millisecondsSinceEpoch,
-                    ),
-                  );
-                  _messageController.clear();
-                }
-              },
+      bottomNavigationBar: Form(
+        key: _formKey,
+        child: Container(
+          margin:
+              EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+          padding: EdgeInsets.all(Dimens.size16),
+          child: TextField(
+            controller: _messageController,
+            decoration: InputDecoration(
+              hintText: 'Type a message',
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+              suffixIcon: IconButton(
+                icon: const Icon(Icons.send),
+                onPressed: () async {
+                  if (_messageController.text.isNotEmpty) {
+                    await context.read<ChatFormCubit>().sendMessage(
+                          PostSendMessageParams(
+                            text: _messageController.text,
+                            roomId: _roomId,
+                          ),
+                        );
+                    _scrollController.animateTo(
+                      0.0,
+                      duration: const Duration(milliseconds: 300),
+                      curve: Curves.easeOut,
+                    );
+                    // _messages.add(
+                    //   MessageDataEntity(
+                    //     text: _messageController.text,
+                    //     senderId: _user?.userId,
+                    //     createdAt: DateTime.now().millisecondsSinceEpoch,
+                    //   ),
+                    // );
+                    _messageController.clear();
+                  }
+                },
+              ),
             ),
           ),
         ),
       ),
-      child: RefreshIndicator(
-        color: Theme.of(context).primaryColor,
-        backgroundColor: Theme.of(context).extension<CustomColor>()!.background,
-        onRefresh: () {
-          _currentPage = 1;
-          _lastPage = 1;
-          _messages.clear();
+      body: body(context),
+    );
+  }
 
-          return context.read<ChatCubit>().refreshChat(
-                GetMessagesParams(
-                  page: _currentPage,
-                  roomId: _roomId,
-                ),
-              );
+  RefreshIndicator body(BuildContext context) {
+    return RefreshIndicator(
+      color: Theme.of(context).primaryColor,
+      backgroundColor: Theme.of(context).extension<CustomColor>()!.background,
+      onRefresh: () {
+        _currentPage = 1;
+        _lastPage = 1;
+        _messages.clear();
+
+        return context.read<ChatCubit>().refreshChat(
+              GetMessagesParams(
+                page: _currentPage,
+                roomId: _roomId,
+              ),
+            );
+      },
+      child: BlocListener<ChatCubit, ChatState>(
+        listener: (context, state) {
+          state.whenOrNull(
+            success: (data) {
+              _messages.addAll(data.data ?? []);
+              _lastPage = data.pagination?.totalPage ?? 1;
+            },
+            failure: (type, message) {
+              if (type is UnauthorizedFailure) {
+                Strings.of(context)!.expiredToken.toToastError(context);
+
+                context.goNamed(Routes.login.name);
+              } else {
+                message.toToastError(context);
+              }
+            },
+          );
         },
-        child: MultiBlocListener(
-          listeners: [
-            BlocListener<ChatCubit, ChatState>(
-              listener: (context, state) {
-                state.whenOrNull(
-                  failure: (type, message) {
-                    if (type is UnauthorizedFailure) {
-                      Strings.of(context)!.expiredToken.toToastError(context);
-
-                      context.goNamed(Routes.login.name);
-                    } else {
-                      message.toToastError(context);
-                    }
-                  },
-                );
-              },
-            ),
-          ],
-          child: Container(
-            padding: EdgeInsets.all(Dimens.size20),
-            child: BlocBuilder<ChatCubit, ChatState>(
-              builder: (context, state) {
-                return state.when(
-                  loading: () => const Center(child: Loading()),
-                  success: (data) {
-                    _messages.addAll(data.data ?? []);
-                    _lastPage = data.pagination?.totalPage ?? 1;
-
-                    return ListView.builder(
-                      shrinkWrap: true,
-                      controller: _scrollController,
-                      itemCount: _currentPage == _lastPage
-                          ? _messages.length
-                          : _messages.length + 1,
-                      reverse: true,
-                      itemBuilder: (context, index) {
-                        if (index < _messages.length) {
-                          final data = _messages[index];
-                          return ChatBubble(
-                            message: data.text ?? "",
-                            isSender: data.senderId == _user?.userId,
-                            senderName: data.senderId == _user?.userId
-                                ? null
-                                : data.sender?.name ?? "",
-                            time: DateFormat("hh:mm").format(
-                              DateTime.fromMillisecondsSinceEpoch(
-                                data.createdAt! * 1000,
-                              ),
+        child: Container(
+          padding: EdgeInsets.all(Dimens.size20),
+          child: BlocBuilder<ChatCubit, ChatState>(
+            builder: (context, state) {
+              return state.when(
+                loading: () => const Center(child: Loading()),
+                success: (data) {
+                  return ListView.builder(
+                    shrinkWrap: true,
+                    controller: _scrollController,
+                    itemCount: _currentPage == _lastPage
+                        ? _messages.length
+                        : _messages.length + 1,
+                    reverse: true,
+                    itemBuilder: (context, index) {
+                      if (index < _messages.length) {
+                        final data = _messages[index];
+                        return ChatBubble(
+                          message: data.text ?? "",
+                          isSender: data.senderId == _user?.userId,
+                          senderName: data.senderId == _user?.userId
+                              ? null
+                              : data.sender?.name ?? "",
+                          time: DateFormat("hh:mm").format(
+                            DateTime.fromMillisecondsSinceEpoch(
+                              data.createdAt! * 1000,
                             ),
-                          );
-                        }
-                        return Padding(
-                          padding: EdgeInsets.all(Dimens.space16),
-                          child: const Center(
-                            child: CupertinoActivityIndicator(),
                           ),
                         );
-                      },
-                    );
-                  },
-                  failure: (_, message) => Empty(errorMessage: message),
-                  empty: () => const SizedBox(),
-                );
-              },
-            ),
+                      }
+                      return Padding(
+                        padding: EdgeInsets.all(Dimens.space16),
+                        child: const Center(
+                          child: CupertinoActivityIndicator(),
+                        ),
+                      );
+                    },
+                  );
+                },
+                failure: (_, message) => Empty(errorMessage: message),
+                empty: () => const SizedBox(),
+              );
+            },
           ),
         ),
       ),
