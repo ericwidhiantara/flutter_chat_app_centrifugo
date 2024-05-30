@@ -194,7 +194,7 @@ class _RoomPageState extends State<RoomPage> with TickerProviderStateMixin {
                                     ),
                                     child: CachedNetworkImage(
                                       imageUrl:
-                                          'https://via.placeholder.com/65x65',
+                                          'https://ui-avatars.com/api/?name=${data.name}&background=0D8ABC&size=1024&color=fff',
                                     ),
                                   ),
                                 ),

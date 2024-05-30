@@ -112,4 +112,40 @@ class Palette {
     final hexCode = hexColor.replaceAll('#', '');
     return Color(int.parse('FF$hexCode', radix: 16));
   }
+
+  static String setCharColor(String text) {
+    var color = "";
+    String char = "";
+    try {
+      if (text != '') {
+        final List splitName = text.split(" ");
+        if (splitName.length > 1) {
+          char = splitName[0][0].toString() + splitName[1][0].toString();
+        } else {
+          char = splitName[0][0].toString();
+        }
+      } else {
+        char = "";
+      }
+
+      char = char.substring(0).toUpperCase();
+      final charCode = char.codeUnitAt(0);
+
+      if (charCode >= 65 && charCode <= 70) {
+        color = '#E57D1E';
+      } else if (charCode >= 71 && charCode <= 75) {
+        color = '#8539AC';
+      } else if (charCode >= 76 && charCode <= 80) {
+        color = '#3296DC';
+      } else if (charCode >= 81 && charCode <= 85) {
+        color = '#26C56A';
+      } else {
+        color = '#324150';
+      }
+    } catch (err) {
+      color = '#324150';
+    }
+
+    return color;
+  }
 }

@@ -83,7 +83,6 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    print("_messages.length ${_messages.length}");
     return Parent(
       appBar: _appBar(context),
       bottomNavigation: Container(
@@ -169,11 +168,7 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
                 return state.when(
                   loading: () => const Center(child: Loading()),
                   success: (data) {
-                    if (_currentPage == 1) {
-                      _messages.clear();
-                    }
                     _messages.addAll(data.data ?? []);
-
                     _lastPage = data.pagination?.totalPage ?? 1;
 
                     return ListView.builder(
