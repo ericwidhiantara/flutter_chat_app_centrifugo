@@ -49,14 +49,17 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
     conf.cli.subscribe("room:$_roomId");
     _sub = conf.cli.messages.listen((MessageDataEntity msg) {
       log.i("Received message: $msg");
-      // _messages.add(msg);
 
-      setState(() => _messages.insert(0, msg));
-      _scrollController.animateTo(
-        0.0,
-        duration: const Duration(milliseconds: 300),
-        curve: Curves.easeOut,
-      );
+      if (_messages.isNotEmpty) {
+        setState(() => _messages.insert(0, msg));
+      }
+      if (_scrollController.hasClients) {
+        _scrollController.animateTo(
+          0.0,
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeOut,
+        );
+      }
     });
 
     _scrollController.addListener(() async {
@@ -84,6 +87,25 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
     super.dispose();
   }
 
+  Future<void> sendMessage(BuildContext context) async {
+    if (_messageController.text.isNotEmpty) {
+      await context.read<ChatFormCubit>().sendMessage(
+            PostSendMessageParams(
+              text: _messageController.text,
+              roomId: _roomId,
+            ),
+          );
+
+      if (_messages.isEmpty && context.mounted) {
+        await context.read<ChatCubit>().fetchMessages(
+              GetMessagesParams(roomId: _roomId),
+            );
+      }
+
+      _messageController.clear();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -97,6 +119,7 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
           padding: EdgeInsets.all(Dimens.size16),
           child: TextField(
             controller: _messageController,
+            onSubmitted: (_) => sendMessage(context),
             decoration: InputDecoration(
               hintText: 'Type a message',
               border: OutlineInputBorder(
@@ -104,29 +127,7 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
               ),
               suffixIcon: IconButton(
                 icon: const Icon(Icons.send),
-                onPressed: () async {
-                  if (_messageController.text.isNotEmpty) {
-                    await context.read<ChatFormCubit>().sendMessage(
-                          PostSendMessageParams(
-                            text: _messageController.text,
-                            roomId: _roomId,
-                          ),
-                        );
-                    _scrollController.animateTo(
-                      0.0,
-                      duration: const Duration(milliseconds: 300),
-                      curve: Curves.easeOut,
-                    );
-                    // _messages.add(
-                    //   MessageDataEntity(
-                    //     text: _messageController.text,
-                    //     senderId: _user?.userId,
-                    //     createdAt: DateTime.now().millisecondsSinceEpoch,
-                    //   ),
-                    // );
-                    _messageController.clear();
-                  }
-                },
+                onPressed: () => sendMessage(context),
               ),
             ),
           ),
