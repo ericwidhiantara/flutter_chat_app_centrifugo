@@ -22,7 +22,7 @@ class ChatsRemoteDatasourceImpl implements ChatsRemoteDatasource {
     GetMessagesParams params,
   ) async {
     final response = await _client.getRequest(
-      "${ListAPI.messagesByRoom}/${params.roomId}?page=${params.page}",
+      "${ListAPI.messages}/${params.roomId}?page=${params.page}",
       converter: (response) =>
           MessagesResponse.fromJson(response as Map<String, dynamic>),
     );
@@ -39,7 +39,7 @@ class ChatsRemoteDatasourceImpl implements ChatsRemoteDatasource {
     });
 
     final response = await _client.postRequest(
-      "${ListAPI.sendMessage}/${params.roomId}/create",
+      "${ListAPI.messages}/${params.roomId}/create",
       formData: formData,
       converter: (response) =>
           MetaModel.fromJson(response["meta"] as Map<String, dynamic>),

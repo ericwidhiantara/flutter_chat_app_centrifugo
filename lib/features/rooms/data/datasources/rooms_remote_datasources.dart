@@ -38,7 +38,7 @@ class RoomsRemoteDatasourceImpl implements RoomsRemoteDatasource {
     PostCreateRoomParams params,
   ) async {
     final response = await _client.postRequest(
-      ListAPI.createRoom,
+      ListAPI.rooms,
       data: {
         "name": params.name,
       },
