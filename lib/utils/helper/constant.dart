@@ -3,7 +3,7 @@ class Constants {
 
   static Constants get = Constants._();
 
-  String appName = "Flutter Auth App";
+  String appName = "Chat App";
   String english = "English";
   String bahasa = "Bahasa";
 
