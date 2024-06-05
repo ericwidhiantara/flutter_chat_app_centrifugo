@@ -102,6 +102,29 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
   Future<void> checkOnline() async {
     log.i("Online user subscription started");
 
+    //check online user from presence data first
+    final res = await conf.cli.onlineUserSubscription!.presence();
+    log.i("Online user presence: ${res.clients.keys}");
+
+    final isPersonalRoom = widget.room.roomType == "personal";
+    final participants = widget.room.participants;
+
+    //
+    if (isPersonalRoom && participants != null) {
+      final recipient =
+          participants.firstWhere((element) => element.userId != _user?.userId);
+
+      // looping to get the ClientInfo inside the response
+      res.clients.forEach((key, value) {
+        log.i("Hehhe: $key, value: $value");
+        if (value.user == recipient.userId) {
+          setState(() {
+            _isOnline = true;
+          });
+        }
+      });
+    }
+
     _subOnlineUser = conf.cli.onlineUsers.listen((OnlineUser value) {
       setState(() {
         _isOnline = value.isOnline;
