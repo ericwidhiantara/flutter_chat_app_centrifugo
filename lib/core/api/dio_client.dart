@@ -99,6 +99,11 @@ class DioClient with MainBoxMixin, FirebaseCrashLogger {
             ),
           );
         }
+        if (e.response?.statusCode == 404) {
+          return Left(
+            NoDataFailure(),
+          );
+        }
         return Left(
           ServerFailure(
             e.response?.data["message"].toString() ?? "Error occurred",
@@ -114,6 +119,11 @@ class DioClient with MainBoxMixin, FirebaseCrashLogger {
           UnauthorizedFailure(
             e.response?.data["message"].toString() ?? "Unauthorized",
           ),
+        );
+      }
+      if (e.response?.statusCode == 404) {
+        return Left(
+          NoDataFailure(),
         );
       }
       return Left(
@@ -159,6 +169,11 @@ class DioClient with MainBoxMixin, FirebaseCrashLogger {
             ),
           );
         }
+        if (e.response?.statusCode == 404) {
+          return Left(
+            NoDataFailure(),
+          );
+        }
         return Left(
           ServerFailure(
             e.response?.data["message"].toString() ?? "Error occurred",
@@ -174,6 +189,11 @@ class DioClient with MainBoxMixin, FirebaseCrashLogger {
           UnauthorizedFailure(
             e.response?.data["message"].toString() ?? "Unauthorized",
           ),
+        );
+      }
+      if (e.response?.statusCode == 404) {
+        return Left(
+          NoDataFailure(),
         );
       }
       return Left(
@@ -218,6 +238,11 @@ class DioClient with MainBoxMixin, FirebaseCrashLogger {
             ),
           );
         }
+        if (e.response?.statusCode == 404) {
+          return Left(
+            NoDataFailure(),
+          );
+        }
         return Left(
           ServerFailure(
             e.response?.data["message"].toString() ?? "Error occurred",
@@ -233,6 +258,11 @@ class DioClient with MainBoxMixin, FirebaseCrashLogger {
           UnauthorizedFailure(
             e.response?.data["message"].toString() ?? "Unauthorized",
           ),
+        );
+      }
+      if (e.response?.statusCode == 404) {
+        return Left(
+          NoDataFailure(),
         );
       }
       return Left(
@@ -276,6 +306,11 @@ class DioClient with MainBoxMixin, FirebaseCrashLogger {
             ),
           );
         }
+        if (e.response?.statusCode == 404) {
+          return Left(
+            NoDataFailure(),
+          );
+        }
         return Left(
           ServerFailure(
             e.response?.data["message"].toString() ?? "Error occurred",
@@ -291,6 +326,11 @@ class DioClient with MainBoxMixin, FirebaseCrashLogger {
           UnauthorizedFailure(
             e.response?.data["message"].toString() ?? "Unauthorized",
           ),
+        );
+      }
+      if (e.response?.statusCode == 404) {
+        return Left(
+          NoDataFailure(),
         );
       }
       return Left(
