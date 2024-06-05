@@ -37,3 +37,13 @@ class UserLoginModel with _$UserLoginModel {
     );
   }
 }
+
+class OnlineUser {
+  final String userId;
+  final bool isOnline;
+
+  OnlineUser({
+    required this.userId,
+    required this.isOnline,
+  });
+}

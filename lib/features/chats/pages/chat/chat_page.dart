@@ -28,8 +28,11 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
   final List<MessageDataEntity> _messages = [];
 
   String _roomId = "";
+  String _roomName = "";
+  bool _isOnline = false;
 
   late StreamSubscription<MessageDataEntity> _sub;
+  late StreamSubscription<OnlineUser> _subOnlineUser;
 
   // final ChatClient conf = ChatClient();
   final TextEditingController _messageController = TextEditingController();
@@ -44,8 +47,16 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
     setState(() {
       _roomId = widget.room.roomId!;
       _user = sl<MainBoxMixin>().getData(MainBoxKeys.tokenData);
+      _roomName = widget.room.roomType == "personal"
+          ? widget.room.participants
+                  ?.firstWhere(
+                    (element) => element.userId != _user?.userId,
+                  )
+                  .name ??
+              "Unknown"
+          : widget.room.name ?? "Unknown";
     });
-
+    checkOnline();
     conf.cli.subscribe("room:$_roomId");
     _sub = conf.cli.messages.listen((MessageDataEntity msg) {
       log.i("Received message: $msg");
@@ -83,8 +94,20 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
   void dispose() {
     _scrollController.dispose();
     _sub.cancel();
+    _subOnlineUser.cancel();
     conf.cli.dispose();
     super.dispose();
+  }
+
+  Future<void> checkOnline() async {
+    log.i("Online user subscription started");
+
+    _subOnlineUser = conf.cli.onlineUsers.listen((OnlineUser value) {
+      setState(() {
+        _isOnline = value.isOnline;
+      });
+      log.i("ini user yang online: $value, isOnline: $_isOnline");
+    });
   }
 
   Future<void> sendMessage(BuildContext context) async {
@@ -224,13 +247,41 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
     return PreferredSize(
       preferredSize: Size.fromHeight(Dimens.size50),
       child: AppBar(
-        title: Text(
-          widget.room.name ?? "-",
-          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                fontWeight: FontWeight.w700,
-              ),
+        title: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              _roomName,
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    fontWeight: FontWeight.w700,
+                  ),
+            ),
+            Row(
+              children: [
+                Container(
+                  width: 10,
+                  height: 10,
+                  decoration: BoxDecoration(
+                    color: _isOnline ? Colors.green : Colors.red,
+                    shape: BoxShape.circle,
+                  ),
+                ),
+                SpacerH(value: Dimens.space8),
+                Text(
+                  widget.room.roomType == "personal"
+                      ? _isOnline
+                          ? "Online"
+                          : "Offline"
+                      : "${widget.room.participants!.length} anggota",
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        fontWeight: FontWeight.w400,
+                        fontSize: Dimens.text12,
+                      ),
+                ),
+              ],
+            ),
+          ],
         ),
-        centerTitle: true,
         elevation: 0,
       ),
     );

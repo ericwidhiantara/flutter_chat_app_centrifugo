@@ -18,12 +18,17 @@ class ChatClient {
   late StreamSubscription<MessageEvent> _msgSub;
 
   late Subscription? subscription;
+  late Subscription? onlineUserSubscription;
 
-  // final _chatMsgController = StreamController<MessageDataEntity>();
   final StreamController<MessageDataEntity> _chatMsgController =
       StreamController<MessageDataEntity>.broadcast();
 
+  final StreamController<OnlineUser> _onlineUserController =
+      StreamController<OnlineUser>.broadcast();
+
   Stream<MessageDataEntity> get messages => _chatMsgController.stream;
+
+  Stream<OnlineUser> get onlineUsers => _onlineUserController.stream;
 
   void init(String token, String chatUserName, String chatUserId) {
     const url = String.fromEnvironment("WEBSOCKET_URL");
@@ -90,22 +95,21 @@ class ChatClient {
     subscription.publication
         .map<String>((e) => utf8.decode(e.data))
         .listen((data) {
-      log.i("Received msg di subs: $data");
+      log.i("Received msg in subs: $data");
       final Map<String, dynamic> d = json.decode(data) as Map<String, dynamic>;
       log.i("Parsed JSON data: $d");
 
-      // Explicitly cast d["data"] to Map<String, dynamic>
       final Map<String, dynamic> jsonData = d["data"] as Map<String, dynamic>;
 
       final MessageDataResponse res = MessageDataResponse.fromJson(jsonData);
 
       final MessageDataEntity message = res.toEntity();
-      log.i("Ini message: ${message.text}");
-      log.i("Ini message: ${message.sender?.name}");
-      log.i("Ini message: ${message.senderId}");
-      log.i("Ini message: ${message.createdAt}");
-      log.i("Ini message: ${message.roomId}");
-      log.i("Ini message: ${message.messageId}");
+      log.i("Message: ${message.text}");
+      log.i("Sender: ${message.sender?.name}");
+      log.i("SenderId: ${message.senderId}");
+      log.i("CreatedAt: ${message.createdAt}");
+      log.i("RoomId: ${message.roomId}");
+      log.i("MessageId: ${message.messageId}");
 
       if (!_chatMsgController.isClosed) {
         _chatMsgController.sink.add(
@@ -116,13 +120,34 @@ class ChatClient {
       }
     });
     subscription.join.listen(
-      (event) => log.i("Client joined channel: $event'"),
+      (event) {
+        log.i("Client joined channel: $event");
+        Fluttertoast.showToast(
+          msg: "Client joined channel: $event",
+          backgroundColor: Colors.green,
+          textColor: Colors.white,
+        );
+      },
     );
     subscription.leave.listen(
-      (event) => log.i("Client leave channel: $event"),
+      (event) {
+        log.i("Client left channel: $event");
+        Fluttertoast.showToast(
+          msg: "Client left channel: $event",
+          backgroundColor: Colors.green,
+          textColor: Colors.white,
+        );
+      },
     );
     subscription.subscribed.listen(
-      (event) => log.i("Subscribed: $event"),
+      (event) {
+        log.i("Subscribed: $event");
+        Fluttertoast.showToast(
+          msg: "Subscribed: $event",
+          backgroundColor: Colors.green,
+          textColor: Colors.white,
+        );
+      },
     );
     subscription.subscribing.listen(
       (event) => log.i("Subscribing: $event"),
@@ -131,10 +156,84 @@ class ChatClient {
       (event) => log.e("Error: $event"),
     );
     subscription.unsubscribed.listen(
-      (event) => log.i("Unsubscribed: $event"),
+      (event) {
+        log.i("Unsubscribed: $event");
+        Fluttertoast.showToast(
+          msg: "Centrifugo server connected",
+          backgroundColor: Colors.green,
+          textColor: Colors.white,
+        );
+      },
     );
     this.subscription = subscription;
     await subscription.subscribe();
+  }
+
+  Future<void> checkOnlineUser(String channel) async {
+    log.i("Subscribing to online user channel $channel");
+    final onlineUserSubscription =
+        _client.getSubscription(channel) ?? _client.newSubscription(channel);
+
+    onlineUserSubscription.join.listen(
+      (event) {
+        log.i("User joined channel $channel: $event");
+        _onlineUserController.sink.add(
+          OnlineUser(
+            userId: event.user,
+            isOnline: true,
+          ),
+        );
+        Fluttertoast.showToast(
+          msg: "User joined channel: $event",
+          backgroundColor: Colors.green,
+          textColor: Colors.white,
+        );
+      },
+    );
+    onlineUserSubscription.leave.listen(
+      (event) {
+        log.i("User left channel $channel: $event");
+        _onlineUserController.sink.add(
+          OnlineUser(
+            userId: event.user,
+            isOnline: false,
+          ),
+        );
+        Fluttertoast.showToast(
+          msg: "User left channel: $event",
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+        );
+      },
+    );
+    onlineUserSubscription.subscribed.listen(
+      (event) {
+        log.i("Subscribed to online user channel: $event");
+        Fluttertoast.showToast(
+          msg: "Subscribed to online user channel: $event",
+          backgroundColor: Colors.green,
+          textColor: Colors.white,
+        );
+      },
+    );
+    onlineUserSubscription.subscribing.listen(
+      (event) => log.i("Subscribing to online user channel: $event"),
+    );
+    onlineUserSubscription.error.listen(
+      (event) => log.e("Error in online user channel: $event"),
+    );
+    onlineUserSubscription.unsubscribed.listen(
+      (event) {
+        log.i("Unsubscribed from online user channel: $event");
+        Fluttertoast.showToast(
+          msg: "Unsubscribed from online user channel: $event",
+          backgroundColor: Colors.green,
+          textColor: Colors.white,
+        );
+      },
+    );
+    this.onlineUserSubscription = onlineUserSubscription;
+    await onlineUserSubscription.subscribe();
   }
 
   Future<void> dispose() async {
@@ -144,7 +243,7 @@ class ChatClient {
     await _disconnSub?.cancel();
     await _errorSub?.cancel();
     await _msgSub.cancel();
-    // await _chatMsgController.close();
+    await _chatMsgController.close();
     await _client.disconnect();
     debugPrint("disposed");
   }

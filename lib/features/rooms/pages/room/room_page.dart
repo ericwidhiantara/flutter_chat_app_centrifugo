@@ -46,7 +46,7 @@ class _RoomPageState extends State<RoomPage> with TickerProviderStateMixin {
         await Future<void>.delayed(
           const Duration(milliseconds: 10),
         );
-        conf.cli.subscribe("online");
+        conf.cli.checkOnlineUser("online:index");
       });
     _scrollController.addListener(() async {
       if (_scrollController.position.atEdge) {
