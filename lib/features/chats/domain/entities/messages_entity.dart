@@ -7,8 +7,8 @@ part 'messages_entity.g.dart';
 @freezed
 class MessagesEntity with _$MessagesEntity {
   const factory MessagesEntity({
-    List<MessageDataEntity>? data,
     MetaEntity? meta,
+    List<MessageDataEntity>? data,
     PaginationEntity? pagination,
   }) = _MessagesEntity;
 
@@ -21,11 +21,11 @@ class MessagesEntity with _$MessagesEntity {
 @freezed
 class MessageDataEntity with _$MessageDataEntity {
   const factory MessageDataEntity({
-    String? id,
     String? messageId,
     String? roomId,
-    String? text,
     String? senderId,
+    String? text,
+    String? messageStatus,
     UserLoginEntity? sender,
     int? createdAt,
     int? updatedAt,

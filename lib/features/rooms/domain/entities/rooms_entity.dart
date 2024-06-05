@@ -8,8 +8,8 @@ part 'rooms_entity.g.dart';
 class RoomsEntity with _$RoomsEntity {
   const factory RoomsEntity({
     MetaEntity? meta,
-    PaginationEntity? pagination,
     List<RoomDataEntity>? data,
+    PaginationEntity? pagination,
   }) = _RoomsEntity;
 
   const RoomsEntity._(); // Added constructor
@@ -21,10 +21,10 @@ class RoomsEntity with _$RoomsEntity {
 @freezed
 class RoomDataEntity with _$RoomDataEntity {
   const factory RoomDataEntity({
-    String? id,
     String? roomId,
     String? userId,
     String? name,
+    String? roomType,
     List<UserLoginEntity>? participants,
     int? createdAt,
     int? updatedAt,

@@ -102,7 +102,6 @@ class ChatClient {
       log.i("Ini message: ${message.senderId}");
       log.i("Ini message: ${message.createdAt}");
       log.i("Ini message: ${message.roomId}");
-      log.i("Ini message: ${message.id}");
       log.i("Ini message: ${message.messageId}");
 
       if (!_chatMsgController.isClosed) {

@@ -9,8 +9,8 @@ part 'rooms_response.g.dart';
 class RoomsResponse with _$RoomsResponse {
   const factory RoomsResponse({
     @JsonKey(name: 'meta') MetaModel? meta,
-    @JsonKey(name: 'pagination') PaginationModel? pagination,
     @JsonKey(name: 'data') List<RoomDataResponse>? data,
+    @JsonKey(name: 'pagination') PaginationModel? pagination,
   }) = _RoomsResponse;
 
   const RoomsResponse._(); // Added constructor
@@ -30,10 +30,10 @@ class RoomsResponse with _$RoomsResponse {
 @freezed
 class RoomDataResponse with _$RoomDataResponse {
   const factory RoomDataResponse({
-    @JsonKey(name: '_id') String? id,
     @JsonKey(name: 'room_id') String? roomId,
     @JsonKey(name: 'user_id') String? userId,
     @JsonKey(name: 'name') String? name,
+    @JsonKey(name: 'room_type') String? roomType,
     @JsonKey(name: 'participants') List<UserLoginModel>? participants,
     @JsonKey(name: 'created_at') int? createdAt,
     @JsonKey(name: 'updated_at') int? updatedAt,
@@ -46,10 +46,10 @@ class RoomDataResponse with _$RoomDataResponse {
 
   RoomDataEntity toEntity() {
     return RoomDataEntity(
-      id: id,
       roomId: roomId,
       userId: userId,
       name: name,
+      roomType: roomType,
       participants:
           participants?.map((participant) => participant.toEntity()).toList(),
       createdAt: createdAt,

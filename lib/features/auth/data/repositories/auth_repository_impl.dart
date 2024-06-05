@@ -1,7 +1,8 @@
 import 'package:dartz/dartz.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:tddboilerplate/core/core.dart';
 import 'package:tddboilerplate/features/auth/auth.dart';
-import 'package:tddboilerplate/utils/services/hive/hive.dart';
+import 'package:tddboilerplate/utils/utils.dart';
 
 class AuthRepositoryImpl implements AuthRepository {
   /// Data Source
@@ -16,15 +17,18 @@ class AuthRepositoryImpl implements AuthRepository {
 
     return response.fold(
       (failure) => Left(failure),
-      (loginResponse) {
-        mainBoxMixin.addData(MainBoxKeys.isLogin, true);
-        mainBoxMixin.addData(MainBoxKeys.token, loginResponse.data?.token);
-        mainBoxMixin.addData(
-          MainBoxKeys.tokenData,
-          loginResponse.data?.user?.toEntity(),
-        );
+      (response) {
+        final data = JwtDecoder.decode(response.data!.accessToken!);
 
-        return Right(loginResponse.toEntity());
+        final JWTModel res = JWTModel.fromJson(data);
+        mainBoxMixin.addData<UserLoginEntity>(
+          MainBoxKeys.tokenData,
+          res.user!.toEntity(),
+        );
+        mainBoxMixin.addData(MainBoxKeys.isLogin, true);
+        mainBoxMixin.addData(MainBoxKeys.token, response.data?.accessToken);
+
+        return Right(response.toEntity());
       },
     );
   }

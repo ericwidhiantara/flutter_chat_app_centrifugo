@@ -9,8 +9,8 @@ part 'users_response.g.dart';
 class UsersResponse with _$UsersResponse {
   const factory UsersResponse({
     @JsonKey(name: 'meta') MetaModel? meta,
-    @JsonKey(name: 'pagination') PaginationModel? pagination,
     @JsonKey(name: 'data') List<UserLoginModel>? data,
+    @JsonKey(name: 'pagination') PaginationModel? pagination,
   }) = _UsersResponse;
 
   const UsersResponse._(); // Added constructor
@@ -20,7 +20,7 @@ class UsersResponse with _$UsersResponse {
 
   UsersEntity toEntity() {
     return UsersEntity(
-      data: data?.map((room) => room.toEntity()).toList(),
+      data: data?.map((user) => user.toEntity()).toList(),
       meta: meta?.toEntity(),
       pagination: pagination?.toEntity(),
     );

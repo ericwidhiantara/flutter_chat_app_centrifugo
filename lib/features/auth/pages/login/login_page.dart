@@ -130,7 +130,7 @@ class _LoginPageState extends State<LoginPage> {
                           if (_keyForm.currentState?.validate() ?? false) {
                             context.read<AuthCubit>().login(
                                   LoginParams(
-                                    email: _conEmail.text,
+                                    username: _conEmail.text,
                                     password: _conPassword.text,
                                   ),
                                 );

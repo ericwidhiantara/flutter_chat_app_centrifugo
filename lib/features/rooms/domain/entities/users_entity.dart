@@ -8,8 +8,8 @@ part 'users_entity.g.dart';
 class UsersEntity with _$UsersEntity {
   const factory UsersEntity({
     MetaEntity? meta,
-    PaginationEntity? pagination,
     List<UserLoginEntity>? data,
+    PaginationEntity? pagination,
   }) = _UsersEntity;
 
   const UsersEntity._(); // Added constructor

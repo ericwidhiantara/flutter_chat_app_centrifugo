@@ -21,8 +21,8 @@ class LoginEntity with _$LoginEntity {
 @freezed
 class LoginDataEntity with _$LoginDataEntity {
   const factory LoginDataEntity({
-    String? token,
-    UserLoginEntity? user,
+    String? accessToken,
+    String? refreshToken,
   }) = _LoginDataEntity;
 
   const LoginDataEntity._(); // Added constructor

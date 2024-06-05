@@ -20,7 +20,7 @@ class PostLogin extends UseCase<LoginEntity, LoginParams> {
 @freezed
 class LoginParams with _$LoginParams {
   const factory LoginParams({
-    @Default("") String email,
+    @Default("") String username,
     @Default("") String password,
   }) = _LoginParams;
 

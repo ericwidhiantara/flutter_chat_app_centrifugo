@@ -158,7 +158,7 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
           state.whenOrNull(
             success: (data) {
               _messages.addAll(data.data ?? []);
-              _lastPage = data.pagination?.totalPage ?? 1;
+              _lastPage = data.pagination?.totalPages ?? 1;
             },
             failure: (type, message) {
               if (type is UnauthorizedFailure) {

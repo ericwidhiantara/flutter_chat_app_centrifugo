@@ -8,8 +8,8 @@ part 'messages_response.g.dart';
 @freezed
 class MessagesResponse with _$MessagesResponse {
   const factory MessagesResponse({
-    @JsonKey(name: 'data') List<MessageDataResponse>? data,
     @JsonKey(name: 'meta') MetaModel? meta,
+    @JsonKey(name: 'data') List<MessageDataResponse>? data,
     @JsonKey(name: 'pagination') PaginationModel? pagination,
   }) = _MessagesResponse;
 
@@ -30,11 +30,11 @@ class MessagesResponse with _$MessagesResponse {
 @freezed
 class MessageDataResponse with _$MessageDataResponse {
   const factory MessageDataResponse({
-    @JsonKey(name: '_id') String? id,
     @JsonKey(name: 'message_id') String? messageId,
     @JsonKey(name: 'room_id') String? roomId,
-    @JsonKey(name: 'text') String? text,
     @JsonKey(name: 'sender_id') String? senderId,
+    @JsonKey(name: 'text') String? text,
+    @JsonKey(name: 'message_status') String? messageStatus,
     @JsonKey(name: 'sender') UserLoginModel? sender,
     @JsonKey(name: 'created_at') int? createdAt,
     @JsonKey(name: 'updated_at') int? updatedAt,
@@ -47,11 +47,11 @@ class MessageDataResponse with _$MessageDataResponse {
 
   MessageDataEntity toEntity() {
     return MessageDataEntity(
-      id: id,
       messageId: messageId,
       roomId: roomId,
-      text: text,
       senderId: senderId,
+      text: text,
+      messageStatus: messageStatus,
       sender: sender?.toEntity(),
       createdAt: createdAt,
       updatedAt: updatedAt,

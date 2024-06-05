@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:dio/dio.dart';
 import 'package:tddboilerplate/core/core.dart';
 import 'package:tddboilerplate/features/auth/auth.dart';
 
@@ -31,9 +32,14 @@ class AuthRemoteDatasourceImpl implements AuthRemoteDatasource {
 
   @override
   Future<Either<Failure, LoginResponse>> login(LoginParams loginParams) async {
+    final FormData formData = FormData.fromMap({
+      "username": loginParams.username,
+      "password": loginParams.password,
+    });
+
     final response = await _client.postRequest(
       ListAPI.login,
-      data: loginParams.toJson(),
+      formData: formData,
       converter: (response) =>
           LoginResponse.fromJson(response as Map<String, dynamic>),
     );

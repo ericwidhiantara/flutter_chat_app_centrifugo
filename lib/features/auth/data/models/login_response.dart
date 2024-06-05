@@ -28,8 +28,8 @@ class LoginResponse with _$LoginResponse {
 @freezed
 class LoginDataResponse with _$LoginDataResponse {
   const factory LoginDataResponse({
-    @JsonKey(name: 'token') String? token,
-    @JsonKey(name: 'user') UserLoginModel? user,
+    @JsonKey(name: 'access_token') String? accessToken,
+    @JsonKey(name: 'refresh_token') String? refreshToken,
   }) = _LoginDataResponse;
 
   const LoginDataResponse._(); // Added constructor
@@ -39,8 +39,8 @@ class LoginDataResponse with _$LoginDataResponse {
 
   LoginDataEntity toEntity() {
     return LoginDataEntity(
-      token: token,
-      user: user?.toEntity(),
+      accessToken: accessToken,
+      refreshToken: refreshToken,
     );
   }
 }

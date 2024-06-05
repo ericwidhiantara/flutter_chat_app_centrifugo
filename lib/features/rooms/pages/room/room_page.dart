@@ -120,7 +120,7 @@ class _RoomPageState extends State<RoomPage> with TickerProviderStateMixin {
                   loading: () => const Center(child: Loading()),
                   success: (data) {
                     _items.addAll(data.data ?? []);
-                    _lastPage = data.pagination?.totalPage ?? 1;
+                    _lastPage = data.pagination?.totalPages ?? 1;
 
                     return ListView.builder(
                       shrinkWrap: true,
