@@ -27,6 +27,9 @@ class ChatClient {
 
   void init(String token, String chatUserName, String chatUserId) {
     const url = String.fromEnvironment("WEBSOCKET_URL");
+    log.i("token $token");
+    log.i("url $url");
+
     _client = createClient(
       url,
       ClientConfig(
@@ -113,10 +116,10 @@ class ChatClient {
       }
     });
     subscription.join.listen(
-      (event) => log.i("Join: $event"),
+      (event) => log.i("Client joined channel: $event'"),
     );
     subscription.leave.listen(
-      (event) => log.i("Leave: $event"),
+      (event) => log.i("Client leave channel: $event"),
     );
     subscription.subscribed.listen(
       (event) => log.i("Subscribed: $event"),

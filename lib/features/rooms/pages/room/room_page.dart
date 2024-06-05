@@ -31,7 +31,23 @@ class _RoomPageState extends State<RoomPage> with TickerProviderStateMixin {
   void initState() {
     super.initState();
     userLogin = sl<MainBoxMixin>().getData(MainBoxKeys.tokenData);
+    final token = sl<MainBoxMixin>().getData(MainBoxKeys.token) as String;
 
+    final UserLoginEntity user =
+        sl<MainBoxMixin>().getData(MainBoxKeys.tokenData) as UserLoginEntity;
+
+    conf.cli
+      ..init(
+        token,
+        user.name ?? "",
+        user.userId ?? "",
+      )
+      ..connect(() async {
+        await Future<void>.delayed(
+          const Duration(milliseconds: 10),
+        );
+        conf.cli.subscribe("online");
+      });
     _scrollController.addListener(() async {
       if (_scrollController.position.atEdge) {
         if (_scrollController.position.pixels != 0) {
@@ -131,6 +147,21 @@ class _RoomPageState extends State<RoomPage> with TickerProviderStateMixin {
                       itemBuilder: (context, index) {
                         if (index < _items.length) {
                           final data = _items[index];
+                          String name = "";
+                          switch (data.roomType!) {
+                            case "group":
+                              name = data.name!;
+                            case "personal":
+                              name = data.participants
+                                      ?.firstWhere(
+                                        (element) =>
+                                            element.userId != userLogin?.userId,
+                                      )
+                                      .name ??
+                                  "";
+                            default:
+                              name = data.name!;
+                          }
                           return Padding(
                             padding: EdgeInsets.only(
                               bottom: Dimens.size10,
@@ -146,36 +177,15 @@ class _RoomPageState extends State<RoomPage> with TickerProviderStateMixin {
                                     );
                                     return;
                                   }
-                                  final token = sl<MainBoxMixin>()
-                                      .getData(MainBoxKeys.token) as String;
-
-                                  final UserLoginEntity user =
-                                      sl<MainBoxMixin>()
-                                              .getData(MainBoxKeys.tokenData)
-                                          as UserLoginEntity;
-
-                                  conf.cli
-                                    ..init(
-                                      token,
-                                      user.name ?? "",
-                                      user.userId ?? "",
-                                    )
-                                    ..connect(() async {
-                                      await Future<void>.delayed(
-                                        const Duration(milliseconds: 10),
-                                      );
-                                      if (context.mounted) {
-                                        context.pushNamed(
-                                          Routes.chat.name,
-                                          extra: data,
-                                        );
-                                      }
-                                    });
+                                  context.pushNamed(
+                                    Routes.chat.name,
+                                    extra: data,
+                                  );
                                 },
                                 tileColor: Theme.of(context).cardColor,
                                 contentPadding: const EdgeInsets.all(8),
                                 title: Text(
-                                  data.name ?? "",
+                                  name,
                                   style: Theme.of(context)
                                       .textTheme
                                       .bodyMedium
@@ -184,15 +194,18 @@ class _RoomPageState extends State<RoomPage> with TickerProviderStateMixin {
                                         fontWeight: FontWeight.w700,
                                       ),
                                 ),
-                                subtitle: Text(
-                                  "Anggota: ${data.participants?.length ?? 0} orang",
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodyMedium
-                                      ?.copyWith(
-                                        color: Theme.of(context).primaryColor,
+                                subtitle: data.roomType == "personal"
+                                    ? null
+                                    : Text(
+                                        "Anggota: ${data.participants?.length ?? 0} orang",
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyMedium
+                                            ?.copyWith(
+                                              color: Theme.of(context)
+                                                  .primaryColor,
+                                            ),
                                       ),
-                                ),
                                 leading: SizedBox(
                                   width: Dimens.size66,
                                   child: ClipRRect(
@@ -201,7 +214,7 @@ class _RoomPageState extends State<RoomPage> with TickerProviderStateMixin {
                                     ),
                                     child: CachedNetworkImage(
                                       imageUrl:
-                                          'https://ui-avatars.com/api/?name=${data.name}&background=0D8ABC&size=1024&color=fff',
+                                          'https://ui-avatars.com/api/?name=$name&background=0D8ABC&size=1024&color=fff',
                                     ),
                                   ),
                                 ),
