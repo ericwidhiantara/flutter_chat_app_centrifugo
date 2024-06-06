@@ -59,7 +59,7 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
     checkOnline();
     conf.cli.subscribe("room:$_roomId");
     _sub = conf.cli.messages.listen((MessageDataEntity msg) {
-      log.i("Received message: $msg");
+      log.i("Received message in chat page: $msg");
 
       if (_messages.isNotEmpty) {
         setState(() => _messages.insert(0, msg));
@@ -91,11 +91,11 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
   }
 
   @override
-  void dispose() {
+  void dispose() async {
     _scrollController.dispose();
     _sub.cancel();
     _subOnlineUser.cancel();
-    conf.cli.dispose();
+    conf.cli.disposeRoomChat();
     super.dispose();
   }
 

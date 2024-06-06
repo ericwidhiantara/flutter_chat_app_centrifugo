@@ -248,6 +248,11 @@ class ChatClient {
     debugPrint("disposed");
   }
 
+  Future<void> disposeRoomChat() async {
+    debugPrint("disposed");
+    await _msgSub.cancel();
+  }
+
   Future<void> sendMsg(MessageDataEntity msg) async {
     final output = jsonEncode(
       {'message': msg.text, 'name': msg.sender?.name, 'user_id': msg.senderId},
