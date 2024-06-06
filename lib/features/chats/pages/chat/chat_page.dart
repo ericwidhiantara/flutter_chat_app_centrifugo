@@ -109,7 +109,6 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
     final isPersonalRoom = widget.room.roomType == "personal";
     final participants = widget.room.participants;
 
-    //
     if (isPersonalRoom && participants != null) {
       final recipient =
           participants.firstWhere((element) => element.userId != _user?.userId);
@@ -126,9 +125,19 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
     }
 
     _subOnlineUser = conf.cli.onlineUsers.listen((OnlineUser value) {
-      setState(() {
-        _isOnline = value.isOnline;
-      });
+      final isPersonalRoom = widget.room.roomType == "personal";
+      final participants = widget.room.participants;
+
+      if (isPersonalRoom && participants != null) {
+        final recipient = participants
+            .firstWhere((element) => element.userId != _user?.userId);
+
+        if (value.userId == recipient.userId) {
+          setState(() {
+            _isOnline = value.isOnline;
+          });
+        }
+      }
       log.i("ini user yang online: $value, isOnline: $_isOnline");
     });
   }
@@ -281,15 +290,17 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
             ),
             Row(
               children: [
-                Container(
-                  width: 10,
-                  height: 10,
-                  decoration: BoxDecoration(
-                    color: _isOnline ? Colors.green : Colors.red,
-                    shape: BoxShape.circle,
+                if (widget.room.roomType == "personal")
+                  Container(
+                    width: 10,
+                    height: 10,
+                    decoration: BoxDecoration(
+                      color: _isOnline ? Colors.green : Colors.red,
+                      shape: BoxShape.circle,
+                    ),
                   ),
-                ),
-                SpacerH(value: Dimens.space8),
+                if (widget.room.roomType == "personal")
+                  SpacerH(value: Dimens.space8),
                 Text(
                   widget.room.roomType == "personal"
                       ? _isOnline
