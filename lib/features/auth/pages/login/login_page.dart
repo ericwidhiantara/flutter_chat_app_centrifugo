@@ -34,7 +34,7 @@ class _LoginPageState extends State<LoginPage> {
             loading: () => context.show(),
             success: (data) {
               context.dismiss();
-              data.toString().toToastSuccess(context);
+              data?.meta?.message.toString().toToastSuccess(context);
 
               TextInput.finishAutofillContext();
             },

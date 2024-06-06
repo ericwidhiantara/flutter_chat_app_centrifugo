@@ -91,11 +91,12 @@ class DioClient with MainBoxMixin, FirebaseCrashLogger {
       return Right(result);
     } on DioException catch (e, stackTrace) {
       if (e.type == DioExceptionType.unknown) {
-        if (e.response?.statusCode == 401) {
+        if (e.response?.statusCode == 401 ||
+            e.response?.data["meta"]["code"] == 401) {
           sl<AuthCubit>().logout();
           return Left(
             UnauthorizedFailure(
-              e.response?.data["message"].toString() ?? "Unauthorized",
+              e.response?.data["meta"]["message"].toString() ?? "Unauthorized",
             ),
           );
         }
@@ -106,18 +107,19 @@ class DioClient with MainBoxMixin, FirebaseCrashLogger {
         }
         return Left(
           ServerFailure(
-            e.response?.data["message"].toString() ?? "Error occurred",
+            e.response?.data["meta"]["message"].toString() ?? "Error occurred",
           ),
         );
       }
       if (!_isUnitTest) {
         nonFatalError(error: e, stackTrace: stackTrace);
       }
-      if (e.response?.statusCode == 401) {
+      if (e.response?.statusCode == 401 ||
+          e.response?.data["meta"]["code"] == 401) {
         sl<AuthCubit>().logout();
         return Left(
           UnauthorizedFailure(
-            e.response?.data["message"].toString() ?? "Unauthorized",
+            e.response?.data["meta"]["message"].toString() ?? "Unauthorized",
           ),
         );
       }
@@ -128,7 +130,7 @@ class DioClient with MainBoxMixin, FirebaseCrashLogger {
       }
       return Left(
         ServerFailure(
-          e.response?.data["message"].toString() ?? "Error occurred",
+          e.response?.data["meta"]["message"].toString() ?? "Error occurred",
         ),
       );
     }
@@ -160,12 +162,15 @@ class DioClient with MainBoxMixin, FirebaseCrashLogger {
       final result = await isolateParse.parseInBackground();
       return Right(result);
     } on DioException catch (e, stackTrace) {
+      log.i(e.type);
+      log.i(e.response?.data);
       if (e.type == DioExceptionType.unknown) {
-        if (e.response?.statusCode == 401) {
+        if (e.response?.statusCode == 401 ||
+            e.response?.data["meta"]["code"] == 401) {
           sl<AuthCubit>().logout();
           return Left(
             UnauthorizedFailure(
-              e.response?.data["message"].toString() ?? "Unauthorized",
+              e.response?.data["meta"]["message"].toString() ?? "Unauthorized",
             ),
           );
         }
@@ -176,18 +181,19 @@ class DioClient with MainBoxMixin, FirebaseCrashLogger {
         }
         return Left(
           ServerFailure(
-            e.response?.data["message"].toString() ?? "Error occurred",
+            e.response?.data["meta"]["message"].toString() ?? "Error occurred",
           ),
         );
       }
       if (!_isUnitTest) {
         nonFatalError(error: e, stackTrace: stackTrace);
       }
-      if (e.response?.statusCode == 401) {
+      if (e.response?.statusCode == 401 ||
+          e.response?.data["meta"]["code"] == 401) {
         sl<AuthCubit>().logout();
         return Left(
           UnauthorizedFailure(
-            e.response?.data["message"].toString() ?? "Unauthorized",
+            e.response?.data["meta"]["message"].toString() ?? "Unauthorized",
           ),
         );
       }
@@ -198,7 +204,7 @@ class DioClient with MainBoxMixin, FirebaseCrashLogger {
       }
       return Left(
         ServerFailure(
-          e.response?.data["message"].toString() ?? "Error occurred",
+          e.response?.data["meta"]["message"].toString() ?? "Error occurred",
         ),
       );
     }
@@ -230,11 +236,12 @@ class DioClient with MainBoxMixin, FirebaseCrashLogger {
       return Right(result);
     } on DioException catch (e, stackTrace) {
       if (e.type == DioExceptionType.unknown) {
-        if (e.response?.statusCode == 401) {
+        if (e.response?.statusCode == 401 ||
+            e.response?.data["meta"]["code"] == 401) {
           sl<AuthCubit>().logout();
           return Left(
             UnauthorizedFailure(
-              e.response?.data["message"].toString() ?? "Unauthorized",
+              e.response?.data["meta"]["message"].toString() ?? "Unauthorized",
             ),
           );
         }
@@ -245,18 +252,19 @@ class DioClient with MainBoxMixin, FirebaseCrashLogger {
         }
         return Left(
           ServerFailure(
-            e.response?.data["message"].toString() ?? "Error occurred",
+            e.response?.data["meta"]["message"].toString() ?? "Error occurred",
           ),
         );
       }
       if (!_isUnitTest) {
         nonFatalError(error: e, stackTrace: stackTrace);
       }
-      if (e.response?.statusCode == 401) {
+      if (e.response?.statusCode == 401 ||
+          e.response?.data["meta"]["code"] == 401) {
         sl<AuthCubit>().logout();
         return Left(
           UnauthorizedFailure(
-            e.response?.data["message"].toString() ?? "Unauthorized",
+            e.response?.data["meta"]["message"].toString() ?? "Unauthorized",
           ),
         );
       }
@@ -267,7 +275,7 @@ class DioClient with MainBoxMixin, FirebaseCrashLogger {
       }
       return Left(
         ServerFailure(
-          e.response?.data["message"].toString() ?? "Error occurred",
+          e.response?.data["meta"]["message"].toString() ?? "Error occurred",
         ),
       );
     }
@@ -298,11 +306,12 @@ class DioClient with MainBoxMixin, FirebaseCrashLogger {
       return Right(result);
     } on DioException catch (e, stackTrace) {
       if (e.type == DioExceptionType.unknown) {
-        if (e.response?.statusCode == 401) {
+        if (e.response?.statusCode == 401 ||
+            e.response?.data["meta"]["code"] == 401) {
           sl<AuthCubit>().logout();
           return Left(
             UnauthorizedFailure(
-              e.response?.data["message"].toString() ?? "Unauthorized",
+              e.response?.data["meta"]["message"].toString() ?? "Unauthorized",
             ),
           );
         }
@@ -313,18 +322,19 @@ class DioClient with MainBoxMixin, FirebaseCrashLogger {
         }
         return Left(
           ServerFailure(
-            e.response?.data["message"].toString() ?? "Error occurred",
+            e.response?.data["meta"]["message"].toString() ?? "Error occurred",
           ),
         );
       }
       if (!_isUnitTest) {
         nonFatalError(error: e, stackTrace: stackTrace);
       }
-      if (e.response?.statusCode == 401) {
+      if (e.response?.statusCode == 401 ||
+          e.response?.data["meta"]["code"] == 401) {
         sl<AuthCubit>().logout();
         return Left(
           UnauthorizedFailure(
-            e.response?.data["message"].toString() ?? "Unauthorized",
+            e.response?.data["meta"]["message"].toString() ?? "Unauthorized",
           ),
         );
       }
@@ -335,7 +345,7 @@ class DioClient with MainBoxMixin, FirebaseCrashLogger {
       }
       return Left(
         ServerFailure(
-          e.response?.data["message"].toString() ?? "Error occurred",
+          e.response?.data["meta"]["message"].toString() ?? "Error occurred",
         ),
       );
     }

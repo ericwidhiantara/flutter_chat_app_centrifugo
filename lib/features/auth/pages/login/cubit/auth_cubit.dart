@@ -5,7 +5,6 @@ import 'package:tddboilerplate/features/features.dart';
 import 'package:tddboilerplate/utils/utils.dart';
 
 part 'auth_cubit.freezed.dart';
-
 part 'auth_state.dart';
 
 class AuthCubit extends Cubit<AuthState> {
@@ -28,6 +27,8 @@ class AuthCubit extends Cubit<AuthState> {
     data.fold(
       (l) {
         if (l is ServerFailure) {
+          emit(_Failure(l.message ?? ""));
+        } else if (l is UnauthorizedFailure) {
           emit(_Failure(l.message ?? ""));
         }
       },
