@@ -162,8 +162,6 @@ class DioClient with MainBoxMixin, FirebaseCrashLogger {
       final result = await isolateParse.parseInBackground();
       return Right(result);
     } on DioException catch (e, stackTrace) {
-      log.i(e.type);
-      log.i(e.response?.data);
       if (e.type == DioExceptionType.unknown) {
         if (e.response?.statusCode == 401 ||
             e.response?.data["meta"]["code"] == 401) {
