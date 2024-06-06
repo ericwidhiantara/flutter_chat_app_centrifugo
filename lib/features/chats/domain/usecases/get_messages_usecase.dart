@@ -20,7 +20,9 @@ class GetMessagesUsecase extends UseCase<MessagesEntity, GetMessagesParams> {
 class GetMessagesParams with _$GetMessagesParams {
   const factory GetMessagesParams({
     @Default(1) int page,
+    @Default(10) int limit,
     @Default("") String roomId,
+    @Default("") String search,
   }) = _GetMessagesParams;
 
   factory GetMessagesParams.fromJson(Map<String, dynamic> json) =>
