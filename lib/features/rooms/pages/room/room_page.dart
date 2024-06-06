@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -8,7 +6,6 @@ import 'package:go_router/go_router.dart';
 import 'package:tddboilerplate/core/core.dart';
 import 'package:tddboilerplate/dependencies_injection.dart';
 import 'package:tddboilerplate/features/features.dart';
-import 'package:tddboilerplate/utils/helper/centrifuge_client.dart' as conf;
 import 'package:tddboilerplate/utils/utils.dart';
 
 class RoomPage extends StatefulWidget {
@@ -36,17 +33,14 @@ class _RoomPageState extends State<RoomPage> with TickerProviderStateMixin {
     final UserLoginEntity user =
         sl<MainBoxMixin>().getData(MainBoxKeys.tokenData) as UserLoginEntity;
 
-    conf.cli
+    onlineClient
       ..init(
         token,
         user.name ?? "",
         user.userId ?? "",
       )
       ..connect(() async {
-        await Future<void>.delayed(
-          const Duration(milliseconds: 10),
-        );
-        conf.cli.checkOnlineUser("online:index");
+        onlineClient.checkOnlineUser("online:index");
       });
     _scrollController.addListener(() async {
       if (_scrollController.position.atEdge) {
@@ -67,7 +61,7 @@ class _RoomPageState extends State<RoomPage> with TickerProviderStateMixin {
   @override
   void dispose() {
     _scrollController.dispose();
-    conf.cli.dispose();
+    onlineClient.dispose();
     super.dispose();
   }
 
@@ -177,10 +171,25 @@ class _RoomPageState extends State<RoomPage> with TickerProviderStateMixin {
                                     );
                                     return;
                                   }
-                                  context.pushNamed(
-                                    Routes.chat.name,
-                                    extra: data,
-                                  );
+                                  final token = sl<MainBoxMixin>()
+                                      .getData(MainBoxKeys.token) as String;
+
+                                  final UserLoginEntity user =
+                                      sl<MainBoxMixin>()
+                                              .getData(MainBoxKeys.tokenData)
+                                          as UserLoginEntity;
+                                  chatClient
+                                    ..init(
+                                      token,
+                                      user.name ?? "",
+                                      user.userId ?? "",
+                                    )
+                                    ..connect(() {
+                                      context.pushNamed(
+                                        Routes.chat.name,
+                                        extra: data,
+                                      );
+                                    });
                                 },
                                 tileColor: Theme.of(context).cardColor,
                                 contentPadding: const EdgeInsets.all(8),
@@ -315,7 +324,8 @@ class _RoomPageState extends State<RoomPage> with TickerProviderStateMixin {
                             TextButton(
                               onPressed: () {
                                 context.read<AuthCubit>().logout();
-                                conf.cli.dispose();
+                                onlineClient.dispose();
+                                chatClient.dispose();
                               },
                               child: Text(
                                 Strings.of(context)!.yes,

@@ -1,4 +1,5 @@
-export 'centrifuge_client.dart';
+export 'centrifuge_chat_client.dart';
+export 'centrifuge_online_client.dart';
 export 'common.dart';
 export 'constant.dart';
 export 'data_helper.dart';

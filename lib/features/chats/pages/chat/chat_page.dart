@@ -8,7 +8,6 @@ import 'package:intl/intl.dart';
 import 'package:tddboilerplate/core/core.dart';
 import 'package:tddboilerplate/dependencies_injection.dart';
 import 'package:tddboilerplate/features/features.dart';
-import 'package:tddboilerplate/utils/helper/centrifuge_client.dart' as conf;
 import 'package:tddboilerplate/utils/utils.dart';
 
 class ChatPage extends StatefulWidget {
@@ -57,8 +56,8 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
           : widget.room.name ?? "Unknown";
     });
     checkOnline();
-    conf.cli.subscribe("room:$_roomId");
-    _sub = conf.cli.messages.listen((MessageDataEntity msg) {
+    chatClient.subscribe("room:$_roomId");
+    _sub = chatClient.messages.listen((MessageDataEntity msg) {
       log.i("Received message in chat page: $msg");
 
       if (_messages.isNotEmpty) {
@@ -91,19 +90,23 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
   }
 
   @override
-  void dispose() async {
+  void dispose() {
     _scrollController.dispose();
     _sub.cancel();
     _subOnlineUser.cancel();
-    conf.cli.disposeRoomChat();
+    disposeRoomChat();
     super.dispose();
+  }
+
+  Future<void> disposeRoomChat() async {
+    await chatClient.dispose();
   }
 
   Future<void> checkOnline() async {
     log.i("Online user subscription started");
 
     //check online user from presence data first
-    final res = await conf.cli.onlineUserSubscription!.presence();
+    final res = await onlineClient.onlineUserSubscription!.presence();
     log.i("Online user presence: ${res.clients.keys}");
 
     final isPersonalRoom = widget.room.roomType == "personal";
@@ -124,7 +127,7 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
       });
     }
 
-    _subOnlineUser = conf.cli.onlineUsers.listen((OnlineUser value) {
+    _subOnlineUser = onlineClient.onlineUsers.listen((OnlineUser value) {
       final isPersonalRoom = widget.room.roomType == "personal";
       final participants = widget.room.participants;
 

@@ -6,7 +6,6 @@ import 'package:go_router/go_router.dart';
 import 'package:tddboilerplate/core/core.dart';
 import 'package:tddboilerplate/dependencies_injection.dart';
 import 'package:tddboilerplate/features/features.dart';
-import 'package:tddboilerplate/utils/helper/centrifuge_client.dart' as conf;
 import 'package:tddboilerplate/utils/utils.dart';
 
 class ParticipantPage extends StatefulWidget {
@@ -107,7 +106,7 @@ class _ParticipantPageState extends State<ParticipantPage>
                     final UserLoginEntity user = sl<MainBoxMixin>()
                         .getData(MainBoxKeys.tokenData) as UserLoginEntity;
 
-                    conf.cli
+                    chatClient
                       ..init(
                         token,
                         user.name ?? "",

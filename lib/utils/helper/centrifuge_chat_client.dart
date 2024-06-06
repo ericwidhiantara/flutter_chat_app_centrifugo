@@ -3,7 +3,6 @@ import 'dart:convert';
 
 import 'package:centrifuge/centrifuge.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:tddboilerplate/features/features.dart';
 import 'package:tddboilerplate/utils/helper/helper.dart';
 
@@ -18,17 +17,10 @@ class ChatClient {
   late StreamSubscription<MessageEvent> _msgSub;
 
   late Subscription? subscription;
-  late Subscription? onlineUserSubscription;
 
-  final StreamController<MessageDataEntity> _chatMsgController =
-      StreamController<MessageDataEntity>.broadcast();
-
-  final StreamController<OnlineUser> _onlineUserController =
-      StreamController<OnlineUser>.broadcast();
+  late StreamController<MessageDataEntity> _chatMsgController;
 
   Stream<MessageDataEntity> get messages => _chatMsgController.stream;
-
-  Stream<OnlineUser> get onlineUsers => _onlineUserController.stream;
 
   void init(String token, String chatUserName, String chatUserId) {
     const url = String.fromEnvironment("WEBSOCKET_URL");
@@ -56,31 +48,16 @@ class ChatClient {
     );
     _connectedSub = _client.connected.listen((event) {
       log.i("Connected to server");
-      Fluttertoast.showToast(
-        msg: "Centrifugo server connected",
-        backgroundColor: Colors.green,
-        textColor: Colors.white,
-      );
+
       onConnect();
     });
     _connectingSub = _client.connecting.listen((event) {
       log.i("Connecting to server");
-      Fluttertoast.showToast(
-        msg: "Connecting to Centrifugo server",
-        backgroundColor: Colors.green[900],
-        textColor: Colors.white,
-      );
     });
     _disconnSub = _client.disconnected.listen((event) {
       log.w("Disconnected from server");
       log.w(event);
       log.w(event.reason);
-
-      Fluttertoast.showToast(
-        msg: "Centrifugo server disconnected",
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-      );
     });
     _errorSub = _client.error.listen((event) {
       log.e(event.error);
@@ -90,6 +67,8 @@ class ChatClient {
 
   Future<void> subscribe(String channel) async {
     log.i("Subscribing to channel $channel");
+    _chatMsgController = StreamController<MessageDataEntity>.broadcast();
+
     final subscription =
         _client.getSubscription(channel) ?? _client.newSubscription(channel);
     subscription.publication
@@ -122,31 +101,16 @@ class ChatClient {
     subscription.join.listen(
       (event) {
         log.i("Client joined channel: $event");
-        Fluttertoast.showToast(
-          msg: "Client joined channel: $event",
-          backgroundColor: Colors.green,
-          textColor: Colors.white,
-        );
       },
     );
     subscription.leave.listen(
       (event) {
         log.i("Client left channel: $event");
-        Fluttertoast.showToast(
-          msg: "Client left channel: $event",
-          backgroundColor: Colors.green,
-          textColor: Colors.white,
-        );
       },
     );
     subscription.subscribed.listen(
       (event) {
         log.i("Subscribed: $event");
-        Fluttertoast.showToast(
-          msg: "Subscribed: $event",
-          backgroundColor: Colors.green,
-          textColor: Colors.white,
-        );
       },
     );
     subscription.subscribing.listen(
@@ -158,82 +122,10 @@ class ChatClient {
     subscription.unsubscribed.listen(
       (event) {
         log.i("Unsubscribed: $event");
-        Fluttertoast.showToast(
-          msg: "Centrifugo server connected",
-          backgroundColor: Colors.green,
-          textColor: Colors.white,
-        );
       },
     );
     this.subscription = subscription;
     await subscription.subscribe();
-  }
-
-  Future<void> checkOnlineUser(String channel) async {
-    log.i("Subscribing to online user channel $channel");
-    final onlineUserSubscription =
-        _client.getSubscription(channel) ?? _client.newSubscription(channel);
-
-    onlineUserSubscription.join.listen(
-      (event) {
-        log.i("User joined channel $channel: $event");
-        _onlineUserController.sink.add(
-          OnlineUser(
-            userId: event.user,
-            isOnline: true,
-          ),
-        );
-        Fluttertoast.showToast(
-          msg: "User joined channel: $event",
-          backgroundColor: Colors.green,
-          textColor: Colors.white,
-        );
-      },
-    );
-    onlineUserSubscription.leave.listen(
-      (event) {
-        log.i("User left channel $channel: $event");
-        _onlineUserController.sink.add(
-          OnlineUser(
-            userId: event.user,
-            isOnline: false,
-          ),
-        );
-        Fluttertoast.showToast(
-          msg: "User left channel: $event",
-          backgroundColor: Colors.red,
-          textColor: Colors.white,
-        );
-      },
-    );
-    onlineUserSubscription.subscribed.listen(
-      (event) {
-        log.i("Subscribed to online user channel: $event");
-        Fluttertoast.showToast(
-          msg: "Subscribed to online user channel: $event",
-          backgroundColor: Colors.green,
-          textColor: Colors.white,
-        );
-      },
-    );
-    onlineUserSubscription.subscribing.listen(
-      (event) => log.i("Subscribing to online user channel: $event"),
-    );
-    onlineUserSubscription.error.listen(
-      (event) => log.e("Error in online user channel: $event"),
-    );
-    onlineUserSubscription.unsubscribed.listen(
-      (event) {
-        log.i("Unsubscribed from online user channel: $event");
-        Fluttertoast.showToast(
-          msg: "Unsubscribed from online user channel: $event",
-          backgroundColor: Colors.green,
-          textColor: Colors.white,
-        );
-      },
-    );
-    this.onlineUserSubscription = onlineUserSubscription;
-    await onlineUserSubscription.subscribe();
   }
 
   Future<void> dispose() async {
@@ -244,13 +136,11 @@ class ChatClient {
     await _errorSub?.cancel();
     await _msgSub.cancel();
     await _chatMsgController.close();
-    await _client.disconnect();
-    debugPrint("disposed");
-  }
+    await subscription!.unsubscribe();
 
-  Future<void> disposeRoomChat() async {
+    await _client.disconnect();
+
     debugPrint("disposed");
-    await _msgSub.cancel();
   }
 
   Future<void> sendMsg(MessageDataEntity msg) async {
@@ -267,4 +157,4 @@ class ChatClient {
   }
 }
 
-final ChatClient cli = ChatClient();
+final ChatClient chatClient = ChatClient();
