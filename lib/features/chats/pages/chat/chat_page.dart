@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:tddboilerplate/core/core.dart';
@@ -29,8 +30,12 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
   String _roomId = "";
   String _roomName = "";
   bool _isOnline = false;
+  bool _isTyping = false;
+
+  String _typingText = "";
 
   late StreamSubscription<MessageDataEntity> _sub;
+  late StreamSubscription<Map<String, dynamic>> _subTyping;
   late StreamSubscription<OnlineUser> _subOnlineUser;
 
   // final ChatClient conf = ChatClient();
@@ -39,6 +44,9 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
   UserLoginEntity? _user;
 
   final _formKey = GlobalKey<FormState>();
+
+// Define a variable to keep track of the timer
+  Timer? _typingTimer;
 
   @override
   void initState() {
@@ -56,7 +64,9 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
           : widget.room.name ?? "Unknown";
     });
     checkOnline();
+
     chatClient.subscribe("room:$_roomId");
+    subscribeTyping();
     _sub = chatClient.messages.listen((MessageDataEntity msg) {
       log.i("Received message in chat page: $msg");
 
@@ -94,12 +104,14 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
     _scrollController.dispose();
     _sub.cancel();
     _subOnlineUser.cancel();
+    _subTyping.cancel();
     disposeRoomChat();
     super.dispose();
   }
 
   Future<void> disposeRoomChat() async {
     await chatClient.dispose();
+    await chatTypingClient.dispose();
   }
 
   Future<void> checkOnline() async {
@@ -164,6 +176,70 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
     }
   }
 
+  Future<void> subscribeTyping() async {
+    final token = sl<MainBoxMixin>().getData(MainBoxKeys.token) as String;
+
+    final UserLoginEntity user =
+        sl<MainBoxMixin>().getData(MainBoxKeys.tokenData) as UserLoginEntity;
+    chatTypingClient
+      ..init(
+        token,
+        user.name ?? "",
+        user.userId ?? "",
+      )
+      ..connect(() {
+        chatTypingClient.subscribe("room:$_roomId:typing");
+        _subTyping =
+            chatTypingClient.typingData.listen((Map<String, dynamic> value) {
+          if (value["user_id"] != _user?.userId) {
+            setState(() {
+              _typingText = "${value["name"]} is typing...";
+              _isTyping = value["is_typing"] as bool;
+            });
+            if (value["is_typing"] as bool) {
+              Fluttertoast.showToast(msg: "${value["name"]} is typing...");
+            }
+          }
+        });
+      });
+  }
+
+  // Function to send the typing status
+  void sendTypingStatus(bool isTyping) {
+    final Map<String, dynamic> data = {
+      "user_id": _user?.userId,
+      "is_typing": isTyping,
+      "name": _user?.name,
+    };
+    chatTypingClient.typing(data);
+  }
+
+// Function to handle user input
+  void onUserInput(String value) {
+    if (value.isNotEmpty) {
+      // Send typing status only if the user was not typing before
+      if (!_isTyping) {
+        sendTypingStatus(true);
+        _isTyping = true;
+      }
+
+      // Cancel the previous timer if it's still running
+      _typingTimer?.cancel();
+
+      // Start a new timer to send "not typing" status after a timeout
+      _typingTimer = Timer(const Duration(seconds: 5), () {
+        sendTypingStatus(false);
+        _isTyping = false;
+      });
+    } else {
+      // Send "not typing" status if the input is empty and the user was typing
+      if (_isTyping) {
+        sendTypingStatus(false);
+        _isTyping = false;
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -178,6 +254,9 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
           child: TextField(
             controller: _messageController,
             onSubmitted: (_) => sendMessage(context),
+            onChanged: (value) {
+              onUserInput(value);
+            },
             decoration: InputDecoration(
               hintText: 'Type a message',
               border: OutlineInputBorder(
@@ -291,32 +370,41 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
                     fontWeight: FontWeight.w700,
                   ),
             ),
-            Row(
-              children: [
-                if (widget.room.roomType == "personal")
-                  Container(
-                    width: 10,
-                    height: 10,
-                    decoration: BoxDecoration(
-                      color: _isOnline ? Colors.green : Colors.red,
-                      shape: BoxShape.circle,
+            if (_isTyping)
+              Text(
+                _typingText,
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      fontWeight: FontWeight.w400,
+                      fontSize: Dimens.text12,
                     ),
-                  ),
-                if (widget.room.roomType == "personal")
-                  SpacerH(value: Dimens.space8),
-                Text(
-                  widget.room.roomType == "personal"
-                      ? _isOnline
-                          ? "Online"
-                          : "Offline"
-                      : "${widget.room.participants!.length} anggota",
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        fontWeight: FontWeight.w400,
-                        fontSize: Dimens.text12,
+              )
+            else
+              Row(
+                children: [
+                  if (widget.room.roomType == "personal")
+                    Container(
+                      width: 10,
+                      height: 10,
+                      decoration: BoxDecoration(
+                        color: _isOnline ? Colors.green : Colors.red,
+                        shape: BoxShape.circle,
                       ),
-                ),
-              ],
-            ),
+                    ),
+                  if (widget.room.roomType == "personal")
+                    SpacerH(value: Dimens.space8),
+                  Text(
+                    widget.room.roomType == "personal"
+                        ? _isOnline
+                            ? "Online"
+                            : "Offline"
+                        : "${widget.room.participants!.length} anggota",
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          fontWeight: FontWeight.w400,
+                          fontSize: Dimens.text12,
+                        ),
+                  ),
+                ],
+              ),
           ],
         ),
         elevation: 0,
