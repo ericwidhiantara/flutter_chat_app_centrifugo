@@ -67,7 +67,7 @@ class _RoomPageState extends State<RoomPage> with TickerProviderStateMixin {
   @override
   void dispose() {
     _scrollController.dispose();
-
+    conf.cli.dispose();
     super.dispose();
   }
 
@@ -315,6 +315,7 @@ class _RoomPageState extends State<RoomPage> with TickerProviderStateMixin {
                             TextButton(
                               onPressed: () {
                                 context.read<AuthCubit>().logout();
+                                conf.cli.dispose();
                               },
                               child: Text(
                                 Strings.of(context)!.yes,
