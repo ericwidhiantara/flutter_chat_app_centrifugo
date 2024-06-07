@@ -328,6 +328,7 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
                         return ChatBubble(
                           message: data.text ?? "",
                           isSender: data.senderId == _user?.userId,
+                          roomType: widget.room.roomType!,
                           senderName: data.senderId == _user?.userId
                               ? null
                               : data.sender?.name ?? "",
@@ -418,12 +419,14 @@ class ChatBubble extends StatelessWidget {
   final bool isSender;
   final String? senderName;
   final String time;
+  final String roomType;
 
   const ChatBubble({
     required this.message,
     required this.isSender,
     this.senderName,
     required this.time,
+    required this.roomType,
   });
 
   @override
@@ -448,15 +451,15 @@ class ChatBubble extends StatelessWidget {
       child: Column(
         crossAxisAlignment: align,
         children: [
-          if (senderName != null)
+          if (senderName != null && roomType == "group")
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8.0),
               child: Text(
                 senderName!,
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black54,
-                ),
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      fontWeight: FontWeight.w700,
+                      fontSize: Dimens.text12,
+                    ),
               ),
             ),
           LayoutBuilder(

@@ -142,19 +142,6 @@ class ChatClient {
 
     debugPrint("disposed");
   }
-
-  Future<void> sendMsg(MessageDataEntity msg) async {
-    final output = jsonEncode(
-      {'message': msg.text, 'name': msg.sender?.name, 'user_id': msg.senderId},
-    );
-    log.i("Sending msg : $output");
-    final data = utf8.encode(output);
-    try {
-      await subscription?.publish(data);
-    } on Exception {
-      rethrow;
-    }
-  }
 }
 
 final ChatClient chatClient = ChatClient();
