@@ -70,6 +70,7 @@ class _LoginPageState extends State<LoginPage> {
                         nextFocusNode: _fnPassword,
                         textInputAction: TextInputAction.next,
                         controller: _conEmail,
+                        textCapitalization: TextCapitalization.none,
                         keyboardType: TextInputType.emailAddress,
                         prefixIcon: Icon(
                           Icons.alternate_email,
@@ -92,6 +93,7 @@ class _LoginPageState extends State<LoginPage> {
                             textInputAction: TextInputAction.done,
                             controller: _conPassword,
                             keyboardType: TextInputType.text,
+                            textCapitalization: TextCapitalization.none,
                             prefixIcon: Icon(
                               Icons.lock_outline,
                               color:
