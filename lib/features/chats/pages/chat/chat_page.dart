@@ -159,6 +159,11 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
 
   Future<void> sendMessage(BuildContext context) async {
     if (_messageController.text.isNotEmpty) {
+      sendTypingStatus(false);
+      setState(() {
+        _isTyping = false;
+      });
+
       await context.read<ChatFormCubit>().sendMessage(
             PostSendMessageParams(
               text: _messageController.text,
@@ -227,7 +232,7 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
       _typingTimer?.cancel();
 
       // Start a new timer to send "not typing" status after a timeout
-      _typingTimer = Timer(const Duration(seconds: 5), () {
+      _typingTimer = Timer(const Duration(milliseconds: 500), () {
         sendTypingStatus(false);
         _isTyping = false;
       });
