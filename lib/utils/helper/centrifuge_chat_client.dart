@@ -18,9 +18,9 @@ class ChatClient {
 
   late Subscription? subscription;
 
-  late StreamController<MessageDataEntity> _chatMsgController;
+  late StreamController<MessageCentrifugeModel> _chatMsgController;
 
-  Stream<MessageDataEntity> get messages => _chatMsgController.stream;
+  Stream<MessageCentrifugeModel> get messages => _chatMsgController.stream;
 
   void init(String token, String chatUserName, String chatUserId) {
     const url = String.fromEnvironment("WEBSOCKET_URL");
@@ -67,7 +67,7 @@ class ChatClient {
 
   Future<void> subscribe(String channel) async {
     log.i("Subscribing to channel $channel");
-    _chatMsgController = StreamController<MessageDataEntity>.broadcast();
+    _chatMsgController = StreamController<MessageCentrifugeModel>.broadcast();
 
     final subscription =
         _client.getSubscription(channel) ?? _client.newSubscription(channel);
@@ -90,9 +90,15 @@ class ChatClient {
       log.i("RoomId: ${message.roomId}");
       log.i("MessageId: ${message.messageId}");
 
+      final MessageCentrifugeModel messageCentrifugeModel =
+          MessageCentrifugeModel(
+        event: d["event"] as String,
+        data: message,
+      );
+
       if (!_chatMsgController.isClosed) {
         _chatMsgController.sink.add(
-          message,
+          messageCentrifugeModel,
         );
       } else {
         log.e("_chatMsgController is closed");
@@ -141,6 +147,22 @@ class ChatClient {
     await _client.disconnect();
 
     debugPrint("disposed");
+  }
+
+  Future<void> readMessage(MessageDataEntity message) async {
+    final output = jsonEncode(
+      {
+        'event': "read_message",
+        "data": message.toJson(),
+      },
+    );
+    log.i("Sending msg : $output");
+    final data = utf8.encode(output);
+    try {
+      await subscription?.publish(data);
+    } on Exception {
+      rethrow;
+    }
   }
 }
 

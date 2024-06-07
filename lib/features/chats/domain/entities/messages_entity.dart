@@ -21,14 +21,14 @@ class MessagesEntity with _$MessagesEntity {
 @freezed
 class MessageDataEntity with _$MessageDataEntity {
   const factory MessageDataEntity({
-    String? messageId,
-    String? roomId,
-    String? senderId,
-    String? text,
-    String? messageStatus,
-    UserLoginEntity? sender,
-    int? createdAt,
-    int? updatedAt,
+    @JsonKey(name: "message_id") String? messageId,
+    @JsonKey(name: "room_id") String? roomId,
+    @JsonKey(name: "sender_id") String? senderId,
+    @JsonKey(name: "text") String? text,
+    @JsonKey(name: "message_status") String? messageStatus,
+    @JsonKey(name: "sender") UserLoginEntity? sender,
+    @JsonKey(name: "created_at") int? createdAt,
+    @JsonKey(name: "updated-at") int? updatedAt,
   }) = _MessageDataEntity;
 
   const MessageDataEntity._(); // Added constructor

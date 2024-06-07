@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
@@ -34,7 +35,7 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
 
   String _typingText = "";
 
-  late StreamSubscription<MessageDataEntity> _sub;
+  late StreamSubscription<MessageCentrifugeModel> _sub;
   late StreamSubscription<Map<String, dynamic>> _subTyping;
   late StreamSubscription<OnlineUser> _subOnlineUser;
 
@@ -64,14 +65,23 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
           : widget.room.name ?? "Unknown";
     });
     checkOnline();
-
     chatClient.subscribe("room:$_roomId");
     subscribeTyping();
-    _sub = chatClient.messages.listen((MessageDataEntity msg) {
-      log.i("Received message in chat page: $msg");
+    checkInRoom();
 
+    _sub = chatClient.messages.listen((MessageCentrifugeModel item) {
+      log.i("Received message in chat page: $item");
       if (_messages.isNotEmpty) {
-        setState(() => _messages.insert(0, msg));
+        if (item.event == "update_message") {
+          setState(() {
+            // update message status based on index
+            _messages[_messages.indexWhere(
+                    (element) => element.messageId == item.data.messageId)] =
+                item.data;
+          });
+        } else {
+          setState(() => _messages.insert(0, item.data));
+        }
       }
       if (_scrollController.hasClients) {
         _scrollController.animateTo(
@@ -135,6 +145,47 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
           setState(() {
             _isOnline = true;
           });
+        }
+      });
+    }
+
+    _subOnlineUser = onlineClient.onlineUsers.listen((OnlineUser value) {
+      final isPersonalRoom = widget.room.roomType == "personal";
+      final participants = widget.room.participants;
+
+      if (isPersonalRoom && participants != null) {
+        final recipient = participants
+            .firstWhere((element) => element.userId != _user?.userId);
+
+        if (value.userId == recipient.userId) {
+          setState(() {
+            _isOnline = value.isOnline;
+          });
+        }
+      }
+      log.i("ini user yang online: $value, isOnline: $_isOnline");
+    });
+  }
+
+  Future<void> checkInRoom() async {
+    log.i("check user in room started");
+
+    //check online user from presence data first
+    final res = await chatClient.subscription!.presence();
+    log.i("User in room: ${res.clients.keys}");
+
+    final isPersonalRoom = widget.room.roomType == "personal";
+    final participants = widget.room.participants;
+
+    if (isPersonalRoom && participants != null) {
+      final recipient =
+          participants.firstWhere((element) => element.userId != _user?.userId);
+
+      // looping to get the ClientInfo inside the response
+      res.clients.forEach((key, value) {
+        log.i("Hehhe: $key, value: $value");
+        if (value.user == recipient.userId) {
+          setState(() {});
         }
       });
     }
@@ -279,85 +330,70 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
     );
   }
 
-  RefreshIndicator body(BuildContext context) {
-    return RefreshIndicator(
-      color: Theme.of(context).primaryColor,
-      backgroundColor: Theme.of(context).extension<CustomColor>()!.background,
-      onRefresh: () {
-        _currentPage = 1;
-        _lastPage = 1;
-        _messages.clear();
+  Widget body(BuildContext context) {
+    return BlocListener<ChatCubit, ChatState>(
+      listener: (context, state) {
+        state.whenOrNull(
+          success: (data) {
+            _messages.addAll(data.data ?? []);
 
-        return context.read<ChatCubit>().refreshChat(
-              GetMessagesParams(
-                page: _currentPage,
-                roomId: _roomId,
-              ),
-            );
+            _lastPage = data.pagination?.totalPages ?? 1;
+          },
+          failure: (type, message) {
+            if (type is UnauthorizedFailure) {
+              Strings.of(context)!.expiredToken.toToastError(context);
+
+              context.goNamed(Routes.login.name);
+            } else {
+              message.toToastError(context);
+            }
+          },
+        );
       },
-      child: BlocListener<ChatCubit, ChatState>(
-        listener: (context, state) {
-          state.whenOrNull(
-            success: (data) {
-              _messages.addAll(data.data ?? []);
-              _lastPage = data.pagination?.totalPages ?? 1;
-            },
-            failure: (type, message) {
-              if (type is UnauthorizedFailure) {
-                Strings.of(context)!.expiredToken.toToastError(context);
-
-                context.goNamed(Routes.login.name);
-              } else {
-                message.toToastError(context);
-              }
-            },
-          );
-        },
-        child: Container(
-          padding: EdgeInsets.all(Dimens.size20),
-          child: BlocBuilder<ChatCubit, ChatState>(
-            builder: (context, state) {
-              return state.when(
-                loading: () => const Center(child: Loading()),
-                success: (data) {
-                  return ListView.builder(
-                    shrinkWrap: true,
-                    controller: _scrollController,
-                    itemCount: _currentPage == _lastPage
-                        ? _messages.length
-                        : _messages.length + 1,
-                    reverse: true,
-                    itemBuilder: (context, index) {
-                      if (index < _messages.length) {
-                        final data = _messages[index];
-                        return ChatBubble(
-                          message: data.text ?? "",
-                          isSender: data.senderId == _user?.userId,
-                          roomType: widget.room.roomType!,
-                          senderName: data.senderId == _user?.userId
-                              ? null
-                              : data.sender?.name ?? "",
-                          time: DateFormat("hh:mm").format(
-                            DateTime.fromMillisecondsSinceEpoch(
-                              data.createdAt! * 1000,
-                            ),
+      child: Container(
+        padding: EdgeInsets.all(Dimens.size20),
+        child: BlocBuilder<ChatCubit, ChatState>(
+          builder: (context, state) {
+            return state.when(
+              loading: () => const Center(child: Loading()),
+              success: (data) {
+                return ListView.builder(
+                  shrinkWrap: true,
+                  controller: _scrollController,
+                  itemCount: _currentPage == _lastPage
+                      ? _messages.length
+                      : _messages.length + 1,
+                  reverse: true,
+                  itemBuilder: (context, index) {
+                    if (index < _messages.length) {
+                      final data = _messages[index];
+                      return ChatBubble(
+                        message: data,
+                        isSender: data.senderId == _user?.userId,
+                        roomType: widget.room.roomType!,
+                        senderName: data.senderId == _user?.userId
+                            ? null
+                            : data.sender?.name ?? "",
+                        time: DateFormat("HH:mm").format(
+                          DateTime.fromMillisecondsSinceEpoch(
+                            data.createdAt! * 1000,
                           ),
-                        );
-                      }
-                      return Padding(
-                        padding: EdgeInsets.all(Dimens.space16),
-                        child: const Center(
-                          child: CupertinoActivityIndicator(),
                         ),
                       );
-                    },
-                  );
-                },
-                failure: (_, message) => Empty(errorMessage: message),
-                empty: () => const SizedBox(),
-              );
-            },
-          ),
+                    }
+                    return Padding(
+                      padding: EdgeInsets.all(Dimens.space16),
+                      child: const Center(
+                        child: CupertinoActivityIndicator(),
+                      ),
+                    );
+                  },
+                );
+              },
+              failure: (_, message) => Empty(errorMessage: message),
+              empty: () => const SizedBox(),
+            );
+          },
         ),
       ),
     );
@@ -367,6 +403,7 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
     return PreferredSize(
       preferredSize: Size.fromHeight(Dimens.size50),
       child: AppBar(
+        centerTitle: false,
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -420,7 +457,7 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
 }
 
 class ChatBubble extends StatelessWidget {
-  final String message;
+  final MessageDataEntity message;
   final bool isSender;
   final String? senderName;
   final String time;
@@ -436,8 +473,8 @@ class ChatBubble extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bgColor = isSender ? Colors.blue : Colors.grey[300];
-    final textColor = isSender ? Colors.white : Colors.black;
+    final bgColor = isSender ? const Color(0xffE7FED8) : Colors.grey[300];
+    const textColor = Colors.black;
     final align = isSender ? CrossAxisAlignment.end : CrossAxisAlignment.start;
     final radius = isSender
         ? const BorderRadius.only(
@@ -450,6 +487,18 @@ class ChatBubble extends StatelessWidget {
             topRight: Radius.circular(12),
             bottomRight: Radius.circular(12),
           );
+
+    String messageStatusIcon = "";
+    switch (message.messageStatus) {
+      case "sent":
+        messageStatusIcon = SvgImages.icMessageSent;
+      case "delivered":
+        messageStatusIcon = SvgImages.icMessageDelivered;
+      case "read":
+        messageStatusIcon = SvgImages.icMessageRead;
+      default:
+        messageStatusIcon = SvgImages.icMessageSent;
+    }
 
     return Align(
       alignment: isSender ? Alignment.centerRight : Alignment.centerLeft,
@@ -487,11 +536,15 @@ class ChatBubble extends StatelessWidget {
                           maxWidth: maxWidth,
                         ),
                         child: Text(
-                          message,
-                          style: TextStyle(color: textColor),
+                          message.text ?? "",
+                          style:
+                              Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                    color: textColor,
+                                    fontWeight: FontWeight.w400,
+                                  ),
                         ),
                       ),
-                      const SizedBox(height: 5),
+                      SpacerV(value: Dimens.size10),
                       Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
@@ -503,6 +556,13 @@ class ChatBubble extends StatelessWidget {
                               fontSize: 10,
                             ),
                           ),
+                          if (isSender) SpacerH(value: Dimens.size10),
+                          if (isSender)
+                            SvgPicture.asset(
+                              messageStatusIcon,
+                              width: 12,
+                              height: 12,
+                            ),
                         ],
                       ),
                     ],
