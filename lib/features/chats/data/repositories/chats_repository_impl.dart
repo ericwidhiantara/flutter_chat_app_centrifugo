@@ -39,4 +39,28 @@ class ChatsRepositoryImpl implements ChatsRepository {
       (response) => Right(response.toEntity()),
     );
   }
+
+  @override
+  Future<Either<Failure, MetaEntity>> readSingleMessage(
+    PostReadSingleMessageParams params,
+  ) async {
+    final response = await _dataSource.readSingleMessage(params);
+
+    return response.fold(
+      (failure) => Left(failure),
+      (response) => Right(response.toEntity()),
+    );
+  }
+
+  @override
+  Future<Either<Failure, MetaEntity>> readAllMessage(
+    PostReadAllMessageParams params,
+  ) async {
+    final response = await _dataSource.readAllMessage(params);
+
+    return response.fold(
+      (failure) => Left(failure),
+      (response) => Right(response.toEntity()),
+    );
+  }
 }

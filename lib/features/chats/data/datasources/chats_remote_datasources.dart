@@ -10,6 +10,14 @@ abstract class ChatsRemoteDatasource {
   );
 
   Future<Either<Failure, MetaModel>> sendMessage(PostSendMessageParams params);
+
+  Future<Either<Failure, MetaModel>> readSingleMessage(
+    PostReadSingleMessageParams params,
+  );
+
+  Future<Either<Failure, MetaModel>> readAllMessage(
+    PostReadAllMessageParams params,
+  );
 }
 
 class ChatsRemoteDatasourceImpl implements ChatsRemoteDatasource {
@@ -42,6 +50,38 @@ class ChatsRemoteDatasourceImpl implements ChatsRemoteDatasource {
     final response = await _client.postRequest(
       ListAPI.messages,
       formData: formData,
+      converter: (response) =>
+          MetaModel.fromJson(response["meta"] as Map<String, dynamic>),
+    );
+
+    return response;
+  }
+
+  @override
+  Future<Either<Failure, MetaModel>> readSingleMessage(
+    PostReadSingleMessageParams params,
+  ) async {
+    final FormData formData = FormData.fromMap({
+      "message_id": params.messageId,
+      "message_status": params.messageStatus,
+    });
+
+    final response = await _client.putRequest(
+      ListAPI.messages,
+      formData: formData,
+      converter: (response) =>
+          MetaModel.fromJson(response["meta"] as Map<String, dynamic>),
+    );
+
+    return response;
+  }
+
+  @override
+  Future<Either<Failure, MetaModel>> readAllMessage(
+    PostReadAllMessageParams params,
+  ) async {
+    final response = await _client.putRequest(
+      "${ListAPI.getMessagesByRoomId}/${params.roomId}/readAll",
       converter: (response) =>
           MetaModel.fromJson(response["meta"] as Map<String, dynamic>),
     );

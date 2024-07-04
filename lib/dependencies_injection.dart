@@ -79,6 +79,8 @@ void _useCase() {
   /// Chats
   sl.registerLazySingleton(() => GetMessagesUsecase(sl()));
   sl.registerLazySingleton(() => PostSendMessageUsecase(sl()));
+  sl.registerLazySingleton(() => PostReadSingleMessageUsecase(sl()));
+  sl.registerLazySingleton(() => PostReadAllMessageUsecase(sl()));
 }
 
 void _cubit() {
@@ -98,5 +100,5 @@ void _cubit() {
 
   /// Chats
   sl.registerFactory(() => ChatCubit(sl()));
-  sl.registerFactory(() => ChatFormCubit(sl()));
+  sl.registerFactory(() => ChatFormCubit(sl(), sl(), sl()));
 }

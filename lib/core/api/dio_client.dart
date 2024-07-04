@@ -279,6 +279,78 @@ class DioClient with MainBoxMixin, FirebaseCrashLogger {
     }
   }
 
+  Future<Either<Failure, T>> putRequest<T>(
+    String url, {
+    Map<String, dynamic>? data,
+    FormData? formData,
+    required ResponseConverter<T> converter,
+    bool isIsolate = true,
+  }) async {
+    try {
+      final response = await dio.put(url, data: formData ?? data);
+      if (response.statusCode! != 200) {
+        throw DioException(
+          requestOptions: response.requestOptions,
+          response: response,
+        );
+      }
+
+      if (!isIsolate) {
+        return Right(converter(response.data));
+      }
+      final isolateParse = IsolateParser<T>(
+        response.data as Map<String, dynamic>,
+        converter,
+      );
+      final result = await isolateParse.parseInBackground();
+      return Right(result);
+    } on DioException catch (e, stackTrace) {
+      if (e.type == DioExceptionType.unknown) {
+        if (e.response?.statusCode == 401 ||
+            e.response?.data["meta"]["code"] == 401) {
+          sl<AuthCubit>().logout();
+          return Left(
+            UnauthorizedFailure(
+              e.response?.data["meta"]["message"].toString() ?? "Unauthorized",
+            ),
+          );
+        }
+        if (e.response?.statusCode == 404) {
+          return Left(
+            NoDataFailure(),
+          );
+        }
+        return Left(
+          ServerFailure(
+            e.response?.data["meta"]["message"].toString() ?? "Error occurred",
+          ),
+        );
+      }
+      if (!_isUnitTest) {
+        nonFatalError(error: e, stackTrace: stackTrace);
+      }
+      if (e.response?.statusCode == 401 ||
+          e.response?.data["meta"]["code"] == 401) {
+        sl<AuthCubit>().logout();
+        return Left(
+          UnauthorizedFailure(
+            e.response?.data["meta"]["message"].toString() ?? "Unauthorized",
+          ),
+        );
+      }
+      if (e.response?.statusCode == 404) {
+        return Left(
+          NoDataFailure(),
+        );
+      }
+      return Left(
+        ServerFailure(
+          e.response?.data["meta"]["message"].toString() ?? "Error occurred",
+        ),
+      );
+    }
+  }
+
   Future<Either<Failure, T>> deleteRequest<T>(
     String url, {
     required ResponseConverter<T> converter,

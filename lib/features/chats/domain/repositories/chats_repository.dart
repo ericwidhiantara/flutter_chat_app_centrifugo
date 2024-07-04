@@ -7,4 +7,12 @@ abstract class ChatsRepository {
   Future<Either<Failure, MessagesEntity>> getMessages(GetMessagesParams params);
 
   Future<Either<Failure, MetaEntity>> sendMessage(PostSendMessageParams params);
+
+  Future<Either<Failure, MetaEntity>> readSingleMessage(
+    PostReadSingleMessageParams params,
+  );
+
+  Future<Either<Failure, MetaEntity>> readAllMessage(
+    PostReadAllMessageParams params,
+  );
 }

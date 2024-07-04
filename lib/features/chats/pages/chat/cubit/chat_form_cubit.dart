@@ -8,12 +8,54 @@ part 'chat_form_cubit.freezed.dart';
 part 'chat_form_state.dart';
 
 class ChatFormCubit extends Cubit<ChatFormState> {
-  ChatFormCubit(this._usecase) : super(const _Loading());
-  final PostSendMessageUsecase _usecase;
+  ChatFormCubit(
+    this._sendMessageUsecase,
+    this._readSingleMessageUsecase,
+    this._readAllMessageUsecase,
+  ) : super(const _Loading());
+  final PostSendMessageUsecase _sendMessageUsecase;
+  final PostReadSingleMessageUsecase _readSingleMessageUsecase;
+  final PostReadAllMessageUsecase _readAllMessageUsecase;
 
   Future<void> sendMessage(PostSendMessageParams params) async {
     emit(const _Loading());
-    final data = await _usecase.call(params);
+    final data = await _sendMessageUsecase.call(params);
+
+    data.fold(
+      (l) {
+        if (l is ServerFailure) {
+          emit(_Failure(l, l.message ?? ""));
+        } else if (l is NoDataFailure) {
+          emit(const _Empty());
+        } else if (l is UnauthorizedFailure) {
+          emit(_Failure(l, l.message ?? ""));
+        }
+      },
+      (r) => emit(_Success(r)),
+    );
+  }
+
+  Future<void> readSingleMessage(PostReadSingleMessageParams params) async {
+    emit(const _Loading());
+    final data = await _readSingleMessageUsecase.call(params);
+
+    data.fold(
+      (l) {
+        if (l is ServerFailure) {
+          emit(_Failure(l, l.message ?? ""));
+        } else if (l is NoDataFailure) {
+          emit(const _Empty());
+        } else if (l is UnauthorizedFailure) {
+          emit(_Failure(l, l.message ?? ""));
+        }
+      },
+      (r) => emit(_Success(r)),
+    );
+  }
+
+  Future<void> readAllMessage(PostReadAllMessageParams params) async {
+    emit(const _Loading());
+    final data = await _readAllMessageUsecase.call(params);
 
     data.fold(
       (l) {
